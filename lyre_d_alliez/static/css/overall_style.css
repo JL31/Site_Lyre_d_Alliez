@@ -29,6 +29,11 @@ header
     text-decoration: underline;
 }
 
+#avatar_membre
+{
+    border-radius: 20px;
+}
+
 #titre_et_menu
 {
     display: flex;

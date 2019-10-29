@@ -127,7 +127,7 @@ def test_creation_profil_membre(request):
 
     if request.method == "POST":
 
-        form = MembreForm(request.POST)
+        form = MembreForm(request.POST, request.FILES)
 
         if form.is_valid():
 

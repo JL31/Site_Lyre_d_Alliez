@@ -39,6 +39,10 @@ from django.contrib.flatpages.views import flatpage
 from django.contrib.auth.views import LoginView, LogoutView
 from .views import *
 
+# Pour la gestion des images (en dév)
+from django.conf.urls.static import static
+from django.conf import settings
+
 
 # ==================================================================================================
 # INITIALISATIONS
@@ -69,3 +73,6 @@ urlpatterns = [
     path('deconnexion/', LogoutView.as_view(template_name='deconnexion.html'), name='deconnexion'),
     path('acces_interdit/', test_acces_interdit, name='acces_interdit'),
 ]
+
+# Pour la gestion des images (en dév)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

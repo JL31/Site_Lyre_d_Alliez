@@ -21,6 +21,7 @@ __status__ = 'dev'
 
 from django.db import models
 from django.contrib.auth.models import User
+from PIL import Image
 
 
 # ==================================================================================================
@@ -79,6 +80,7 @@ class Membre(User):
     est_membre_du_bureau = models.BooleanField(null=False, blank=True, default=False)
     est_le_chef = models.BooleanField(null=False, blank=True, default=False)
 
+    # =========
     class Meta:
         """
             Configuration/définition des options de metadonnées du modèle
@@ -97,6 +99,7 @@ class Membre(User):
                     "est_le_chef"
                    ]
 
+    # ================
     def __str__(self):
         """
             Permet de faciliter la reconnaissance des objets lors de l'administration
@@ -104,6 +107,22 @@ class Membre(User):
         
         return self.username
 
+    # =============
+    def save(self):
+        """
+            Permet d'enregister la photo dans un format différent que son format d'origine
+            Nécessite au préalable d'importer la classe Image depuis PIL (from PIL import Image)
+        """
+
+        if not self.avatar:
+
+            return
+
+        super(Membre, self).save()
+        image = Image.open(self.avatar)
+        size = (40, 40)
+        image = image.resize(size, Image.ANTIALIAS)
+        image.save(self.avatar.path)
 
 # ==================================================================================================
 # FUNCTIONS

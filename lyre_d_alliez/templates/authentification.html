@@ -6,6 +6,7 @@
         
         <div>
             Salut {{ user.username }} :-)<br/>
+            <img src="{{ request.user.membre.avatar.url }}" id="avatar_membre"/><br />
             <a href="{% url 'deconnexion' %}" id="lien_deconnexion">Se déconnecter</a>
         </div>
         
