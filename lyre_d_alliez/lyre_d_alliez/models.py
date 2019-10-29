@@ -67,12 +67,8 @@ class Membre(User):
     # liaison avec le modèle User
     user = models.OneToOneField(User, parent_link=True, unique=True, on_delete=models.CASCADE)
     
-    # avatar = models.ImageField(null=False, blank=False, upload_to="avatars/")
-    avatar = models.ImageField(null=True, blank=True, upload_to="avatars/")
-    
-    # description = models.TextField(null=True, blank=False, max_length=500)
+    avatar = models.ImageField(null=False, blank=False, upload_to="avatars/")
     description = models.TextField(null=True, blank=True, max_length=500)
-    
     instrument = models.CharField(null=False, blank=False, max_length=255, choices=LISTE_DES_INSTRUMENTS, default='clarinette si b')
     
     chant = models.BooleanField(null=False, blank=True, default=False)
