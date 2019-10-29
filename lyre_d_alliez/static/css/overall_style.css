@@ -12,7 +12,7 @@ header
     display: flex;
     flex-direction: column;
     background-color: RGB(216,125,52);
-    border-radius: 10px;
+    /*border-radius: 10px;*/
 }
 
 #authentification
@@ -74,4 +74,9 @@ nav a
     flex-direction: column;
     list-style: none;
     padding-left: 0px;
+}
+
+.instrument
+{
+    background-color: RGB(255,178,103);
 }

@@ -6,13 +6,13 @@
 <div id="">
 Notre orchestre contient les principaux instruments que l'on peut trouver dans un orhcestre harmomnique "classique", séparés en plusieurs pupitres :<br />
 <br />
-{% for instrument, liste_des_membres in dico_instrument_membres.items %}
+{% for instrument, dico_instru_membres in dico_instrument_membres.items %}
 
-    <h4>{{ instrument|capfirst }}</h4>
+    <h4 class="instrument">{{ dico_instru_membres.instrument|capfirst }}</h4>
 
-    {% for membre in liste_des_membres %}
+    {% for membre in dico_instru_membres.membres %}
 
-        {% if membre == liste_des_membres|last %}
+        {% if membre == dico_instru_membres.membres|last %}
 
             {{ membre }}
 

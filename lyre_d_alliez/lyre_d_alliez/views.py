@@ -198,7 +198,7 @@ def les_pupitres(request):
     """
 
     liste_des_membres = Membre.objects.all()
-    liste_des_instruments = ( instrument[0] for instrument in LISTE_DES_INSTRUMENTS )
+    liste_des_instruments = ( instrument for instrument in LISTE_DES_INSTRUMENTS )
 
     dico_instrument_membres = OrderedDict()
 
@@ -206,9 +206,9 @@ def les_pupitres(request):
 
         for membre in liste_des_membres:
 
-            if instrument in membre.instruments:
+            if instrument[0] in membre.instruments:
 
-                dico_instrument_membres.setdefault(instrument, []).append(membre)
+                dico_instrument_membres.setdefault(instrument[0], {"instrument": instrument[1], "membres": []})["membres"].append(membre)
 
     return render(request, "sous_menu_association_les_pupitres.html", {"dico_instrument_membres": dico_instrument_membres})
 
