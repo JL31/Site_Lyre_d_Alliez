@@ -67,6 +67,7 @@ urlpatterns = [
     path('association/', test_association, name='association'),
     path('association/presentation', flatpage, {'url': '/association/presentation/'}, name='presentation'),
     path('association/bureau', flatpage, {'url': '/association/bureau/'}, name='bureau'),
+    path('association/les_pupitres', test_les_pupitres, name='les_pupitres'),
     path('zone_de_partage/', test_zone_de_partage, name='zone_de_partage'),
     path('creation_profil_membre/', test_creation_profil_membre, name='creation_profil_membre'),
     path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),

@@ -42,7 +42,7 @@ class MembreAdmin(admin.ModelAdmin):
     list_display = ("username",
                     "first_name",
                     "email",
-                    "instrument",
+                    "instruments",
                     "chant",
                     "est_membre",
                     "est_membre_du_bureau",
@@ -51,7 +51,7 @@ class MembreAdmin(admin.ModelAdmin):
     list_filter = ("username",
                    "first_name",
                    "email",
-                   "instrument",
+                   "instruments",
                    "chant")
     
     date_hierarchy = "date_joined"
@@ -61,7 +61,7 @@ class MembreAdmin(admin.ModelAdmin):
     search_fields = ("username",
                      "first_name",
                      "email",
-                     "instrument",
+                     "instruments",
                      "chant")
                      
     # Configuration du formulaire d'édition
@@ -73,7 +73,7 @@ class MembreAdmin(admin.ModelAdmin):
                                                              "first_name",
                                                              "email",
                                                              "description",
-                                                             "instrument",
+                                                             "instruments",
                                                              "chant",
                                                              "est_membre",
                                                              "est_membre_du_bureau",

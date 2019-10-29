@@ -23,11 +23,37 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from .models import Membre
+from django.forms import MultipleChoiceField
 
 
 # ==================================================================================================
 # INITIALISATIONS
 # ==================================================================================================
+
+LISTE_DES_INSTRUMENTS = (('clarinette si b', 'clarinette si b'),
+                         ('clarinette basse', 'clarinette basse'),
+                         ('flute traversiere', 'flute traversière'),
+                         ('flute traversiere basse', 'flute traversière basse'),
+                         ('piccolo', 'piccolo'),
+                         ('xylophone_marimba', 'xylophone / marimba'),
+                         ('piano', 'piano'),
+                         ('saxophone soprano', 'saxophone soprano'),
+                         ('saxophone alto', 'saxophone alto'),
+                         ('saxophone tenor', 'saxophone ténor'),
+                         ('saxophone baryton', 'saxophone baryton'),
+                         ('saxophone basse', 'saxophone basse'),
+                         ('trombone', 'trombone'),
+                         ('trombone basse', 'trombone basse'),
+                         ('euphonium', 'euphonium'),
+                         ('tuba', 'tuba'),
+                         ('guitare seche', 'guitare sèche'),
+                         ('guitare electrique', 'guitare électrique'),
+                         ('guitare acoustique', 'guitare acoustique'),
+                         ('mandoline', 'mandoline'),
+                         ('guitare basse', 'guitare basse'),
+                         ('trompette', 'trompette'),
+                         ('batterie', 'batterie')
+                        )
 
 # ==================================================================================================
 # CLASSES
@@ -38,14 +64,16 @@ class MembreForm(UserCreationForm):
     """
         Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouveau membre
     """
-    
+
+    instruments = MultipleChoiceField(choices=LISTE_DES_INSTRUMENTS)
+
     class Meta:
         """
             Configuration/définition des options de metadonnées du formulaire
         """
         
         model = Membre
-        fields = ("avatar", "username", "first_name", "email", "description", "instrument", "chant")
+        fields = ("avatar", "username", "first_name", "email", "description", "instruments", "chant")
 
     # ===============
     def clean(self):

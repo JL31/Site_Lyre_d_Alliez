@@ -1,0 +1,25 @@
+{% extends "base_etendue.html" %}
+
+{% block contenu %}
+<h1>Les pupitres</h1><br />
+<br />
+<div id="">
+Notre orchestre contient les principaux instruments que l'on peut trouver dans un orhcestre harmomnique "classique", séparés en plusieurs pupitres :<br />
+<br />
+{% for instrument in liste_des_instruments %}
+
+    <h4>{{ instrument }}</h4>
+
+    {% for membre in liste_des_membres %}
+
+        {% if instrument in membre.instruments %}
+
+            {{ membre }},
+
+        {% endif %}
+
+    {% endfor %}
+
+{% endfor %}
+</div>
+{% endblock %}

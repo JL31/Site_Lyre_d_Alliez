@@ -177,6 +177,11 @@ prénom : Did
 email : c.d@e.fr
 mdp : Poire1fois
 
+username : Bob
+prénom : b
+email : b.t@f.fr
+mdp : Bob123456
+
 http://localhost:8000/creation_profil_membre/
 
 

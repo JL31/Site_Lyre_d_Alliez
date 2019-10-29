@@ -24,7 +24,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.signals import post_save
 from django.core.mail import mail_admins
-from .forms import MembreForm
+from .forms import MembreForm, LISTE_DES_INSTRUMENTS
 from .models import Membre
 
 
@@ -45,6 +45,9 @@ from .models import Membre
 def test_personne_autorisee(request):
     """
         Fonction de test pour vérifier si le visiteur est autorisée à accéder à certaines pages
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
 
         :return: un booléen indiquant :
 
@@ -85,44 +88,70 @@ def envoi_mail_admin_nouveau_membre(**kwargs):
 def test_accueil(request):
     """
         Vue de test de la page d'accueil
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
     """
-    
+
     return render(request, "base_etendue.html")
     
-
 # ===========================
 def test_actualites(request):
     """
         Vue de test pour les actualités
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
     """
-    
+
     return render(request, "sous_menu_actualites.html")
     
-
 # ===========================
 def test_association(request):
     """
         Vue de test pour l'association
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
     """
     
     return render(request, "sous_menu_association.html")
     
-
 @login_required
 @user_passes_test(test_personne_autorisee)
 # ================================
 def test_zone_de_partage(request):
     """
         Vue de test pour la zone de partage
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
     """
 
     return render(request, "sous_menu_zone_de_partage.html")
-
 
 # =======================================
 def test_creation_profil_membre(request):
     """
         Vue de test pour la création du profil d'un membre
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
     if request.method == "POST":
@@ -141,15 +170,37 @@ def test_creation_profil_membre(request):
 
     return render(request, "test_MembreForm.html", {"form": form})
     
-
 # ===============================
 def test_acces_interdit(request):
     """
         Vue de test pour l'accès interdit à une page du site
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
     """
-    
+
     return render(request, "acces_interdit.html")
     
+# =============================
+def test_les_pupitres(request):
+    """
+        Vue de test des pupitres
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    liste_des_membres = Membre.objects.all()
+    liste_des_instruments = ( instrument[0] for instrument in LISTE_DES_INSTRUMENTS )
+
+    return render(request, "sous_menu_association_les_pupitres.html", {"liste_des_membres": liste_des_membres, "liste_des_instruments": liste_des_instruments})
+
 
 # ==================================================================================================
 # UTILISATION

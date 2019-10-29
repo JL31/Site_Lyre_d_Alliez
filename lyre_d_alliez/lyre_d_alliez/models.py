@@ -28,35 +28,10 @@ from PIL import Image
 # INITIALISATIONS
 # ==================================================================================================
 
-LISTE_DES_INSTRUMENTS = (('clarinette si b', 'clarinette si b'),
-                         ('clarinette basse', 'clarinette basse'),
-                         ('flute traversiere', 'flute traversière'),
-                         ('flute traversiere basse', 'flute traversière basse'),
-                         ('piccolo', 'piccolo'),
-                         ('xylophone_marimba', 'xylophone / marimba'),
-                         ('piano', 'piano'),
-                         ('saxophone soprano', 'saxophone soprano'),
-                         ('saxophone alto', 'saxophone alto'),
-                         ('saxophone tenor', 'saxophone ténor'),
-                         ('saxophone baryton', 'saxophone baryton'),
-                         ('saxophone basse', 'saxophone basse'),
-                         ('trombone', 'trombone'),
-                         ('trombone basse', 'trombone basse'),
-                         ('euphonium', 'euphonium'),
-                         ('tuba', 'tuba'),
-                         ('guitare seche', 'guitare sèche'),
-                         ('guitare electrique', 'guitare électrique'),
-                         ('guitare acoustique', 'guitare acoustique'),
-                         ('mandoline', 'mandoline'),
-                         ('guitare basse', 'guitare basse'),
-                         ('trompette', 'trompette'),
-                         ('batterie', 'batterie')
-                        )
-
-
 # ==================================================================================================
 # CLASSES
 # ==================================================================================================
+
 
 # =================
 class Membre(User):
@@ -69,8 +44,8 @@ class Membre(User):
     
     avatar = models.ImageField(null=False, blank=False, upload_to="avatars/")
     description = models.TextField(null=True, blank=True, max_length=500)
-    instrument = models.CharField(null=False, blank=False, max_length=255, choices=LISTE_DES_INSTRUMENTS, default='clarinette si b')
-    
+    instruments = models.CharField(null=False, blank=False, max_length=255)
+
     chant = models.BooleanField(null=False, blank=True, default=False)
     est_membre = models.BooleanField(null=False, blank=True, default=False)
     est_membre_du_bureau = models.BooleanField(null=False, blank=True, default=False)
@@ -83,12 +58,12 @@ class Membre(User):
         """
         
         verbose_name = "membre"
-        ordering = ["avatar", 
+        ordering = ["avatar",
                     "username",
                     "first_name",
                     "email",
                     "description",
-                    "instrument",
+                    "instruments",
                     "chant",
                     "est_membre",
                     "est_membre_du_bureau",
@@ -119,6 +94,7 @@ class Membre(User):
         size = (40, 40)
         image = image.resize(size, Image.ANTIALIAS)
         image.save(self.avatar.path)
+
 
 # ==================================================================================================
 # FUNCTIONS
