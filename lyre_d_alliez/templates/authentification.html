@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block authentification %}
+    
+    {% if user.is_authenticated %}
+        
+        <div>
+            Salut {{ user.username }} :-)<br/>
+            <a href="{% url 'deconnexion' %}" id="lien_deconnexion">Se déconnecter</a>
+        </div>
+        
+    {% else %}
+        
+        <a href="{% url 'connexion' %}" id="lien_connexion">Se connecter</a>
+        
+    {% endif %}
+    
+{% endblock %}

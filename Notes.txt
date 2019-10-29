@@ -1,0 +1,209 @@
+﻿
+Site de la Lyre
+---------------
+
+# =====================================================================================================================
+# Contenu
+# =====================================================================================================================
+
+- compte utilisateur pour les membres
+- accès aux photos et vidéos seulement pour les membres
+- possibilitée de commenter les articles/news seulement pour les membres
+- articles/news
+- les outils du chef : envoi de mail à la mailing list pré-enregistrée, modification de la mailing list, définition des dates de concert
+- photos
+- vidéos (quid du lecteur vidéo ?)
+- agenda (avec alertes)
+- historique des programmes
+- articles de presse
+- présentation de l'asso
+- membres du bureau
+- lien vers l'école de musique de Didier
+- nos relations avec d'autres harmonies ?
+- nos "sponsors"/"soutients"
+- articles/tuto/conseils : entretien des instru, techniques particulières, point de solfège --> comment catégoriser ?
+- zone de partage d'infos/de bons plans (vente d'instru par exemples)
+- contact
+- plan du site ?
+- mentions légales ?
+
+# =====================================================================================================================
+# Questions
+# =====================================================================================================================
+
+- d'une manière générale y a-t-il des fichiers qu'il vaut mieux éviter de mettre en gestion de conf ?
+- faut-il dès le début penser i18n et écrire toutes les strings en respectant ce procédé ?
+- git flow pour le dév : bien/pas bien ?
+
+# =====================================================================================================================
+# Menu (navigation)
+# =====================================================================================================================
+
+Actualités [tous] / L'asso [tous] / Photos [membres] / Vidéos [membres] / Zone de partage [membres] / Les outils du chef [Didier]
+
+# =====================================================================================================================
+# Détails menu
+# =====================================================================================================================
+
+Actualités :
+- Agenda (dates des concerts)
+- Calendrier des concerts
+  --> redondance entre les deux catégories précédentes ?
+- Articles/infos
+
+L'asso :
+- Présentation : notre histoire
+  --> flatpage ou TemplateView
+- Le bureau
+  --> flatpage ou TemplateView
+- Les pupitres
+  --> flatpage ou TemplateView
+- Articles de presse
+- Historique des concerts (avec leur programme)
+  --> un dossier par année
+- Nos soutiens --> à déplacer près du footer pour un affichage permanent ?
+               --> ou alors un bandeau à défilement automatique (cf site OneStock) ?
+               --> les stocker dans une BDD séparée ?
+
+Zone de partage :
+- Les bons plans
+- Conseils
+- Tutoriels
+
+# =====================================================================================================================
+# Concernant l'architecture des templates
+# =====================================================================================================================
+
+- un fichier "base.html" contenant des blocks titre (dans le head), navigation, contenu et footer
+- un fichier "navigation.html" qui étend le fichier "base.html"
+- un fichier "footer.html" qui étend le fichier "navigation.html"
+- un fichier "base_etendue.html" qui étend le fichier "footer.html"
+
+Tous les autres templates étendront le fichier "base_etendue.html"
+
+# =====================================================================================================================
+# Détail "Photos"
+# =====================================================================================================================
+
+Il y aura un dossier par année, le clic sur le menu fera apparaître un menu déroulant permettant de choisir l'année.
+Au sein d'une année il y aura plusieurs dossiers, un pour chaque évènement.
+Quid de l'affichage :
+--- carrés pour ensuite zoomer ?
+--- bandeau avec miniatures en dessous d'un zoom ?
+
+# =====================================================================================================================
+# Détail "Vidéos"
+# =====================================================================================================================
+
+Il y aura un dossier par année, le clic sur le menu fera apparaître un menu déroulant permettant de choisir l'année.
+Au sein d'une année il y aura plusieurs dossiers, un pour chaque évènement.
+
+# =====================================================================================================================
+# Détail des profils des membres
+# =====================================================================================================================
+
+ajouter avatar
+--> les options du membre seront disponibles via cet avatar qui sera affcihé en permanence en haut à droite du site
+--> voir comment faire pour ajouter un avatar par défaut si pas spécifié par le membre
+
+avatar
+identifiant
+prénom
+adresse email
+description
+instrument --> proposer un menu déroulant ?
+chant : oui / non
+membre du bureau : oui / non --> soumis à validation
+chef : oui / non ? --> soumis à validation
+
+autorisation pour l'accès aux zones membre
+process :
+- inscription via le formulaire adéquat
+- envoi de mail auto à l'admin pour valider le profil, i.e. lui fournir l'autorisation aux zones membres + (le cas échéant) statut membre du bureau + statut du chef
+
+# =====================================================================================================================
+# Accès membres/visiteurs
+# =====================================================================================================================
+
+https://stackoverflow.com/questions/41247569/how-to-get-extended-user-custom-fields-in-django-template
+https://simpleisbetterthancomplex.com/tutorial/2016/06/27/how-to-use-djangos-built-in-login-system.html
+https://django.readthedocs.io/en/2.2.x/ref/settings.html#std:setting-LOGIN_REDIRECT_URL
+
+envoi mail  -->  https://simpleisbetterthancomplex.com/tutorial/2016/06/13/how-to-send-email.html
+
+# =====================================================================================================================
+# Détail "L'asso" / "Les pupitres"
+# =====================================================================================================================
+
+mettre une image (interactive ?) en forme de demi cercle avec différents découpages de cette image avec les noms des instruments dans chaque découpage ?
+lorsqu'un utilisateur cliquera sur un découpage correspondant à un instrument la page se mettra à jour pour afficher les informations relatives à ce pupitre
+remplissage automatique des catégories en fonctions des détails des profils des membres ?
+quid si les membres ne veulent pas de compte ?
+créer quand même un compte en leur nom ?
+
+clarinettes
+flûte traversières et piccolos
+piano
+xylophone / marimba
+chanteurs / chanteuses
+saxophones
+--> sopranos
+--> altos
+--> ténors
+--> barytons
+--> basses
+trombones
+    --> différencier les catégories ?
+trompettes
+    --> différencier les catégories ?
+tuba
+euphonium
+    --> différencier les catégories ?
+guitare
+basse
+batterie et percussions
+
+# =====================================================================================================================
+# Membres de test
+# =====================================================================================================================
+
+username : Tutu
+prénom : Toto
+email : a.b@c.fr
+mdp: Pomme2rainette
+
+username : Chef
+prénom : Did
+email : c.d@e.fr
+mdp : Poire1fois
+
+http://localhost:8000/creation_profil_membre/
+
+
+# =====================================================================================================================
+# Notes ré-inint database
+# =====================================================================================================================
+
+https://stackoverflow.com/questions/30267237/invalidbaseserror-cannot-resolve-bases-for-modelstate-users-groupproxy
+https://stackoverflow.com/questions/12784835/django-no-such-table
+
+
+!!! Penser à faire les migrations seulement des modèles qui changent !!!
+
+1. commenter le modèle incriminé
+
+2. refaire la migration :
+   python manage.py makemigrations
+   python manage.py migrate
+
+3. décommneter le modèle incriminé
+
+4. refaire la migration :
+   python manage.py makemigrations
+   python manage.py migrate --run-syncdb
+
+# =====================================================================================================================
+# Notes diverses
+# =====================================================================================================================
+
+Créer une API pour obtenir les permissions attribuées à un membre ?

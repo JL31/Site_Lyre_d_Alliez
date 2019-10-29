@@ -1,0 +1,25 @@
+﻿{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+       <meta charset="utf-8" />
+       <link rel="stylesheet" type="text/css" href="{% static 'css/overall_style.css' %}" />
+       <title>{% block title %}La Lyre d'Alliez{% endblock %}</title>
+    </head>
+    <body>
+        <header>
+            <div id="authentification">
+                {% block authentification %}{% endblock %}
+            </div>
+            <div id="titre_et_menu">
+                <div id="titre_header">
+                    <h3><a href="{% url 'accueil' %}">Bienvenue sur le site de la Lyre d'Alliez</a></h3>
+                </div>
+                <nav id="navigation">{% block navigation %}{% endblock %}</nav>
+            </div>
+        </header>
+        <section id="contenu">{% block contenu %}{% endblock %}</section>
+        <footer id="footer">{% block footer %}{% endblock %}</footer>
+    </body>
+</html>

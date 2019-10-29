@@ -1,0 +1,35 @@
+﻿{% extends "authentification.html" %}
+
+{% block navigation %}
+<ul>
+    <li>
+        <a href="{% url 'actualites' %}">Actualités</a>
+        {% block sous_menu_actualites %}{% endblock %}
+    </li>
+    <li>
+        <a href="{% url 'association' %}">L'association</a>
+        {% block sous_menu_association %}{% endblock %}
+    </li>
+    
+    {% if user.is_authenticated %}
+    <li>
+        <a href="">Photos</a>
+        {% block sous_menu_photos %}{% endblock %}
+    </li>
+    <li>
+        <a href="">Vidéos</a>
+        {% block sous_menu_videos %}{% endblock %}
+    </li>
+    <li>
+        <a href="{% url 'zone_de_partage' %}">Zone de partage</a>
+        {% block sous_menu_zone_de_partage %}{% endblock %}
+    </li>
+    {% endif%}                
+    
+    {% if user.is_authenticated and request.user.membre.est_le_chef %}
+    <li>
+        <a href="">Les outils du chef</a>
+    </li>
+    {% endif %}
+</ul>
+{% endblock %}

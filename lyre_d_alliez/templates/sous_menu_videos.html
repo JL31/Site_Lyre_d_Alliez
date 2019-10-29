@@ -1,0 +1,29 @@
+﻿{% extends "base.html" %}
+
+{% block navigation %}
+<ul>
+    <li>
+        <a href="">Actualités</a>
+        {% block sous_menu_actualites %}{% endblock %}
+    </li>
+    <li>
+        <a href="">L'association</a>
+        {% block sous_menu_association %}{% endblock %}
+    </li>
+    <li>
+        <a href="">Photos</a>
+        {% block sous_menu_photos %}{% endblock %}
+    </li>
+    <li>
+        <a href="">Vidéos</a>
+        {% block sous_menu_videos %}{% endblock %}
+    </li>
+    <li>
+        <a href="">Zone de partage</a>
+        {% block sous_menu_zone_de_partage %}{% endblock %}
+        </li>
+    <li>
+        <a href="">Les outils du chef</a>
+    </li>
+</ul>
+{% endblock %}

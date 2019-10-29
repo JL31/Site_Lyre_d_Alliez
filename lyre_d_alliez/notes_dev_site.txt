@@ -1,0 +1,9 @@
+﻿créer le projet : python-m django startproject nom_du_projet
+changer le LANGUAGE_CODE dans le fichier settings.py
+création du dossier "static" dans le dossier du projet (ainsi que les sous-dossiers "css", "img" et "js")
+création du dossier "templates" dans le dossier du projet
+ajout du set STATICFILES_DIRS dans le fichier settings.py
+comment organiser le projet ? faut-il mettre les vues dans le dossier du site ?
+ajout d'une ligne dans le fichier settings.py dans la liste TEMPLATES, dans le dico DIRS (pour gérer les templates au niveau du projet)
+
+
