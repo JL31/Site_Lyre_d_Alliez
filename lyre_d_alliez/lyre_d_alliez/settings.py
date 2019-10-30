@@ -63,9 +63,6 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-ADMINS = secret_data.ADMINS
-EMAIL_SUBJECT_PREFIX = "[Site de la Lyre d'Alliez] "
-
 LOGIN_REDIRECT_URL = "/accueil/"
 LOGIN_URL = "/acces_interdit/"
 
@@ -169,4 +166,15 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 MEDIA_ROOT = os.path.join(STATICFILES_DIRS[0], "img")
 
-MEDIA_URL = "/images.lyre_d_alliez.fr/"
+MEDIA_URL = "/images.lyredalliez.fr/"
+
+# Email sending configuration (require to install django-mailjet through pip and to create a Mailjet account)
+
+ADMINS = secret_data.ADMINS
+EMAIL_SUBJECT_PREFIX = "[Site de la Lyre d'Alliez] "
+# SERVER_EMAIL = "noreply@lyredalliez.fr"
+SERVER_EMAIL = secret_data.ADMINS[0][1]
+
+EMAIL_BACKEND = "django_mailjet.backends.MailjetBackend"
+MAILJET_API_KEY = secret_data.MAILJET_API_KEY
+MAILJET_API_SECRET = secret_data.MAILJET_API_SECRET

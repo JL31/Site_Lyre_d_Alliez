@@ -104,15 +104,16 @@ Au sein d'une année il y aura plusieurs dossiers, un pour chaque évènement.
 
 ajouter avatar
 --> les options du membre seront disponibles via cet avatar qui sera affcihé en permanence en haut à droite du site
---> voir comment faire pour ajouter un avatar par défaut si pas spécifié par le membre
+--> voir comment faire pour ajouter un avatar par défaut si pas spécifié par le membre ?
 
 avatar
 identifiant
 prénom
 adresse email
 description
-instrument --> proposer un menu déroulant ?
+instrument --> proposer un menu déroulant
 chant : oui / non
+membre de l'orchestre : oui / non --> soumis à validation
 membre du bureau : oui / non --> soumis à validation
 chef : oui / non ? --> soumis à validation
 
@@ -212,3 +213,28 @@ https://stackoverflow.com/questions/12784835/django-no-such-table
 # =====================================================================================================================
 
 Créer une API pour obtenir les permissions attribuées à un membre ?
+
+# =====================================================================================================================
+# Infos Mailjet
+# =====================================================================================================================
+
+Identifiants
+------------
+
+Nom d'utilisateur (clé API)
+cf site
+
+Mot de passe (Clé secrète)
+cf site
+
+Configuration
+-------------
+
+Serveur SMTP
+in-v3.mailjet.com
+
+Utiliser TLS
+optionnel
+
+Port
+25 ou 587 (certains hébergeurs bloquent le port 25)

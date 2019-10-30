@@ -80,3 +80,21 @@ nav a
 {
     background-color: RGB(255,178,103);
 }
+
+.agenda_concert
+{
+    display: flex;
+}
+
+.agenda_concert .bordure_gauche
+{
+    width: 20px;
+    background-color: RGB(255,178,103);
+}
+
+.agenda_concert .description_evenement
+{
+    background-color: RGB(200,200,200);
+    padding-left: 5px;
+    width: 60vw;
+}

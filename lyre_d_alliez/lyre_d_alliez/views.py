@@ -70,14 +70,13 @@ def envoi_mail_admin_nouveau_membre(**kwargs):
         Fonction qui permet d'envoyer un mail à l'admin pour l'informer qu'un nouveau membre a été créé
     """
 
-    # sujet = " Isncription d'un nouveau membre"
-    # message = ("Une personne vient de remplir le formulaire d'inscription à la zone des membres.\n\n"
-    #            "Merci de vérifier les informations renseignées et de lui attribuer soit : \n\n"
-    #            "- l'accès à la zone membre ;\n"
-    #            "- l'accès aux outils du chef.")
-    #
-    # mail_admins(sujet, message)
-    pass
+    sujet = " Inscription d'un nouveau membre"
+    message = ("Une personne vient de remplir le formulaire d'inscription à la zone des membres.\n\n"
+               "Merci de vérifier les informations renseignées et de lui attribuer soit : \n\n"
+               "- l'accès à la zone membre ;\n"
+               "- l'accès aux outils du chef.")
+
+    mail_admins(sujet, message)
 
 
 # ==================================================================================================
@@ -210,8 +209,21 @@ def les_pupitres(request):
 
                 dico_instrument_membres.setdefault(instrument[0], {"instrument": instrument[1], "membres": []})["membres"].append(membre)
 
-    return render(request, "sous_menu_association_les_pupitres.html", {"dico_instrument_membres": dico_instrument_membres})
+    return render(request, "les_pupitres.html", {"dico_instrument_membres": dico_instrument_membres})
 
+# ==================
+def agenda(request):
+    """
+        Vue de l'agenda
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    return render(request, "agenda.html")
 
 # ==================================================================================================
 # SIGNAUX
