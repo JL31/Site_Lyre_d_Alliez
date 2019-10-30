@@ -76,6 +76,7 @@ urlpatterns = [
     path('zone_de_partage/', zone_de_partage, name='zone_de_partage'),
 
     path('creation_profil_membre/', creation_profil_membre, name='creation_profil_membre'),
+    path('creation_evenement/', creation_evenement, name='creation_evenement'),
 
     path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),
     path('deconnexion/', LogoutView.as_view(template_name='deconnexion.html'), name='deconnexion'),

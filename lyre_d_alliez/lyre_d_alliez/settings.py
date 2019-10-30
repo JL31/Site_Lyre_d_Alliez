@@ -172,8 +172,8 @@ MEDIA_URL = "/images.lyredalliez.fr/"
 
 ADMINS = secret_data.ADMINS
 EMAIL_SUBJECT_PREFIX = "[Site de la Lyre d'Alliez] "
-# SERVER_EMAIL = "noreply@lyredalliez.fr"
-SERVER_EMAIL = secret_data.ADMINS[0][1]
+SERVER_EMAIL = "noreply@lyredalliez.fr"
+# SERVER_EMAIL = secret_data.ADMINS[0][1]
 
 EMAIL_BACKEND = "django_mailjet.backends.MailjetBackend"
 MAILJET_API_KEY = secret_data.MAILJET_API_KEY

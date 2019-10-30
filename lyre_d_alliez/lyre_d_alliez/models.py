@@ -96,6 +96,37 @@ class Membre(User):
         image.save(self.avatar.path)
 
 
+# =============================
+class Evenements(models.Model):
+    """
+        Classe qui décrit le modèle des évènements
+    """
+
+    nom = models.CharField(null=False, blank=False, max_length=255)
+    lieu = models.CharField(null=False, blank=False, max_length=255)
+    date = models.DateField(null=False, blank=False)
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du modèle
+        """
+
+        verbose_name = "evenement"
+        ordering = ["nom",
+                    "lieu",
+                    "date"
+                   ]
+
+    # ================
+    def __str__(self):
+        """
+            Permet de faciliter la reconnaissance des objets lors de l'administration
+        """
+
+        return self.nom
+
+
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================

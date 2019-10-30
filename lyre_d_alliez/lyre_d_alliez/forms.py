@@ -22,8 +22,8 @@ __status__ = 'dev'
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Membre
-from django.forms import MultipleChoiceField
+from .models import Membre, Evenements
+from django.forms import MultipleChoiceField, ModelForm
 
 
 # ==================================================================================================
@@ -67,6 +67,7 @@ class MembreForm(UserCreationForm):
 
     instruments = MultipleChoiceField(choices=LISTE_DES_INSTRUMENTS)
 
+    # =========
     class Meta:
         """
             Configuration/définition des options de metadonnées du formulaire
@@ -99,6 +100,21 @@ class MembreForm(UserCreationForm):
             
         return self.cleaned_data
 
+
+# =============================
+class EvenementForm(ModelForm):
+    """
+        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouvel évènement
+    """
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du formulaire
+        """
+
+        model = Evenements
+        fields = ("nom", "lieu", "date")
 
 # ==================================================================================================
 # FUNCTIONS

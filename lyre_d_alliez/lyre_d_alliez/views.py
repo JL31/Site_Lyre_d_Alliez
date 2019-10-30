@@ -24,7 +24,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.signals import post_save
 from django.core.mail import mail_admins
-from .forms import MembreForm, LISTE_DES_INSTRUMENTS
+from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm
 from .models import Membre
 
 from collections import OrderedDict
@@ -224,6 +224,34 @@ def agenda(request):
     """
 
     return render(request, "agenda.html")
+
+# ==============================
+def creation_evenement(request):
+    """
+        Vue pour la création d'un évènement
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    if request.method == "POST":
+
+        form = EvenementForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            return HttpResponseRedirect("/accueil/")
+
+    else:
+
+        form = EvenementForm()
+
+    return render(request, "EvenementForm.html", {"form": form})
 
 # ==================================================================================================
 # SIGNAUX
