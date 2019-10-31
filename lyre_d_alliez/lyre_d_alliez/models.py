@@ -123,6 +123,7 @@ class Abonnement(models.Model):
 
         return self.adresse_mail_abonne
 
+
 # =============================
 class Evenements(models.Model):
     """

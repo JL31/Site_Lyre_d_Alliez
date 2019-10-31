@@ -25,7 +25,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.signals import post_save
 from django.core.mail import mail_admins
 from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm
-from .models import Membre, Evenements
+from .models import Membre, Evenements, Abonnement
 
 # from bootstrap_modal_forms.generic import BSModalCreateView
 # from django.urls import reverse_lazy
@@ -274,8 +274,9 @@ def creation_evenement(request):
 
 # ====================================================
 def abonnement_evenement(request, nom_de_l_evenement):
+# def abonnement_evenement(request):
     """
-        Vue pour lagestion d'un abonnement à un évènement
+        Vue pour la gestion d'un abonnement à un évènement
 
         :param request: instance de HttpRequest
         :type request: django.core.handlers.wsgi.WSGIRequest
@@ -295,23 +296,20 @@ def abonnement_evenement(request, nom_de_l_evenement):
 
             evenement = Evenements.objects.filter(nom=nom_de_l_evenement)
 
-            print()
-            print(evenement)
-            print()
+            if len(evenement) > 1:
 
-            abonnement = evenement.abonnement()
-            print()
-            print(abonnement)
-            print()
-            abonnement.adresse_mail_abonne = form.cleaned_data.get("adresse_email")
-            print()
-            print(abonnement.adresse_mail_abonne)
-            print()
-            abonnement.date_de_l_alerte = form.cleaned_data.get("date_envoi_alerte")
-            print()
-            print(abonnement.date_de_l_alerte)
-            print()
-            abonnement.save()
+                # à améliorer
+                raise ValueError
+
+            else:
+
+                abonnement = Abonnement(adresse_mail_abonne=form.cleaned_data.get("adresse_email"),
+                                        date_de_l_alerte=form.cleaned_data.get("date_envoi_alerte"))
+                abonnement.save()
+
+                for obj in evenement:
+
+                    obj.abonnements.add(abonnement)
 
             return HttpResponseRedirect("/actualites/agenda/")
 
@@ -319,7 +317,7 @@ def abonnement_evenement(request, nom_de_l_evenement):
 
         form = AbonnementEvenementForm()
 
-    return render(request, "abonnement_evenement_bis.html", {"form": form})
+    return render(request, "abonnement_evenement_bis.html", {"form": form, "nom_de_l_evenement": nom_de_l_evenement})
 
 
 # ==================================================================================================

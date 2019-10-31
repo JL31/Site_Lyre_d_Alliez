@@ -19,6 +19,7 @@
                 Lieu : {{ evenement.lieu }}<br />
                 Date : {{ evenement.date }}
             </p>
+            <!--<a class="lien_abonnement_evenement" href="{# {% url 'abonnement_evenement' evenement.nom %} #}"><img src="{# {% static 'img/test_ajout.png' %} #}" /></a>-->
             <a class="lien_abonnement_evenement" href="{% url 'abonnement_evenement' evenement.nom %}"><img src="{% static 'img/test_ajout.png' %}" /></a>
             <!-- Début ajout -->
             <!--
@@ -33,12 +34,11 @@
                 $(function ()
                   {
                     // Create book button
-                    $(".abonnement-evenement").modalForm({formURL: "{% url 'abonnement_evenement' %}"});
+                    $(".abonnement-evenement").modalForm({formURL: "{# {% url 'abonnement_evenement' %} #}"});
                   }
                  );
             </script>-->
             <!-- Fin ajout -->
-
         </div>
     {% endfor %}
 

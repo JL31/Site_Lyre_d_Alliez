@@ -34,7 +34,7 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.contrib.flatpages.views import flatpage
 from django.contrib.auth.views import LoginView, LogoutView
 from .views import *
@@ -78,7 +78,9 @@ urlpatterns = [
     path('creation_profil_membre/', creation_profil_membre, name='creation_profil_membre'),
     path('creation_evenement/', creation_evenement, name='creation_evenement'),
     # path('abonnement_evenement/', VueAbonnementEvenement.as_view(), name='abonnement_evenement'),
-    path('abonnement_evenement/<str:nom_de_l_evenement>', abonnement_evenement, name='abonnement_evenement'),
+    # path('abonnement_evenement/', abonnement_evenement, name='abonnement_evenement'),
+    # path('abonnement_evenement/<str:nom_de_l_evenement>', abonnement_evenement, name='abonnement_evenement'),
+    re_path(r'^abonnement_evenement/(?P<nom_de_l_evenement>.*)/$', abonnement_evenement, name='abonnement_evenement'),
 
     path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),
     path('deconnexion/', LogoutView.as_view(template_name='deconnexion.html'), name='deconnexion'),

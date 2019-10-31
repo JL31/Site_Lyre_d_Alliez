@@ -118,8 +118,9 @@ class EvenementForm(ModelForm):
         fields = ("nom", "lieu", "date")
 
 
-# =========================================
-class AbonnementEvenementForm(BSModalForm):
+# =======================================
+# class AbonnementEvenementForm(BSModalForm):
+class AbonnementEvenementForm(ModelForm):
     """
         Classe qui permet la création d'un formulaire pour l'abonnement à un évènement
     """
