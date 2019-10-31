@@ -77,6 +77,8 @@ urlpatterns = [
 
     path('creation_profil_membre/', creation_profil_membre, name='creation_profil_membre'),
     path('creation_evenement/', creation_evenement, name='creation_evenement'),
+    # path('abonnement_evenement/', VueAbonnementEvenement.as_view(), name='abonnement_evenement'),
+    path('abonnement_evenement/<str:nom_de_l_evenement>', abonnement_evenement, name='abonnement_evenement'),
 
     path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),
     path('deconnexion/', LogoutView.as_view(template_name='deconnexion.html'), name='deconnexion'),

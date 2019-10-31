@@ -22,8 +22,9 @@ __status__ = 'dev'
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Membre, Evenements
-from django.forms import MultipleChoiceField, ModelForm
+from .models import Membre, Evenements, Abonnement
+from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput
+from bootstrap_modal_forms.forms import BSModalForm
 
 
 # ==================================================================================================
@@ -115,6 +116,55 @@ class EvenementForm(ModelForm):
 
         model = Evenements
         fields = ("nom", "lieu", "date")
+
+
+# =========================================
+class AbonnementEvenementForm(BSModalForm):
+    """
+        Classe qui permet la création d'un formulaire pour l'abonnement à un évènement
+    """
+
+    adresse_email = EmailField(label="Indiquez votre adresse email", required=True)
+    confirmation_adresse_email = EmailField(label="Confirmez votre adresse email", required=True)
+    date_envoi_alerte = DateField(label="Date d'envoi de l'alerte")
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du formulaire
+        """
+
+        model = Abonnement
+
+        fields = ("adresse_email",
+                  "confirmation_adresse_email",
+                  "date_envoi_alerte")
+
+        widgets = {'adresse_email': TextInput(attrs={'type': 'email', 'placeholder': 'exemple: jean.dupont@test.fr'}),
+                   'confirmation_adresse_email': TextInput(attrs={'type': 'email', 'placeholder': 'exemple: jean.dupont@test.fr'}),
+                   'date_envoi_alerte': DateInput(format='%d-%m-%Y',
+                                                  attrs={'class': 'myDateClass', 'placeholder': 'Choisissez une date', 'required': True})
+                  }
+
+    # ===============
+    def clean(self):
+        """
+            Surcharge de la méthode clean
+
+            :return: les données nettoyées
+            :rtype: dict
+        """
+
+        adresse_email = self.cleaned_data.get("adresse_email")
+        confirmation_adresse_email = self.cleaned_data.get("confirmation_adresse_email")
+
+        if adresse_email != confirmation_adresse_email:
+
+            message_d_erreur = "Les deux adresses mail ne sont pas identiques, merci de corriger votre saisie"
+            raise ValidationError(message_d_erreur)
+
+        return self.cleaned_data
+
 
 # ==================================================================================================
 # FUNCTIONS

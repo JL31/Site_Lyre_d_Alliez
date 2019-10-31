@@ -96,5 +96,10 @@ nav a
 {
     background-color: RGB(200,200,200);
     padding-left: 5px;
-    width: 60vw;
+    width: 65vw;
+}
+
+strong
+{
+    font-size: 1.1em;
 }

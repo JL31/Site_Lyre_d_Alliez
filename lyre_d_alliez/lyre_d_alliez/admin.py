@@ -20,7 +20,7 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.contrib import admin
-from .models import Membre
+from .models import Membre, Evenements, Abonnement
 
 
 # ==================================================================================================
@@ -81,6 +81,54 @@ class MembreAdmin(admin.ModelAdmin):
                  )
 
 
+# ======================================
+class EvenementsAdmin(admin.ModelAdmin):
+    """
+        Classe qui permet la gestion de l'administration des membres
+    """
+
+    ### renommer en EvenementAdmin (sans le 's's à la fin) ?
+    ###     ==> à impacter partout
+
+    # Configuration de la liste d'articles
+    list_display = ("nom",
+                    "lieu",
+                    "date")
+
+    list_filter = ("nom",
+                   "lieu",
+                   "date")
+
+    date_hierarchy = "date"
+
+    ordering = ("date",)
+
+    search_fields = ("nom",
+                     "lieu",
+                     "date")
+
+
+# ======================================
+class AbonnementAdmin(admin.ModelAdmin):
+    """
+        Classe qui permet la gestion de l'administration des abonnements
+    """
+
+    # Configuration de la liste d'articles
+    list_display = ("adresse_mail_abonne",
+                    "date_de_l_alerte")
+
+    list_filter = ("adresse_mail_abonne",
+                    "date_de_l_alerte")
+
+    date_hierarchy = "date_de_l_alerte"
+
+    ordering = ("date_de_l_alerte",)
+
+    search_fields = ("adresse_mail_abonne",
+                    "date_de_l_alerte")
+
+
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================
@@ -90,3 +138,5 @@ class MembreAdmin(admin.ModelAdmin):
 # ==================================================================================================
 
 admin.site.register(Membre, MembreAdmin)
+admin.site.register(Evenements, EvenementsAdmin)
+admin.site.register(Abonnement, AbonnementAdmin)

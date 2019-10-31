@@ -5,9 +5,18 @@
     <head>
        <meta charset="utf-8" />
        <link rel="stylesheet" type="text/css" href="{% static 'css/overall_style.css' %}" />
+       <!-- Début ajout -->
+       <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"> -->
+       <!-- Fin ajout -->
        <title>{% block title %}La Lyre d'Alliez{% endblock %}</title>
     </head>
     <body>
+        <!-- Début ajout -->
+        <!-- <script src="{% static 'js/jquery.js' %}"></script>
+        <script src="{% static 'js/bootstrap.js' %}"></script>
+        <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+        <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script> -->
+        <!-- Fin ajout -->
         <header>
             <div id="authentification">
                 {% block authentification %}{% endblock %}

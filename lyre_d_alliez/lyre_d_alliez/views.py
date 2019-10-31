@@ -24,8 +24,11 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.signals import post_save
 from django.core.mail import mail_admins
-from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm
-from .models import Membre
+from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm
+from .models import Membre, Evenements
+
+# from bootstrap_modal_forms.generic import BSModalCreateView
+# from django.urls import reverse_lazy
 
 from collections import OrderedDict
 
@@ -36,6 +39,19 @@ from collections import OrderedDict
 # ==================================================================================================
 # CLASSES
 # ==================================================================================================
+
+
+# # ==============================================
+# class VueAbonnementEvenement(BSModalCreateView):
+#     """
+#         ...
+#     """
+#
+#     template_name = 'abonnement_evenement.html'
+#     form_class = AbonnementEvenementForm
+#     success_message = 'Abonnement réussi'
+#     success_url = reverse_lazy('creation_evenement')
+
 
 # ==================================================================================================
 # FUNCTIONS
@@ -223,7 +239,9 @@ def agenda(request):
         :rtype: django.http.response.HttpResponse
     """
 
-    return render(request, "agenda.html")
+    liste_des_evenements = Evenements.objects.all()
+
+    return render(request, "agenda.html", {"liste_des_evenements": liste_des_evenements})
 
 # ==============================
 def creation_evenement(request):
@@ -252,6 +270,57 @@ def creation_evenement(request):
         form = EvenementForm()
 
     return render(request, "EvenementForm.html", {"form": form})
+
+
+# ====================================================
+def abonnement_evenement(request, nom_de_l_evenement):
+    """
+        Vue pour lagestion d'un abonnement à un évènement
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param nom_de_l_evenement: nom de l'évènement auquel il faut rattacher l'abonnement
+        :type nom_de_l_evenement: str
+
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    if request.method == "POST":
+
+        form = AbonnementEvenementForm(request.POST)
+
+        if form.is_valid():
+
+            evenement = Evenements.objects.filter(nom=nom_de_l_evenement)
+
+            print()
+            print(evenement)
+            print()
+
+            abonnement = evenement.abonnement()
+            print()
+            print(abonnement)
+            print()
+            abonnement.adresse_mail_abonne = form.cleaned_data.get("adresse_email")
+            print()
+            print(abonnement.adresse_mail_abonne)
+            print()
+            abonnement.date_de_l_alerte = form.cleaned_data.get("date_envoi_alerte")
+            print()
+            print(abonnement.date_de_l_alerte)
+            print()
+            abonnement.save()
+
+            return HttpResponseRedirect("/actualites/agenda/")
+
+    else:
+
+        form = AbonnementEvenementForm()
+
+    return render(request, "abonnement_evenement_bis.html", {"form": form})
+
 
 # ==================================================================================================
 # SIGNAUX

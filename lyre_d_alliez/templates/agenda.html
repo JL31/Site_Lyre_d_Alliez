@@ -1,21 +1,46 @@
 {% extends "base_etendue.html" %}
+{% load static %}
 
 {% block contenu %}
 <h1>Agenda</h1>
-<br />
 <div id="">
-    Vous trouverez ci-après la liste des évènements passés et à venir.<br />
-    N'hésitez pas à vous abonner à un(des) évènement(s) pour être informé quelques semaines avant et bloquer le créneau dans votre agenda ;-)
 
-    <br />
-    <br />
+    <p>
+        Vous trouverez ci-après la liste des évènements passés et à venir.<br />
+        <br />
+        N'hésitez pas à vous abonner à un(des) évènement(s) (en cliquant sur la croix à droite de chaque évènement) pour être informé quelques semaines avant et bloquer le créneau dans votre agenda ;-)
+    </p>
 
-    <div class="agenda_concert">
-        <p class="bordure_gauche"></p>
-        <p class="description_evenement">Evènement : Concert du nouvel an<br />
-        Lieu : Salle des fêtes de Mondonville<br />
-        Date : 17 janvier 2020</p>
-    </div>
+    {% for evenement in liste_des_evenements %}
+        <div class="agenda_concert">
+            <p class="bordure_gauche"></p>
+            <p class="description_evenement">
+                <strong>{{ evenement.nom }}</strong><br />
+                Lieu : {{ evenement.lieu }}<br />
+                Date : {{ evenement.date }}
+            </p>
+            <a class="lien_abonnement_evenement" href="{% url 'abonnement_evenement' evenement.nom %}"><img src="{% static 'img/test_ajout.png' %}" /></a>
+            <!-- Début ajout -->
+            <!--
+            <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content"></div>
+                </div>
+            </div>
+
+            <button class="abonnement-evenement btn btn-primary" type="button" name="button">S'abonner à l'évènement</button>
+            <script type="text/javascript">
+                $(function ()
+                  {
+                    // Create book button
+                    $(".abonnement-evenement").modalForm({formURL: "{% url 'abonnement_evenement' %}"});
+                  }
+                 );
+            </script>-->
+            <!-- Fin ajout -->
+
+        </div>
+    {% endfor %}
 
 </div>
 {% endblock %}

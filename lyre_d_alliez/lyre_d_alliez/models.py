@@ -97,6 +97,33 @@ class Membre(User):
 
 
 # =============================
+class Abonnement(models.Model):
+    """
+        Classe qui décrit le modèle des abonnements
+    """
+
+    adresse_mail_abonne = models.EmailField(null=False, blank=False, max_length=255)
+    date_de_l_alerte = models.DateField(null=False, blank=False)
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du modèle
+        """
+
+        verbose_name = "abonnement"
+        ordering = ["adresse_mail_abonne",
+                    "date_de_l_alerte"]
+
+    # ================
+    def __str__(self):
+        """
+            Permet de faciliter la reconnaissance des objets lors de l'administration
+        """
+
+        return self.adresse_mail_abonne
+
+# =============================
 class Evenements(models.Model):
     """
         Classe qui décrit le modèle des évènements
@@ -105,6 +132,7 @@ class Evenements(models.Model):
     nom = models.CharField(null=False, blank=False, max_length=255)
     lieu = models.CharField(null=False, blank=False, max_length=255)
     date = models.DateField(null=False, blank=False)
+    abonnements = models.ManyToManyField(Abonnement)
 
     # =========
     class Meta:

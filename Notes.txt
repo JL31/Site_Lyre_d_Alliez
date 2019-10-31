@@ -26,6 +26,7 @@ Site de la Lyre
 - contact
 - plan du site ?
 - mentions légales ?
+- rajouter une liste déroulante dans la page d'admin des Membres afin d'ajouter un rôle dans le cas où le membre fait partie du Bureau
 
 # =====================================================================================================================
 # Questions
@@ -80,6 +81,22 @@ Zone de partage :
 - un fichier "base_etendue.html" qui étend le fichier "footer.html"
 
 Tous les autres templates étendront le fichier "base_etendue.html"
+
+# =====================================================================================================================
+# Détail "Agenda"
+# =====================================================================================================================
+
+Prévoir un bouton/lien pour s'abonner à un évènement
+Lorsqu'un visiteur cliquera sur ce bouton/lien une fenêtre apparaîtra dans la page pour lui demander :
+- son adresse mail,
+- la confirmation de son adresse mail,
+- combien de temps (en semaines) avant l'évènement il souhaite être averti par mail
+
+==> cf JavaScript ?
+
+https://pypi.org/project/django-bootstrap-modal-forms/
+https://trco.si/dbmf/
+
 
 # =====================================================================================================================
 # Détail "Photos"
