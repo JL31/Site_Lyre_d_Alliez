@@ -26,11 +26,13 @@ from django.db.models.signals import post_save
 from django.core.mail import mail_admins
 from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm
 from .models import Membre, Evenements, Abonnement
+from django.contrib import messages
 
 # from bootstrap_modal_forms.generic import BSModalCreateView
-# from django.urls import reverse_lazy
 
 from collections import OrderedDict
+from datetime import datetime
+
 
 # ==================================================================================================
 # INITIALISATIONS
@@ -177,7 +179,8 @@ def creation_profil_membre(request):
         if form.is_valid():
 
             form.save()
-
+            msg = "Le profil a été crée avec succès, merci d'attendre l'email d'activation de votre compte"
+            messages.info(request, msg)
             return HttpResponseRedirect("/accueil/")
 
     else:
@@ -251,8 +254,8 @@ def creation_evenement(request):
         :param request: instance de HttpRequest
         :type request: django.core.handlers.wsgi.WSGIRequest
 
-        :return: instance de HttpResponse ou de HttpResponseRedirect
-        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
     """
 
     if request.method == "POST":
@@ -274,7 +277,6 @@ def creation_evenement(request):
 
 # ====================================================
 def abonnement_evenement(request, nom_de_l_evenement):
-# def abonnement_evenement(request):
     """
         Vue pour la gestion d'un abonnement à un évènement
 
@@ -299,9 +301,13 @@ def abonnement_evenement(request, nom_de_l_evenement):
             if len(evenement) > 1:
 
                 # à améliorer
-                raise ValueError
+                msg = "Erreur --- vue abonnement_evenement --- filtre nom : plus d'une personne"
+                raise ValueError(msg)
 
             else:
+
+                # mettre en place un système pour éviter les doublons
+                # quid si un même visiteur souhaite programmer deux alertes à la même date ?
 
                 abonnement = Abonnement(adresse_mail_abonne=form.cleaned_data.get("adresse_email"),
                                         date_de_l_alerte=form.cleaned_data.get("date_envoi_alerte"))
@@ -319,13 +325,68 @@ def abonnement_evenement(request, nom_de_l_evenement):
 
     return render(request, "abonnement_evenement_bis.html", {"form": form, "nom_de_l_evenement": nom_de_l_evenement})
 
+# ===============================
+def envoi_alerte_abonne(request):
+    """
+        Vue pour la gestion de l'envoi d'une alerte à un abonné concernant un évènement
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    liste_des_evenements = Evenements.objects.all()
+
+    for evenement in liste_des_evenements:
+
+        liste_des_abonnes = evenement.abonnements.all()
+
+        for abonne in liste_des_abonnes:
+
+            if abonne.date_de_l_alerte.strftime("%Y-%m-%d") == datetime.now().strftime("%Y-%m-%d"):
+
+                return render(request, "page_de_test.html", {"evenement": evenement, "abonne": abonne})
+
+    return HttpResponseRedirect("/accueil/")
+
+# ==================
+def bureau(request):
+    """
+        Vue du bureau
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    chef = Membre.objects.filter(est_le_chef=True)
+
+    if len(chef) > 1:
+
+        # à améliorer
+        msg = "Erreur --- vue bureau --- filtre est_le_chef : plus d'une personne"
+        raise ValueError(msg)
+
+    else:
+
+        for obj in chef:
+
+            chef = obj
+
+    liste_des_membres_du_bureau = Membre.objects.filter(est_membre_du_bureau=True)
+
+    return render(request, "bureau.html", {"chef": chef, "liste_des_membres_du_bureau": liste_des_membres_du_bureau})
 
 # ==================================================================================================
 # SIGNAUX
 # ==================================================================================================
 
 # Envoi d'un mail aux admins en cas de création d'un nouveau compte Membre
-post_save.connect(envoi_mail_admin_nouveau_membre, sender=Membre)
+# post_save.connect(envoi_mail_admin_nouveau_membre, sender=Membre)
 
 
 # ==================================================================================================

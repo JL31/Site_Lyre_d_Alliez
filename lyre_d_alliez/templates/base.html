@@ -18,6 +18,9 @@
         <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script> -->
         <!-- Fin ajout -->
         <header>
+            <div id="zone_de_messages">
+                {% block zone_de_messages %}{% endblock %}
+            </div>
             <div id="authentification">
                 {% block authentification %}{% endblock %}
             </div>

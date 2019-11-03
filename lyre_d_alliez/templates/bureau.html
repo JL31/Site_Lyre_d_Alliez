@@ -1,0 +1,15 @@
+{% extends "base_etendue.html" %}
+
+{% block contenu %}
+<h1>Le bureau</h1>
+<p>Voici les membres du bureau : ils oeuvrent tous pour l'organisation des concerts et des évènements spéciaux !</p>
+<p>
+    {{ chef }} : {{ chef.first_name }}<br />
+    {% for membre_du_bureau in liste_des_membres_du_bureau %}
+
+        <br />{{ membre_du_bureau }} : {{ membre_du_bureau.first_name }}
+
+    {% endfor %}
+</p>
+
+{% endblock %}
