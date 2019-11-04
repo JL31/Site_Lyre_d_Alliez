@@ -83,6 +83,30 @@ Zone de partage :
 Tous les autres templates étendront le fichier "base_etendue.html"
 
 # =====================================================================================================================
+# Détail "Articles"
+# =====================================================================================================================
+
+s'inspirer du site jab31
+
+- mettre trois articles par ligne
+- la prévisualisation d'un article contiendra :
+    + une image/photo
+    + un titre
+    + une description tronquée (...)
+    + un bouton/lien "Lire la suite..."
+    + la date de l'article
+
+cliquer sur :
+- une image/photo
+- le titre
+- le bouton/lien "Lire la suite..."
+
+permettra d'afficher l'article en plein écran
+
+prévoir une API de création d'un article
+
+
+# =====================================================================================================================
 # Détail "Agenda"
 # =====================================================================================================================
 
@@ -90,7 +114,8 @@ Prévoir un bouton/lien pour s'abonner à un évènement
 Lorsqu'un visiteur cliquera sur ce bouton/lien une fenêtre apparaîtra dans la page pour lui demander :
 - son adresse mail,
 - la confirmation de son adresse mail,
-- combien de temps (en semaines) avant l'évènement il souhaite être averti par mail
+- la date à laquelle il souhaite être averti par mail
+  --> https://simpleisbetterthancomplex.com/tutorial/2019/01/03/how-to-use-date-picker-with-django.html
 
 ==> cf JavaScript ?
 

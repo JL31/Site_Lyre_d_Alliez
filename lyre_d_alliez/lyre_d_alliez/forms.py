@@ -22,9 +22,9 @@ __status__ = 'dev'
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Membre, Evenements, Abonnement
+from .models import Membre, Evenement, Abonnement, Article
 from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput
-from bootstrap_modal_forms.forms import BSModalForm
+# from bootstrap_modal_forms.forms import BSModalForm
 
 
 # ==================================================================================================
@@ -114,7 +114,7 @@ class EvenementForm(ModelForm):
             Configuration/définition des options de metadonnées du formulaire
         """
 
-        model = Evenements
+        model = Evenement
         fields = ("nom", "lieu", "date")
 
 
@@ -165,6 +165,22 @@ class AbonnementEvenementForm(ModelForm):
             raise ValidationError(message_d_erreur)
 
         return self.cleaned_data
+
+
+# ===========================
+class ArticleForm(ModelForm):
+    """
+        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouvel article
+    """
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du formulaire
+        """
+
+        model = Article
+        fields = ("image", "titre", "description")
 
 
 # ==================================================================================================

@@ -103,3 +103,28 @@ strong
 {
     font-size: 1.1em;
 }
+
+.conteneur_global_des_articles
+{
+    display: flex;
+    justify-content: center;
+}
+
+.articles
+{
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 65%;
+}
+
+.article
+{
+    width: 20%;
+    margin: 25px 20px 25px 20px;
+}
+
+.lien_image_vers_article, .lien_titre_vers_article, .lien_vers_article
+{
+    color: black;
+    text-decoration: none;
+}

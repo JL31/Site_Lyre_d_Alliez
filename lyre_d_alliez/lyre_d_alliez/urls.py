@@ -65,23 +65,31 @@ urlpatterns = [
 
     path('accueil/', accueil, name='accueil'),
 
+    # Menu et sous-menus : Actualités
     path('actualites/', actualites, name='actualites'),
     path('actualites/agenda/', agenda, name='agenda'),
+    path('actualites/articles/', liste_des_articles, name='liste_des_articles'),
+    re_path(r'^actualites/article/(?P<reference_de_l_article>\d+)/$', lire_article, name='lire_article'),
 
+    # Menu et sous-menus  : Association
     path('association/', association, name='association'),
     path('association/presentation/', flatpage, {'url': '/association/presentation/'}, name='presentation'),
     # path('association/bureau/', flatpage, {'url': '/association/bureau/'}, name='bureau'),
     path('association/bureau/', bureau, name='bureau'),
     path('association/les_pupitres/', les_pupitres, name='les_pupitres'),
 
+    # Menu et sous-menus  : Zone de partage
     path('zone_de_partage/', zone_de_partage, name='zone_de_partage'),
 
+    # APIs
     path('creation_profil_membre/', creation_profil_membre, name='creation_profil_membre'),
     path('creation_evenement/', creation_evenement, name='creation_evenement'),
     # path('abonnement_evenement/', VueAbonnementEvenement.as_view(), name='abonnement_evenement'),
     re_path(r'^abonnement_evenement/(?P<nom_de_l_evenement>.*)/$', abonnement_evenement, name='abonnement_evenement'),
     path('envoi_alerte_abonne/', envoi_alerte_abonne, name='envoi_alerte_abonne'),
+    path('creation_article/', creation_article, name='creation_article'),
 
+    # Connexion / deconnexion
     path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),
     path('deconnexion/', LogoutView.as_view(template_name='deconnexion.html'), name='deconnexion'),
     path('acces_interdit/', acces_interdit, name='acces_interdit'),

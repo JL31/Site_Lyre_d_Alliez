@@ -21,6 +21,7 @@ __status__ = 'dev'
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 from PIL import Image
 
 
@@ -124,8 +125,8 @@ class Abonnement(models.Model):
         return self.adresse_mail_abonne
 
 
-# =============================
-class Evenements(models.Model):
+# ============================
+class Evenement(models.Model):
     """
         Classe qui décrit le modèle des évènements
     """
@@ -154,6 +155,39 @@ class Evenements(models.Model):
         """
 
         return self.nom
+
+
+# ==========================
+class Article(models.Model):
+    """
+        Classe qui décrit le modèle des articles
+    """
+
+    image = models.ImageField(null=False, blank=False, upload_to="images_articles/")
+    titre = models.CharField(null=False, blank=False, max_length=250)
+    description = models.TextField(null=False, blank=False, max_length=5000)
+    date = models.DateField(default=timezone.now)
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du modèle
+        """
+
+        verbose_name = "article"
+        ordering = ["image",
+                    "titre",
+                    "description",
+                    "date"
+                    ]
+
+    # ================
+    def __str__(self):
+        """
+            Permet de faciliter la reconnaissance des objets lors de l'administration
+        """
+
+        return self.titre
 
 
 # ==================================================================================================

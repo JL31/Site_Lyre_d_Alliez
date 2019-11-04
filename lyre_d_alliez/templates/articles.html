@@ -1,0 +1,26 @@
+{% extends "base_etendue.html" %}
+
+{% block contenu %}
+
+    <br />
+    <div class="conteneur_global_des_articles">
+
+        <div class="articles">
+
+        {% for article in liste_des_articles %}
+
+            <div class="article">
+                <a href="{% url 'lire_article' article.id %}" class="lien_image_vers_article"><img src="{{ article.image.url }}" class="image_article"/></a>
+                <a href="{% url 'lire_article' article.id %}" class="lien_titre_vers_article"><h2 class="titre_article">{{ article.titre }}</h2></a>
+                <p id="description_article">{{ article.description|truncatewords_html:30 }}</p>
+                <a href="{% url 'lire_article' article.id %}" class="lien_vers_article">Lire la suite...</a>
+                <p id="date_article">{{ article.date }}</p>
+            </div>
+
+        {% endfor %}
+
+        </div>
+
+    </div>
+
+{% endblock %}

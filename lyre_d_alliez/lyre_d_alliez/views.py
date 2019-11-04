@@ -23,15 +23,20 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.signals import post_save
-from django.core.mail import mail_admins
-from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm
-from .models import Membre, Evenements, Abonnement
+from django.core.mail import mail_admins, send_mail
 from django.contrib import messages
+
+from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm
+from .models import Membre, Evenement, Abonnement, Article
+
+from .secret_data import ADMINS, MOT_DE_PASSE
 
 # from bootstrap_modal_forms.generic import BSModalCreateView
 
 from collections import OrderedDict
 from datetime import datetime
+from locale import setlocale, LC_TIME
+from smtplib import SMTPException
 
 
 # ==================================================================================================
@@ -90,11 +95,45 @@ def envoi_mail_admin_nouveau_membre(**kwargs):
 
     sujet = " Inscription d'un nouveau membre"
     message = ("Une personne vient de remplir le formulaire d'inscription à la zone des membres.\n\n"
-               "Merci de vérifier les informations renseignées et de lui attribuer soit : \n\n"
-               "- l'accès à la zone membre ;\n"
-               "- l'accès aux outils du chef.")
+               "Merci de vérifier les informations renseignées et de lui attribuer les accès en tant que : \n\n"
+               "- membre ;\n"
+               "- membre du bureau ;\n"
+               "- chef.")
+    expediteur = ADMINS[0][1]
+    destinataire = [ADMINS[0][1]]
 
-    mail_admins(sujet, message)
+    utilisateur = ADMINS[0][1]
+    mot_de_passe = MOT_DE_PASSE
+
+    # mail_admins(sujet, message)
+    try:
+
+        send_mail(sujet, message, expediteur, destinataire, fail_silently=False, auth_user=utilisateur, auth_password=mot_de_passe)
+
+    except SMTPException:
+
+        msg = "Problème lors de l'envoi de mail après la création d'un compte membre"
+        raise SMTPException(msg)
+
+# =======================
+def envoi_mail(**kwargs):
+    """
+        Fonction qui permet d'envoyer un mail
+    """
+
+    expediteur = ADMINS[0][1]
+    destinataire = [ADMINS[0][1]]
+    utilisateur = ADMINS[0][1]
+    mot_de_passe = MOT_DE_PASSE
+
+    try:
+
+        send_mail(kwargs["sujet"], kwargs["message"], expediteur, destinataire, fail_silently=False, auth_user=utilisateur, auth_password=mot_de_passe)
+
+    except SMTPException:
+
+        msg = kwargs["msg_erreur"]
+        raise SMTPException(msg)
 
 
 # ==================================================================================================
@@ -242,7 +281,7 @@ def agenda(request):
         :rtype: django.http.response.HttpResponse
     """
 
-    liste_des_evenements = Evenements.objects.all()
+    liste_des_evenements = Evenement.objects.all()
 
     return render(request, "agenda.html", {"liste_des_evenements": liste_des_evenements})
 
@@ -274,7 +313,6 @@ def creation_evenement(request):
 
     return render(request, "EvenementForm.html", {"form": form})
 
-
 # ====================================================
 def abonnement_evenement(request, nom_de_l_evenement):
     """
@@ -296,7 +334,7 @@ def abonnement_evenement(request, nom_de_l_evenement):
 
         if form.is_valid():
 
-            evenement = Evenements.objects.filter(nom=nom_de_l_evenement)
+            evenement = Evenement.objects.filter(nom=nom_de_l_evenement)
 
             if len(evenement) > 1:
 
@@ -309,13 +347,20 @@ def abonnement_evenement(request, nom_de_l_evenement):
                 # mettre en place un système pour éviter les doublons
                 # quid si un même visiteur souhaite programmer deux alertes à la même date ?
 
-                abonnement = Abonnement(adresse_mail_abonne=form.cleaned_data.get("adresse_email"),
-                                        date_de_l_alerte=form.cleaned_data.get("date_envoi_alerte"))
+                adresse_mail_abonne = form.cleaned_data.get("adresse_email")
+                date_de_l_alerte = form.cleaned_data.get("date_envoi_alerte")
+
+                abonnement = Abonnement(adresse_mail_abonne=adresse_mail_abonne,
+                                        date_de_l_alerte=date_de_l_alerte)
                 abonnement.save()
 
                 for obj in evenement:
 
                     obj.abonnements.add(abonnement)
+
+                    setlocale(LC_TIME, "fr-FR")     # permet d'obtenir la date au format local (ici Fr)
+                    msg = "Votre demande d'abonnement a bien été prise en compte. Vous recevrez un email pour vous alerter le {} à l'adresse suivante : {}".format(date_de_l_alerte.strftime("%A %d %B %Y"), adresse_mail_abonne)
+                    messages.info(request, msg)
 
             return HttpResponseRedirect("/actualites/agenda/")
 
@@ -337,7 +382,7 @@ def envoi_alerte_abonne(request):
         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
-    liste_des_evenements = Evenements.objects.all()
+    liste_des_evenements = Evenement.objects.all()
 
     for evenement in liste_des_evenements:
 
@@ -347,7 +392,12 @@ def envoi_alerte_abonne(request):
 
             if abonne.date_de_l_alerte.strftime("%Y-%m-%d") == datetime.now().strftime("%Y-%m-%d"):
 
-                return render(request, "page_de_test.html", {"evenement": evenement, "abonne": abonne})
+                sujet = " Rappel "
+                message = ("La Lyre d'Alliez vous rappelle que le {{ evenement.nom }} aura lieu à {{ evenement.lieu }} le {{ evenement.date }}<br />"
+                           "Ceci est un message automatique envoyé à {{ abonne.adresse_mail_abonne }}")
+                msg_erreur = "Problème lors de l'envoi d'une alerte mail à un abonné"
+
+                envoi_mail(sujet=sujet, message=message, msg_erreur=msg_erreur)
 
     return HttpResponseRedirect("/accueil/")
 
@@ -381,12 +431,89 @@ def bureau(request):
 
     return render(request, "bureau.html", {"chef": chef, "liste_des_membres_du_bureau": liste_des_membres_du_bureau})
 
+# ============================
+def creation_article(request):
+    """
+        Vue du formulaire permettant la création d'un nouvel article
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    if request.method == "POST":
+
+        form = ArticleForm(request.POST, request.FILES)
+
+        if form.is_valid():
+
+            form.save()
+            msg = "L'article a été crée avec succès"
+            messages.info(request, msg)
+            return HttpResponseRedirect("/accueil/")
+
+    else:
+
+        form = ArticleForm()
+
+    return render(request, "ArticleForm.html", {"form": form})
+
+# ==============================
+def liste_des_articles(request):
+    """
+        Vue permettant de lister tous les articles créés
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    liste_des_articles = Article.objects.order_by("-date")
+
+    return render(request, "articles.html", {"liste_des_articles": liste_des_articles})
+
+# ================================================
+def lire_article(request, reference_de_l_article):
+    """
+        Vue qui permet de lire un article
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param reference_de_l_article:
+        :type reference_de_l_article:
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    article = Article.objects.filter(id=reference_de_l_article)
+
+    if len(article) > 1:
+
+        # à améliorer
+        msg = "Erreur --- vue lire_article --- filtre id : plus d'un article"
+        raise ValueError(msg)
+
+    else:
+
+        for obj in article:
+
+            article = obj
+
+    return render(request, "lecture_article.html", {"article": article})
+
+
 # ==================================================================================================
 # SIGNAUX
 # ==================================================================================================
 
 # Envoi d'un mail aux admins en cas de création d'un nouveau compte Membre
-# post_save.connect(envoi_mail_admin_nouveau_membre, sender=Membre)
+post_save.connect(envoi_mail_admin_nouveau_membre, sender=Membre)
 
 
 # ==================================================================================================

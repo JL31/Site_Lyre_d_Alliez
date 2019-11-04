@@ -20,7 +20,7 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.contrib import admin
-from .models import Membre, Evenements, Abonnement
+from .models import Membre, Evenement, Abonnement, Article
 
 
 # ==================================================================================================
@@ -81,8 +81,8 @@ class MembreAdmin(admin.ModelAdmin):
                  )
 
 
-# ======================================
-class EvenementsAdmin(admin.ModelAdmin):
+# =====================================
+class EvenementAdmin(admin.ModelAdmin):
     """
         Classe qui permet la gestion de l'administration des membres
     """
@@ -129,6 +129,26 @@ class AbonnementAdmin(admin.ModelAdmin):
                     "date_de_l_alerte")
 
 
+# ===================================
+class ArticleAdmin(admin.ModelAdmin):
+    """
+        Classe qui permet la gestion de l'administration des articles
+    """
+
+    # Configuration de la liste d'articles
+    list_display = ("titre",
+                    "date")
+
+    list_filter = ("titre",
+                   "date")
+
+    date_hierarchy = "date"
+
+    ordering = ("date",)
+
+    search_fields = ("titre",
+                     "date")
+
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================
@@ -138,5 +158,6 @@ class AbonnementAdmin(admin.ModelAdmin):
 # ==================================================================================================
 
 admin.site.register(Membre, MembreAdmin)
-admin.site.register(Evenements, EvenementsAdmin)
+admin.site.register(Evenement, EvenementAdmin)
 admin.site.register(Abonnement, AbonnementAdmin)
+admin.site.register(Article, ArticleAdmin)
