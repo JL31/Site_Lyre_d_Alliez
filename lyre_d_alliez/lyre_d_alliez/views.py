@@ -27,7 +27,7 @@ from django.core.mail import mail_admins, send_mail
 from django.contrib import messages
 
 from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm
-from .models import Membre, Evenement, Abonnement, Article
+from .models import Membre, Evenement, Abonnement, Article, Commentaire
 
 from .secret_data import ADMINS, MOT_DE_PASSE
 
@@ -474,7 +474,7 @@ def liste_des_articles(request):
 
     liste_des_articles = Article.objects.order_by("-date")
 
-    return render(request, "articles.html", {"liste_des_articles": liste_des_articles})
+    return render(request, "liste_des_articles.html", {"liste_des_articles": liste_des_articles})
 
 # ================================================
 def lire_article(request, reference_de_l_article):
@@ -492,6 +492,7 @@ def lire_article(request, reference_de_l_article):
     """
 
     article = Article.objects.filter(id=reference_de_l_article)
+    liste_des_commentaires = None
 
     if len(article) > 1:
 
@@ -505,7 +506,20 @@ def lire_article(request, reference_de_l_article):
 
             article = obj
 
-    return render(request, "lecture_article.html", {"article": article})
+            liste_com = Commentaire.objects.all()
+            print()
+            print(liste_com)
+            for it in liste_com:
+
+                print()
+                print(it.texte)
+                print(it.article_set.all())
+
+            print()
+            liste_des_commentaires = Commentaire.objects.filter(article=obj)
+            print(liste_des_commentaires)
+
+    return render(request, "lecture_article.html", {"article": article, "liste_des_commentaires": liste_des_commentaires})
 
 
 # ==================================================================================================

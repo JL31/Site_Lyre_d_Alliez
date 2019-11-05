@@ -4,12 +4,18 @@
 
     <div class="conteneur_global_de_l_article">
 
-        <div class="article">
+        <div class="lecture_article">
 
-            <h2 class="titre_article">{{ article.titre }}</h2></a>
-            <p id="description_article">{{ article.description }}</p>
-            <p id="date_article">{{ article.date }}</p>
-
+            <h2 class="titre_lecture_article">{{ article.titre }}</h2>
+            <p id="date_lecture_article">{{ article.date }}</p>
+            <p id="description_lecture_article">{{ article.description }}</p>
+            <form action="{% url 'liste_des_articles' %}" id="fin_lecture_article">
+                <input type="submit" id="bouton_retour_liste_des_articles" value="Retour"/>
+            </form>
+            <br />
+            {% for commentaire in liste_des_commentaires %}
+                <div>{{ commentaire.texte }}</div>
+            {% endfor %}
         </div>
 
     </div>

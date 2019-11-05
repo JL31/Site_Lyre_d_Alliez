@@ -135,6 +135,7 @@ class Evenement(models.Model):
     lieu = models.CharField(null=False, blank=False, max_length=255)
     date = models.DateField(null=False, blank=False)
     abonnements = models.ManyToManyField(Abonnement)
+    # ==> à modifier en ForeignKey ?
 
     # =========
     class Meta:
@@ -157,6 +158,35 @@ class Evenement(models.Model):
         return self.nom
 
 
+# ==============================
+class Commentaire(models.Model):
+    """
+        Classe qui décrit le modèle des commentaires
+    """
+
+    texte = models.TextField(null=True, blank=False, max_length=5000)
+    date = models.DateTimeField(default=timezone.now())
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du modèle
+        """
+
+        verbose_name = "commentaire"
+        ordering = ["texte",
+                    "date"
+                    ]
+
+    # ================
+    def __str__(self):
+        """
+            Permet de faciliter la reconnaissance des objets lors de l'administration
+        """
+
+        return self.texte
+
+
 # ==========================
 class Article(models.Model):
     """
@@ -167,6 +197,7 @@ class Article(models.Model):
     titre = models.CharField(null=False, blank=False, max_length=250)
     description = models.TextField(null=False, blank=False, max_length=5000)
     date = models.DateField(default=timezone.now)
+    commentaires = models.ForeignKey(Commentaire, on_delete=models.SET_NULL, null=True)
 
     # =========
     class Meta:
@@ -178,7 +209,8 @@ class Article(models.Model):
         ordering = ["image",
                     "titre",
                     "description",
-                    "date"
+                    "date",
+                    "commentaires"
                     ]
 
     # ================

@@ -20,7 +20,7 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.contrib import admin
-from .models import Membre, Evenement, Abonnement, Article
+from .models import Membre, Evenement, Abonnement, Article, Commentaire
 
 
 # ==================================================================================================
@@ -149,6 +149,27 @@ class ArticleAdmin(admin.ModelAdmin):
     search_fields = ("titre",
                      "date")
 
+
+# =======================================
+class CommentaireAdmin(admin.ModelAdmin):
+    """
+        Classe qui permet la gestion de l'administration des commentaires
+    """
+
+    # Configuration de la liste d'articles
+    list_display = ("texte",
+                    "date")
+
+    list_filter = ("texte",
+                   "date")
+
+    date_hierarchy = "date"
+
+    ordering = ("date",)
+
+    search_fields = ("texte",
+                     "date")
+
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================
@@ -161,3 +182,4 @@ admin.site.register(Membre, MembreAdmin)
 admin.site.register(Evenement, EvenementAdmin)
 admin.site.register(Abonnement, AbonnementAdmin)
 admin.site.register(Article, ArticleAdmin)
+admin.site.register(Commentaire, CommentaireAdmin)

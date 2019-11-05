@@ -128,3 +128,61 @@ strong
     color: black;
     text-decoration: none;
 }
+
+/* Mise en forme de la liste des articles */
+/* -------------------------------------- */
+
+.image_article
+{
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+.titre_article
+{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+#description_article
+{
+    font-size: 0.9em;
+    color: RGB(120,120,120);
+}
+
+.lien_vers_article
+{
+    font-size: 0.9em;
+}
+
+#date_article
+{
+    font-size: 0.9em;
+    color: RGB(120,120,120);
+}
+
+
+/* Mise en forme de la lecture d'un  article */
+/* ----------------------------------------- */
+
+.lecture_article
+{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.titre_lecture_article
+{
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+#date_lecture_article
+{
+    font-size: 0.9em;
+    margin-top: 5px;
+    padding-top: 0px;
+}
