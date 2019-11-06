@@ -167,7 +167,7 @@ class CommentaireAdmin(admin.ModelAdmin):
 
     date_hierarchy = "date"
 
-    ordering = ("date",)
+    ordering = ("-date",)
 
     search_fields = ("texte",
                      "date",

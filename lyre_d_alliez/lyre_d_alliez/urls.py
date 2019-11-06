@@ -88,7 +88,6 @@ urlpatterns = [
     re_path(r'^abonnement_evenement/(?P<nom_de_l_evenement>.*)/$', abonnement_evenement, name='abonnement_evenement'),
     path('envoi_alerte_abonne/', envoi_alerte_abonne, name='envoi_alerte_abonne'),
     path('creation_article/', creation_article, name='creation_article'),
-    path('ajouter_commentaire/', ajouter_commentaire, name='ajouter_commentaire'),
 
     # Connexion / deconnexion
     path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),

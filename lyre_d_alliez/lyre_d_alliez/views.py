@@ -25,8 +25,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.signals import post_save
 from django.core.mail import mail_admins, send_mail
 from django.contrib import messages
+from django.utils import timezone
 
-from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm
+from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm
 from .models import Membre, Evenement, Abonnement, Article, Commentaire
 
 from .secret_data import ADMINS, MOT_DE_PASSE
@@ -491,7 +492,14 @@ def lire_article(request, reference_de_l_article):
         :rtype: django.http.response.HttpResponse
     """
 
+    # Récupération du contenu de l'article sélectionné
+    # ------------------------------------------------
+
     article = Article.objects.filter(id=reference_de_l_article)
+
+    # Récupération des commentaires associés à l'article sélectionné
+    # --------------------------------------------------------------
+
     liste_des_commentaires = None
 
     if len(article) > 1:
@@ -507,30 +515,38 @@ def lire_article(request, reference_de_l_article):
             article = obj
             liste_des_commentaires = Commentaire.objects.filter(articles=obj)
 
-    return render(request, "lecture_article.html", {"article": article, "liste_des_commentaires": liste_des_commentaires})
 
-# ===============================
-def ajouter_commentaire(request):
-    """
-        Vue du formulaire permettant la'ajout d'un commentaire dans un article
+            # # # ==> rajouter un tri par date descendante (le plus récent en haut)
 
-        :param request: instance de HttpRequest
-        :type request: django.core.handlers.wsgi.WSGIRequest
 
-        :param reference_de_l_article:
-        :type reference_de_l_article:
-
-        :return: instance de HttpResponse
-        :rtype: django.http.response.HttpResponse
-    """
+    # Gestion du formulaire permettant l'ajout d'un commentaire à l'article sélectionné
+    # ---------------------------------------------------------------------------------
 
     if request.method == "POST":
 
-        pass
+        form = CommentaireForm(request.POST)
+
+        if form.is_valid():
+
+            commentaire = form.save(commit=False)
+            commentaire.date = timezone.now()
+            commentaire.articles = article
+            commentaire.save()
+
+
+            # # # ==> rajouter le nom de la personne qui à écrit le commentaire
+
+            # # # ==> problème lors de la réactualisation de la page : cela créé à nouveau le dernier commenaire !!!
+
+            form = CommentaireForm()
+            # return HttpResponseRedirect("/lire_article/")
 
     else:
 
-        pass
+        form = CommentaireForm()
+
+    return render(request, "lecture_article.html", {"article": article, "liste_des_commentaires": liste_des_commentaires, "form": form})
+
 
 # ==================================================================================================
 # SIGNAUX

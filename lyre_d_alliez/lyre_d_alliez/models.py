@@ -136,6 +136,7 @@ class Evenement(models.Model):
     date = models.DateField(null=False, blank=False)
     abonnements = models.ManyToManyField(Abonnement)
     # ==> à modifier en ForeignKey ?
+    # ==> la Foreign Key sera sur le modèle Abonnement
 
     # =========
     class Meta:

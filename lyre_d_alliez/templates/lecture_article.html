@@ -20,11 +20,13 @@
                 </div>
             {% endfor %}
 
-            <form action="{% url 'creation_article' %}" method="POST">
+            {% if user.is_authenticated %}
+            <form action="{% url 'lire_article' article.id %}" method="POST" class="formulaire_ajout_commentaire">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type="submit" value="Créer l'article" />
+                <input type="submit" value="Envoyer le commentaire" />
             </form>
+            {% endif %}
 
         </div>
 

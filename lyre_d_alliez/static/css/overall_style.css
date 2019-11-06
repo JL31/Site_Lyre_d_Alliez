@@ -205,3 +205,10 @@ strong
     padding-left: 20px;
     font-size: 0.8em;
 }
+
+.formulaire_ajout_commentaire
+{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}

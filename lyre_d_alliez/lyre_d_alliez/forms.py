@@ -22,8 +22,8 @@ __status__ = 'dev'
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Membre, Evenement, Abonnement, Article
-from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput
+from .models import Membre, Evenement, Abonnement, Article, Commentaire
+from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput, Textarea
 # from bootstrap_modal_forms.forms import BSModalForm
 
 
@@ -181,6 +181,33 @@ class ArticleForm(ModelForm):
 
         model = Article
         fields = ("image", "titre", "description")
+
+
+# ===============================
+class CommentaireForm(ModelForm):
+    """
+        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouveau commentaire
+    """
+
+    # ==================================
+    def __init__(self, *args, **kwargs):
+        """
+            Constructeur de la classe
+        """
+
+        # Les deux lignes suivantes permettent de ne pas afficher le label du champ "texte" dans la page (en réalité le lable est vide)
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields["texte"].label = ""
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du formulaire
+        """
+
+        model = Commentaire
+        fields = ("texte", )
+        widgets = {"texte": Textarea(attrs={"placeholder": "Rédigez votre commentaire ici"}),}
 
 
 # ==================================================================================================
