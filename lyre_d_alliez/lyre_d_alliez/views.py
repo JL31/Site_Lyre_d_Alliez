@@ -505,22 +505,32 @@ def lire_article(request, reference_de_l_article):
         for obj in article:
 
             article = obj
-
-            liste_com = Commentaire.objects.all()
-            print()
-            print(liste_com)
-            for it in liste_com:
-
-                print()
-                print(it.texte)
-                print(it.article_set.all())
-
-            print()
-            liste_des_commentaires = Commentaire.objects.filter(article=obj)
-            print(liste_des_commentaires)
+            liste_des_commentaires = Commentaire.objects.filter(articles=obj)
 
     return render(request, "lecture_article.html", {"article": article, "liste_des_commentaires": liste_des_commentaires})
 
+# ===============================
+def ajouter_commentaire(request):
+    """
+        Vue du formulaire permettant la'ajout d'un commentaire dans un article
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param reference_de_l_article:
+        :type reference_de_l_article:
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    if request.method == "POST":
+
+        pass
+
+    else:
+
+        pass
 
 # ==================================================================================================
 # SIGNAUX

@@ -12,10 +12,20 @@
             <form action="{% url 'liste_des_articles' %}" id="fin_lecture_article">
                 <input type="submit" id="bouton_retour_liste_des_articles" value="Retour"/>
             </form>
-            <br />
+
             {% for commentaire in liste_des_commentaires %}
-                <div>{{ commentaire.texte }}</div>
+                <div class="commentaire">
+                    <p class="texte_commentaire">{{ commentaire.texte }}</p>
+                    <p class="date_commentaire">{{ commentaire.date }}</p>
+                </div>
             {% endfor %}
+
+            <form action="{% url 'creation_article' %}" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Créer l'article" />
+            </form>
+
         </div>
 
     </div>

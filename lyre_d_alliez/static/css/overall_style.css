@@ -104,6 +104,9 @@ strong
     font-size: 1.1em;
 }
 
+/* Mise en forme de la liste des articles */
+/* -------------------------------------- */
+
 .conteneur_global_des_articles
 {
     display: flex;
@@ -128,9 +131,6 @@ strong
     color: black;
     text-decoration: none;
 }
-
-/* Mise en forme de la liste des articles */
-/* -------------------------------------- */
 
 .image_article
 {
@@ -185,4 +185,23 @@ strong
     font-size: 0.9em;
     margin-top: 5px;
     padding-top: 0px;
+}
+
+.commentaire
+{
+    border: 1px solid gray;
+    margin-bottom: 5px;
+}
+
+.texte_commentaire
+{
+    padding-left: 20px;
+    margin-bottom: 5px;
+}
+
+.date_commentaire
+{
+    margin-top: 5px;
+    padding-left: 20px;
+    font-size: 0.8em;
 }

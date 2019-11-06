@@ -158,17 +158,20 @@ class CommentaireAdmin(admin.ModelAdmin):
 
     # Configuration de la liste d'articles
     list_display = ("texte",
-                    "date")
+                    "date",
+                    "articles")
 
     list_filter = ("texte",
-                   "date")
+                   "date",
+                   "articles")
 
     date_hierarchy = "date"
 
     ordering = ("date",)
 
     search_fields = ("texte",
-                     "date")
+                     "date",
+                     "articles")
 
 # ==================================================================================================
 # FUNCTIONS
