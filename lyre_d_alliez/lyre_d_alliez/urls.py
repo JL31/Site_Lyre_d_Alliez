@@ -74,7 +74,6 @@ urlpatterns = [
     # Menu et sous-menus  : Association
     path('association/', association, name='association'),
     path('association/presentation/', flatpage, {'url': '/association/presentation/'}, name='presentation'),
-    # path('association/bureau/', flatpage, {'url': '/association/bureau/'}, name='bureau'),
     path('association/bureau/', bureau, name='bureau'),
     path('association/les_pupitres/', les_pupitres, name='les_pupitres'),
 
@@ -84,7 +83,6 @@ urlpatterns = [
     # APIs
     path('creation_profil_membre/', creation_profil_membre, name='creation_profil_membre'),
     path('creation_evenement/', creation_evenement, name='creation_evenement'),
-    # path('abonnement_evenement/', VueAbonnementEvenement.as_view(), name='abonnement_evenement'),
     re_path(r'^abonnement_evenement/(?P<nom_de_l_evenement>.*)/$', abonnement_evenement, name='abonnement_evenement'),
     path('envoi_alerte_abonne/', envoi_alerte_abonne, name='envoi_alerte_abonne'),
     path('creation_article/', creation_article, name='creation_article'),

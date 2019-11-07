@@ -26,6 +26,7 @@ from django.db.models.signals import post_save
 from django.core.mail import mail_admins, send_mail
 from django.contrib import messages
 from django.utils import timezone
+from django.urls import reverse
 
 from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm
 from .models import Membre, Evenement, Abonnement, Article, Commentaire
@@ -513,11 +514,7 @@ def lire_article(request, reference_de_l_article):
         for obj in article:
 
             article = obj
-            liste_des_commentaires = Commentaire.objects.filter(articles=obj)
-
-
-            # # # ==> rajouter un tri par date descendante (le plus récent en haut)
-
+            liste_des_commentaires = Commentaire.objects.filter(articles=obj).order_by("-date")
 
     # Gestion du formulaire permettant l'ajout d'un commentaire à l'article sélectionné
     # ---------------------------------------------------------------------------------
@@ -531,15 +528,10 @@ def lire_article(request, reference_de_l_article):
             commentaire = form.save(commit=False)
             commentaire.date = timezone.now()
             commentaire.articles = article
+            commentaire.redacteur = request.user.membre
             commentaire.save()
 
-
-            # # # ==> rajouter le nom de la personne qui à écrit le commentaire
-
-            # # # ==> problème lors de la réactualisation de la page : cela créé à nouveau le dernier commenaire !!!
-
-            form = CommentaireForm()
-            # return HttpResponseRedirect("/lire_article/")
+            return HttpResponseRedirect(reverse("lire_article", kwargs={"reference_de_l_article": reference_de_l_article}))
 
     else:
 

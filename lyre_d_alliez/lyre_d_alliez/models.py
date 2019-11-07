@@ -201,6 +201,7 @@ class Commentaire(models.Model):
     texte = models.TextField(null=True, blank=False, max_length=5000)
     date = models.DateTimeField(default=timezone.now())
     articles = models.ForeignKey(Article, on_delete=models.SET_NULL, null=True)
+    redacteur = models.ForeignKey(Membre, on_delete=models.SET_NULL, null=True)
 
     # =========
     class Meta:
@@ -211,7 +212,8 @@ class Commentaire(models.Model):
         verbose_name = "commentaire"
         ordering = ["texte",
                     "date",
-                    "articles"
+                    "articles",
+                    "redacteur"
                     ]
 
     # ================
