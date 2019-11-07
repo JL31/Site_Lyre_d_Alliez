@@ -20,7 +20,7 @@ Site de la Lyre
 - membres du bureau
 - lien vers l'école de musique de Didier
 - nos relations avec d'autres harmonies ?
-- nos "sponsors"/"soutients"
+- nos "sponsors"/"soutiens"
 - articles/tuto/conseils : entretien des instru, techniques particulières, point de solfège --> comment catégoriser ?
 - zone de partage d'infos/de bons plans (vente d'instru par exemples)
 - contact
@@ -275,12 +275,11 @@ Port
 
 Actualités      --> Calendrier                  --- n
 
-L'association   --> Articles de presse          --- 1
 L'association   --> Historique des concerts     --- 1
-L'association   --> Nos soutients               --- 1
+L'association   --> Nos soutiens                --- 1
 
-Photos          --> tout                        --- 1
-Vidéos          --> tout                        --- 1
+Photos          -->                             --- 1
+Vidéos          -->                             --- 1
 
 Zone de partage --> Les bons plans              --- 1
 Zone de partage --> Conseils                    --- 1

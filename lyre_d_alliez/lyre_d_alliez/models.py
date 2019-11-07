@@ -82,7 +82,7 @@ class Membre(User):
     # =============
     def save(self):
         """
-            Permet d'enregister la photo dans un format différent que son format d'origine
+            Permet d'enregister le logo dans un format différent de celui d'origine
             Nécessite au préalable d'importer la classe Image depuis PIL (from PIL import Image)
         """
 
@@ -233,7 +233,7 @@ class ArticleDePresse(models.Model):
 
     titre = models.CharField(null=False, blank=False, max_length=250)
     description = models.TextField(null=False, blank=False, max_length=1000)
-    lien_vers_l_article = models.CharField(null=False, blank=False, max_length=750)
+    lien_vers_l_article = models.URLField(null=False, blank=False, max_length=750)
 
     # =========
     class Meta:
@@ -255,6 +255,53 @@ class ArticleDePresse(models.Model):
 
         return self.titre
 
+
+# ==========================
+class Soutien(models.Model):
+    """
+        Classe qui décrit le modèle des soutiens
+    """
+
+    nom = models.CharField(null=False, blank=False, max_length=250)
+    logo = models.ImageField(null=False, blank=False, upload_to="logos/")
+    site_internet = models.URLField(null=True, blank=True, max_length=750)
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du modèle
+        """
+
+        verbose_name = "soutien"
+        ordering = ["nom",
+                    "logo",
+                    "site_internet"
+                    ]
+
+    # ================
+    def __str__(self):
+        """
+            Permet de faciliter la reconnaissance des objets lors de l'administration
+        """
+
+        return self.nom
+
+    # =============
+    def save(self):
+        """
+            Permet d'enregister le logo dans un format différent de celui d'origine
+            Nécessite au préalable d'importer la classe Image depuis PIL (from PIL import Image)
+        """
+
+        if not self.logo:
+
+            return
+
+        super(Soutien, self).save()
+        image = Image.open(self.logo)
+        size = (150, 150)
+        image = image.resize(size, Image.ANTIALIAS)
+        image.save(self.logo.path)
 
 # ==================================================================================================
 # FUNCTIONS

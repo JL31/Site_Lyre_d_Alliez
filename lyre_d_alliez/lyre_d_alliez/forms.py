@@ -22,7 +22,7 @@ __status__ = 'dev'
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien
 from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput, Textarea
 # from bootstrap_modal_forms.forms import BSModalForm
 
@@ -234,6 +234,32 @@ class ArticleDepresseForm(ModelForm):
 
         model = ArticleDePresse
         fields = ("titre", "description", "lien_vers_l_article")
+
+
+# ===========================
+class SoutienForm(ModelForm):
+    """
+        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouvel article de presse
+    """
+
+    # ==================================
+    def __init__(self, *args, **kwargs):
+        """
+            Constructeur de la classe
+        """
+
+        # Les deux lignes suivantes permettent de modifier le label du champ "site_internet" dans la page
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields["site_internet"].label = "Site internet"
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du formulaire
+        """
+
+        model = Soutien
+        fields = ("nom", "logo", "site_internet")
 
 
 # ==================================================================================================

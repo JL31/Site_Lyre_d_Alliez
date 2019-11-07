@@ -20,7 +20,7 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.contrib import admin
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien
 
 
 # ==================================================================================================
@@ -192,6 +192,23 @@ class ArticleDePresseAdmin(admin.ModelAdmin):
     search_fields = ("titre", )
 
 
+# ===================================
+class SoutienAdmin(admin.ModelAdmin):
+    """
+        Classe qui permet la gestion de l'administration des soutiens
+    """
+
+    # Configuration de la liste d'articles
+    list_display = ("nom",
+                    "site_internet")
+
+    list_filter = ("nom", )
+
+    ordering = ("nom", )
+
+    search_fields = ("nom", )
+
+
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================
@@ -206,3 +223,4 @@ admin.site.register(Abonnement, AbonnementAdmin)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Commentaire, CommentaireAdmin)
 admin.site.register(ArticleDePresse, ArticleDePresseAdmin)
+admin.site.register(Soutien, SoutienAdmin)

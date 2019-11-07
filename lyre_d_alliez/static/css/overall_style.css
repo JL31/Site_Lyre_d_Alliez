@@ -276,3 +276,11 @@ strong
 {
     padding-bottom: 10px;
 }
+
+/* Mise en forme de nos soutiens */
+/* ----------------------------- */
+
+.contenu_des_soutiens
+{
+    display: flex;
+}

@@ -22,14 +22,15 @@ __status__ = 'dev'
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
+from django.dispatch.dispatcher import receiver
 from django.core.mail import mail_admins, send_mail
 from django.contrib import messages
 from django.utils import timezone
 from django.urls import reverse
 
-from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse
+from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien
 
 from .secret_data import ADMINS, MOT_DE_PASSE
 
@@ -89,6 +90,7 @@ def personne_autorisee(request):
 
     return request.membre.est_membre or request.membre.est_membre_du_bureau or request.membre.est_le_chef
 
+
 # ============================================
 def envoi_mail_admin_nouveau_membre(**kwargs):
     """
@@ -117,12 +119,23 @@ def envoi_mail_admin_nouveau_membre(**kwargs):
         msg = "Problème lors de l'envoi de mail après la création d'un compte membre"
         raise SMTPException(msg)
 
-# =======================
-def envoi_mail(**kwargs):
+
+@receiver(post_save, sender=Membre)
+# ===============================
+def envoi_mail(sender, **kwargs):
     """
         Fonction qui permet d'envoyer un mail
+
+        :param sender: l'instance du modèle Soutien qui est en cours de suppression
+        :type sender: lyre_d_alliez.models.Soutien
     """
 
+    sujet = " Inscription d'un nouveau membre"
+    message = ("Une personne vient de remplir le formulaire d'inscription à la zone des membres.\n\n"
+               "Merci de vérifier les informations renseignées et de lui attribuer les accès en tant que : \n\n"
+               "- membre ;\n"
+               "- membre du bureau ;\n"
+               "- chef.")
     expediteur = ADMINS[0][1]
     destinataire = [ADMINS[0][1]]
     utilisateur = ADMINS[0][1]
@@ -130,12 +143,28 @@ def envoi_mail(**kwargs):
 
     try:
 
-        send_mail(kwargs["sujet"], kwargs["message"], expediteur, destinataire, fail_silently=False, auth_user=utilisateur, auth_password=mot_de_passe)
+        send_mail(sujet, message, expediteur, destinataire, fail_silently=False, auth_user=utilisateur, auth_password=mot_de_passe)
 
     except SMTPException:
 
-        msg = kwargs["msg_erreur"]
+        msg = "Problème lors de l'envoi de mail après la création d'un compte membre"
         raise SMTPException(msg)
+
+
+@receiver(post_delete, sender=Soutien)
+# ==========================================================
+def supprimer_logo_d_un_soutien(sender, instance, **kwargs):
+    """
+        Fonction qui permet de supprimer, sur le serveur, le logo d'un soutien dans le cas où ce dernier serait supprimé
+
+        :param sender: expéditeur qui va envoyer le signal
+        :type sender: django.db.models.base.ModelBase
+
+        :param instance: l'instance du modèle Soutien qui est en cours de suppression
+        :type instance: lyre_d_alliez.models.Soutien
+    """
+
+    instance.logo.delete(False)
 
 
 # ==================================================================================================
@@ -584,14 +613,54 @@ def creation_article_de_presse(request):
 
     return render(request, "ArticleDePresseForm.html", {"form": form})
 
+# ====================
+def soutiens(request):
+    """
+        Vue qui permet d'afficher les soutiens
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    liste_des_soutiens = Soutien.objects.all()
+
+    return render(request, "soutiens.html", {"liste_des_soutiens": liste_des_soutiens})
+
+# ============================
+def creation_soutien(request):
+    """
+        Vue du formulaire permettant la création d'un nouvel article
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    if request.method == "POST":
+
+        form = SoutienForm(request.POST, request.FILES)
+
+        if form.is_valid():
+
+            form.save()
+            msg = "Le soutien a bien été ajouté"
+            messages.info(request, msg)
+            return HttpResponseRedirect("/accueil/")
+
+    else:
+
+        form = SoutienForm()
+
+    return render(request, "SoutienForm.html", {"form": form})
 
 # ==================================================================================================
 # SIGNAUX
 # ==================================================================================================
-
-# Envoi d'un mail aux admins en cas de création d'un nouveau compte Membre
-post_save.connect(envoi_mail_admin_nouveau_membre, sender=Membre)
-
 
 # ==================================================================================================
 # UTILISATION
