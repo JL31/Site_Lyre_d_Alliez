@@ -225,6 +225,37 @@ class Commentaire(models.Model):
         return self.texte
 
 
+# ==================================
+class ArticleDePresse(models.Model):
+    """
+        Classe qui décrit le modèle des articles de presse
+    """
+
+    titre = models.CharField(null=False, blank=False, max_length=250)
+    description = models.TextField(null=False, blank=False, max_length=1000)
+    lien_vers_l_article = models.CharField(null=False, blank=False, max_length=750)
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du modèle
+        """
+
+        verbose_name = "article_de_presse"
+        ordering = ["titre",
+                    "description",
+                    "lien_vers_l_article"
+                    ]
+
+    # ================
+    def __str__(self):
+        """
+            Permet de faciliter la reconnaissance des objets lors de l'administration
+        """
+
+        return self.titre
+
+
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================

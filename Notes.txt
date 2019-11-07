@@ -82,40 +82,12 @@ Zone de partage :
 
 Tous les autres templates étendront le fichier "base_etendue.html"
 
-# =====================================================================================================================
-# Détail "Articles"
-# =====================================================================================================================
-
-s'inspirer du site jab31
-
-- mettre trois articles par ligne
-- la prévisualisation d'un article contiendra :
-    + une image/photo
-    + un titre
-    + une description tronquée (...)
-    + un bouton/lien "Lire la suite..."
-    + la date de l'article
-
-cliquer sur :
-- une image/photo
-- le titre
-- le bouton/lien "Lire la suite..."
-
-permettra d'afficher l'article en plein écran
-
-prévoir une API de création d'un article
-
 
 # =====================================================================================================================
 # Détail "Agenda"
 # =====================================================================================================================
 
-Prévoir un bouton/lien pour s'abonner à un évènement
-Lorsqu'un visiteur cliquera sur ce bouton/lien une fenêtre apparaîtra dans la page pour lui demander :
-- son adresse mail,
-- la confirmation de son adresse mail,
-- la date à laquelle il souhaite être averti par mail
-  --> https://simpleisbetterthancomplex.com/tutorial/2019/01/03/how-to-use-date-picker-with-django.html
+--> https://simpleisbetterthancomplex.com/tutorial/2019/01/03/how-to-use-date-picker-with-django.html
 
 ==> cf JavaScript ?
 
@@ -133,12 +105,14 @@ Quid de l'affichage :
 --- carrés pour ensuite zoomer ?
 --- bandeau avec miniatures en dessous d'un zoom ?
 
+
 # =====================================================================================================================
 # Détail "Vidéos"
 # =====================================================================================================================
 
 Il y aura un dossier par année, le clic sur le menu fera apparaître un menu déroulant permettant de choisir l'année.
 Au sein d'une année il y aura plusieurs dossiers, un pour chaque évènement.
+
 
 # =====================================================================================================================
 # Détail des profils des membres
@@ -174,6 +148,7 @@ https://django.readthedocs.io/en/2.2.x/ref/settings.html#std:setting-LOGIN_REDIR
 
 envoi mail  -->  https://simpleisbetterthancomplex.com/tutorial/2016/06/13/how-to-send-email.html
 
+
 # =====================================================================================================================
 # Détail "L'asso" / "Les pupitres"
 # =====================================================================================================================
@@ -206,6 +181,7 @@ guitare
 basse
 batterie et percussions
 
+
 # =====================================================================================================================
 # Membres de test
 # =====================================================================================================================
@@ -224,8 +200,6 @@ username : Bob
 prénom : b
 email : b.t@f.fr
 mdp : Bob123456
-
-http://localhost:8000/creation_profil_membre/
 
 
 # =====================================================================================================================
@@ -250,11 +224,13 @@ https://stackoverflow.com/questions/12784835/django-no-such-table
    python manage.py makemigrations
    python manage.py migrate --run-syncdb
 
+
 # =====================================================================================================================
 # Notes diverses
 # =====================================================================================================================
 
 Créer une API pour obtenir les permissions attribuées à un membre ?
+
 
 # =====================================================================================================================
 # Infos Mailjet
@@ -280,3 +256,32 @@ optionnel
 
 Port
 25 ou 587 (certains hébergeurs bloquent le port 25)
+
+
+# =====================================================================================================================
+# Notes versions
+# =====================================================================================================================
+
+1.0     tout implémenter côté back-end
+1.1     re-architecture du code avec plusieurs applications
+1.2     API REST (RESTFull ?)
+1.3     déploiement avec Docker
+1.4     développer le front-end et l'aspect graphique/visuel du site
+
+
+# =====================================================================================================================
+# Reste à faire
+# =====================================================================================================================
+
+Actualités      --> Calendrier                  --- n
+
+L'association   --> Articles de presse          --- 1
+L'association   --> Historique des concerts     --- 1
+L'association   --> Nos soutients               --- 1
+
+Photos          --> tout                        --- 1
+Vidéos          --> tout                        --- 1
+
+Zone de partage --> Les bons plans              --- 1
+Zone de partage --> Conseils                    --- 1
+Zone de partage --> Tutoriels                   --- 1

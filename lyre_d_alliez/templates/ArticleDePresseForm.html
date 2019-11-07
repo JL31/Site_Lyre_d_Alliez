@@ -1,0 +1,9 @@
+{% extends "base_etendue.html" %}
+
+{% block contenu %}
+<form action="{% url 'creation_article_de_presse' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Créer le lien vers l'article de presse" />
+</form>
+{% endblock %}

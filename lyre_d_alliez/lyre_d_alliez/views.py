@@ -28,8 +28,8 @@ from django.contrib import messages
 from django.utils import timezone
 from django.urls import reverse
 
-from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm
-from .models import Membre, Evenement, Abonnement, Article, Commentaire
+from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse
 
 from .secret_data import ADMINS, MOT_DE_PASSE
 
@@ -489,8 +489,8 @@ def lire_article(request, reference_de_l_article):
         :param reference_de_l_article:
         :type reference_de_l_article:
 
-        :return: instance de HttpResponse
-        :rtype: django.http.response.HttpResponse
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
     # Récupération du contenu de l'article sélectionné
@@ -538,6 +538,51 @@ def lire_article(request, reference_de_l_article):
         form = CommentaireForm()
 
     return render(request, "lecture_article.html", {"article": article, "liste_des_commentaires": liste_des_commentaires, "form": form})
+
+# ==============================
+def articles_de_presse(request):
+    """
+        Vue qui permet de lire un article
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    liste_des_articles_de_presse = ArticleDePresse.objects.all()
+
+    return render(request, "articles_de_presse.html", {"liste_des_articles_de_presse": liste_des_articles_de_presse})
+
+# ======================================
+def creation_article_de_presse(request):
+    """
+        Vue du formulaire permettant la création d'un nouvel article
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    if request.method == "POST":
+
+        form = ArticleDepresseForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+            msg = "Le lien vers l'article de presse a bien été ajouté"
+            messages.info(request, msg)
+            return HttpResponseRedirect("/accueil/")
+
+    else:
+
+        form = ArticleDepresseForm()
+
+    return render(request, "ArticleDePresseForm.html", {"form": form})
 
 
 # ==================================================================================================

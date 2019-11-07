@@ -22,7 +22,7 @@ __status__ = 'dev'
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Membre, Evenement, Abonnement, Article, Commentaire
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse
 from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput, Textarea
 # from bootstrap_modal_forms.forms import BSModalForm
 
@@ -208,6 +208,32 @@ class CommentaireForm(ModelForm):
         model = Commentaire
         fields = ("texte", )
         widgets = {"texte": Textarea(attrs={"placeholder": "Rédigez votre commentaire ici"}),}
+
+
+# ===================================
+class ArticleDepresseForm(ModelForm):
+    """
+        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouvel article de presse
+    """
+
+    # ==================================
+    def __init__(self, *args, **kwargs):
+        """
+            Constructeur de la classe
+        """
+
+        # Les deux lignes suivantes permettent de modifier le label du champ "lien_vers_l_article" dans la page
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields["lien_vers_l_article"].label = "Lien vers l'article"
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du formulaire
+        """
+
+        model = ArticleDePresse
+        fields = ("titre", "description", "lien_vers_l_article")
 
 
 # ==================================================================================================

@@ -76,6 +76,7 @@ urlpatterns = [
     path('association/presentation/', flatpage, {'url': '/association/presentation/'}, name='presentation'),
     path('association/bureau/', bureau, name='bureau'),
     path('association/les_pupitres/', les_pupitres, name='les_pupitres'),
+    path('association/articles_de_presse/', articles_de_presse, name='articles_de_presse'),
 
     # Menu et sous-menus  : Zone de partage
     path('zone_de_partage/', zone_de_partage, name='zone_de_partage'),
@@ -86,6 +87,7 @@ urlpatterns = [
     re_path(r'^abonnement_evenement/(?P<nom_de_l_evenement>.*)/$', abonnement_evenement, name='abonnement_evenement'),
     path('envoi_alerte_abonne/', envoi_alerte_abonne, name='envoi_alerte_abonne'),
     path('creation_article/', creation_article, name='creation_article'),
+    path('creation_article_de_presse/', creation_article_de_presse, name='creation_article_de_presse'),
 
     # Connexion / deconnexion
     path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),

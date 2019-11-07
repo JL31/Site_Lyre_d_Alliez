@@ -1,0 +1,24 @@
+{% extends "base_etendue.html" %}
+
+{% block contenu %}
+<h1>Articles de presse</h1>
+<div>
+    <p>
+        Vous trouverez ci-après une liste de liens vers des articles de presse concernant notre association.<br />
+        Pour consulter un article il vous suffit de cliquer sur le lien ;-)
+    </p>
+
+    {% for article in liste_des_articles_de_presse %}
+        <div class="conteneur_lien_vers_article_de_presse">
+            <div class="bordure_gauche_lien_vers_article_de_presse">
+                <p></p>
+            </div>
+            <div class="contenu_lien_vers_article_de_presse">
+                <h2 class="titre_lien_vers_article_de_presse">{{ article.titre}}</h2>
+                <p class="description_lien_vers_article_de_presse">{{ article.description }}</p>
+                <a href="{{ article.lien_vers_l_article }}" target="_blank" class="lien_vers_article_de_presse">{{ article.lien_vers_l_article }}</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

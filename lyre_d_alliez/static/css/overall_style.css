@@ -40,6 +40,8 @@ header
 }
 
 /* Mise en forme du menu de navigation */
+/* ----------------------------------- */
+
 nav ul
 {
     display: flex;    
@@ -155,8 +157,8 @@ strong
 }
 
 
-/* Mise en forme de la lecture d'un  article */
-/* ----------------------------------------- */
+/* Mise en forme de la lecture d'un article */
+/* ---------------------------------------- */
 
 .lecture_article
 {
@@ -231,4 +233,46 @@ strong
     width: 50%;
     margin-left: auto;
     margin-right: auto;
+}
+
+/* Mise en forme de la liste des liens vers les articles de presse */
+/* --------------------------------------------------------------- */
+
+.conteneur_lien_vers_article_de_presse
+{
+    display: flex;
+}
+
+.bordure_gauche_lien_vers_article_de_presse
+{
+    width: 20px;
+    background-color: RGB(255,178,103);
+    border: 1px solid black;
+}
+
+.contenu_lien_vers_article_de_presse
+{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid gray;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 80vw;
+}
+
+.titre_lien_vers_article_de_presse
+{
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.description_lien_vers_article_de_presse
+{
+    margin-top: 0px;
+    padding-top: 10px;
+}
+
+.lien_vers_article_de_presse
+{
+    padding-bottom: 10px;
 }
