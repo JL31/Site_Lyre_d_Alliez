@@ -1,0 +1,25 @@
+{% extends "base_etendue.html" %}
+{% load static %}
+
+{% block contenu %}
+<h1>Evènements de l'année {{ annee }}</h1>
+<div>
+    <p>
+        Retrouvez tous nos concerts, et les programmes associés, pour l'année {{ annee }}.
+    </p>
+
+    <div class="conteneur_des_evenements_annee">
+    {% for evenement in liste_des_evenements_de_l_annee %}
+        <div class="conteneur_evenements_annee">
+            <p class="bordure_gauche_annee"></p>
+            <p class="description_evenement_annee">
+                <strong>{{ evenement.nom }}</strong><br />
+                Lieu : {{ evenement.lieu }}<br />
+                Date : {{ evenement.date }}
+            </p>
+        </div>
+    {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

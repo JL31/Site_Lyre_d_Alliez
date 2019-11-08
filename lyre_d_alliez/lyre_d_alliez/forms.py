@@ -25,7 +25,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.forms import Form, CharField, EmailField, Textarea
 
-# from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, DemandeDevenirSoutien
 from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien
 from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput, Textarea
 

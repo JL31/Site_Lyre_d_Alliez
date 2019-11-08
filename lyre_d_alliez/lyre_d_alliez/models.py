@@ -22,6 +22,7 @@ __status__ = 'dev'
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+# from django.core.validators import RegexValidator
 
 from PIL import Image
 
@@ -132,10 +133,19 @@ class Evenement(models.Model):
         Classe qui décrit le modèle des évènements
     """
 
+    # date_regexp = RegexValidator(regex=r"^[0,1,2,3]?\d/[0,1]?\d/\d{4}$", message=("La date doit avoir le format suivant : jj/mm/aaaa"
+    #                                                                               "jj et mm peuvent être des chiffres.\n"
+    #                                                                               "Les exemples suivants sont tous valides pour la date du 1er janiver 2020:\n"
+    #                                                                               "- 1/1/2020"
+    #                                                                               "- 1/01/2020"
+    #                                                                               "- 01/1/2020"
+    #                                                                               "- 01/01/2020"))
+
     nom = models.CharField(null=False, blank=False, max_length=255)
     lieu = models.CharField(null=False, blank=False, max_length=255)
     date = models.DateField(null=False, blank=False)
-    abonnements = models.ManyToManyField(Abonnement)
+    # date = models.DateField(null=False, blank=False, max_length=10, validators=[date_regexp])
+    # abonnements = models.ManyToManyField(Abonnement)
     # ==> à modifier en ForeignKey ?
     # ==> la Foreign Key sera sur le modèle Abonnement
 
@@ -303,48 +313,6 @@ class Soutien(models.Model):
         size = (150, 150)
         image = image.resize(size, Image.ANTIALIAS)
         image.save(self.logo.path)
-
-
-# # ========================================
-# class DemandeDevenirSoutien(models.Model):
-#     """
-#         Classe qui décrit le modèle pour de demande pour devenir soutien de l'asso
-#     """
-#
-#     telephone_regexp = RegexValidator(regex=r"^0\d[ .]?(\d{2}[ .]?){4}$", message=("Le numéro de téléphone doit avoir l'un des formats suivant :\n"
-#                                                        "- 00.11.22.33.44,\n"
-#                                                        "- 0011223344,\n"
-#                                                        "- 00 11 22 33 44"))
-#
-#     nom = models.CharField(null=False, blank=False, max_length=250)
-#     prenom = models.CharField(null=False, blank=False, max_length=250)
-#     societe = models.CharField(null=True, blank=True, max_length=250)
-#     adresse_email = models.EmailField(null=True, blank=True, max_length=255)
-#     numero_de_telephone = models.CharField(null=True, blank=True, max_length=14, validators=[telephone_regexp])
-#     message = models.TextField(null=False, blank=False, max_length=5000)
-#
-#     # =========
-#     class Meta:
-#         """
-#             Configuration/définition des options de metadonnées du modèle
-#         """
-#
-#         verbose_name = "demande_devenir_soutien"
-#         ordering = ["nom",
-#                     "prenom",
-#                     "societe",
-#                     "adresse_email",
-#                     "numero_de_telephone",
-#                     "message"
-#                     ]
-#
-#     # ================
-#     def __str__(self):
-#         """
-#             Permet de faciliter la reconnaissance des objets lors de l'administration
-#         """
-#
-#         return self.nom
 
 
 # ==================================================================================================

@@ -1,0 +1,21 @@
+{% extends "base_etendue.html" %}
+{% load static %}
+
+{% block contenu %}
+<h1>Historique des concerts</h1>
+<div>
+    <p>
+        Retrouvez, année par année, l'historique de nos concerts et le programme associé.
+    </p>
+
+    <div class="conteneur_dossiers">
+    {% for annee in liste_des_annees %}
+        <div class="conteneur_historique_annee">
+            <img src="{% static 'img/image_defaut_evenements_annee_200x200.jpg' %}" class="image_evenements_annee"/>
+            <a href="{% url 'liste_des_evenements_de_l_annee' annee %}" class="lien_vers_evenements_annee"><h2 class="titre_annee">{{ annee }}</h2></a>
+        </div>
+    {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

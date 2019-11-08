@@ -284,3 +284,68 @@ strong
 {
     display: flex;
 }
+
+/* Mise en forme de l'historique de nos concerts */
+/* --------------------------------------------- */
+
+.conteneur_dossiers
+{
+    display: flex;
+    flex-direction: row
+    align-items: center;
+}
+
+.conteneur_historique_annee
+{
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.image_evenements_annee
+{
+    border: 1px solid black;
+    margin-bottom: 0px;
+}
+
+.titre_annee
+{
+    border: 1px solid black;
+    margin-top: 0px;
+    text-align: center;
+    background-color: RGB(242,231,191)
+}
+
+.lien_vers_evenements_annee
+{
+    color: black;
+    text-decoration: none;
+}
+
+/* Mise en forme des évènements d'une année spécifiée */
+/* -------------------------------------------------- */
+
+.conteneur_des_evenements_annee
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.conteneur_evenements_annee
+{
+    display: flex;
+    margin-bottom: 0px;
+}
+
+.bordure_gauche_annee
+{
+    padding: 0px;
+    width: 20px;
+    background-color: RGB(255,178,103);
+}
+
+.description_evenement_annee
+{
+    padding: 5px;
+    background-color: RGB(200,200,200);
+    width: 65vw;
+}

@@ -209,7 +209,8 @@ def accueil(request):
     """
 
     return render(request, "base_etendue.html")
-    
+
+
 # ======================
 def actualites(request):
     """
@@ -223,7 +224,8 @@ def actualites(request):
     """
 
     return render(request, "sous_menu_actualites.html")
-    
+
+
 # =======================
 def association(request):
     """
@@ -254,6 +256,7 @@ def zone_de_partage(request):
 
     return render(request, "sous_menu_zone_de_partage.html")
 
+
 # ==================================
 def creation_profil_membre(request):
     """
@@ -282,7 +285,8 @@ def creation_profil_membre(request):
         form = MembreForm()
 
     return render(request, "MembreForm.html", {"form": form})
-    
+
+
 # ==========================
 def acces_interdit(request):
     """
@@ -296,7 +300,8 @@ def acces_interdit(request):
     """
 
     return render(request, "acces_interdit.html")
-    
+
+
 # ========================
 def les_pupitres(request):
     """
@@ -324,6 +329,7 @@ def les_pupitres(request):
 
     return render(request, "les_pupitres.html", {"dico_instrument_membres": dico_instrument_membres})
 
+
 # ==================
 def agenda(request):
     """
@@ -339,6 +345,7 @@ def agenda(request):
     liste_des_evenements = Evenement.objects.all()
 
     return render(request, "agenda.html", {"liste_des_evenements": liste_des_evenements})
+
 
 # ==============================
 def creation_evenement(request):
@@ -367,6 +374,7 @@ def creation_evenement(request):
         form = EvenementForm()
 
     return render(request, "EvenementForm.html", {"form": form})
+
 
 # ====================================================
 def abonnement_evenement(request, nom_de_l_evenement):
@@ -425,6 +433,7 @@ def abonnement_evenement(request, nom_de_l_evenement):
 
     return render(request, "abonnement_evenement_bis.html", {"form": form, "nom_de_l_evenement": nom_de_l_evenement})
 
+
 # ===============================
 def envoi_alerte_abonne(request):
     """
@@ -456,6 +465,7 @@ def envoi_alerte_abonne(request):
 
     return HttpResponseRedirect(reverse("accueil"))
 
+
 # ==================
 def bureau(request):
     """
@@ -486,6 +496,7 @@ def bureau(request):
 
     return render(request, "bureau.html", {"chef": chef, "liste_des_membres_du_bureau": liste_des_membres_du_bureau})
 
+
 # ============================
 def creation_article(request):
     """
@@ -515,6 +526,7 @@ def creation_article(request):
 
     return render(request, "ArticleForm.html", {"form": form})
 
+
 # ==============================
 def liste_des_articles(request):
     """
@@ -530,6 +542,7 @@ def liste_des_articles(request):
     liste_des_articles = Article.objects.order_by("-date")
 
     return render(request, "liste_des_articles.html", {"liste_des_articles": liste_des_articles})
+
 
 # ================================================
 def lire_article(request, reference_de_l_article):
@@ -592,6 +605,7 @@ def lire_article(request, reference_de_l_article):
 
     return render(request, "lecture_article.html", {"article": article, "liste_des_commentaires": liste_des_commentaires, "form": form})
 
+
 # ==============================
 def articles_de_presse(request):
     """
@@ -607,6 +621,7 @@ def articles_de_presse(request):
     liste_des_articles_de_presse = ArticleDePresse.objects.all()
 
     return render(request, "articles_de_presse.html", {"liste_des_articles_de_presse": liste_des_articles_de_presse})
+
 
 # ======================================
 def creation_article_de_presse(request):
@@ -637,6 +652,7 @@ def creation_article_de_presse(request):
 
     return render(request, "ArticleDePresseForm.html", {"form": form})
 
+
 # ====================
 def soutiens(request):
     """
@@ -652,6 +668,7 @@ def soutiens(request):
     liste_des_soutiens = Soutien.objects.all()
 
     return render(request, "soutiens.html", {"liste_des_soutiens": liste_des_soutiens})
+
 
 # ============================
 def creation_soutien(request):
@@ -681,6 +698,7 @@ def creation_soutien(request):
         form = SoutienForm()
 
     return render(request, "SoutienForm.html", {"form": form})
+
 
 # ========================================
 def demande_pour_devenir_soutien(request):
@@ -761,6 +779,54 @@ def demande_pour_devenir_soutien(request):
         form = DemandeDevenirSoutienForm()
 
     return render(request, "DemandeDevenirSoutienForm.html", {"form": form})
+
+
+# ===================================
+def historique_des_concerts(request):
+    """
+        Vue qui permet d'afficher l'historique des concerts pour chaque année
+
+        :param request: instance de HttpRequest ou de HttpResponseRedirect
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    liste_des_evenements_tmp = Evenement.objects.order_by("-date")
+    liste_des_evenements = OrderedDict()
+
+    for evenement in liste_des_evenements_tmp:
+
+        liste_des_evenements.setdefault(evenement.date.year, []).append(evenement)
+
+    liste_des_annees = list(liste_des_evenements.keys())
+
+    return render(request, "historique_des_concerts.html", {"liste_des_annees": liste_des_annees})
+
+
+# ==================================================
+def liste_des_evenements_de_l_annee(request, annee):
+    """
+        Vue qui permet d'afficher l'historique des concerts pour l'année spécifiée
+
+        :param request: instance de HttpRequest ou de HttpResponseRedirect
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param annee: année choisie par le visiteur
+        :type annee: str (converti automatiquement par django lors de l'utilisation d'expression régulières dans les URLs)
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    annee_int = int(annee)
+
+    liste_des_evenements_de_l_annee_tmp = Evenement.objects.order_by("-date")
+
+    liste_des_evenements_de_l_annee = [ evenement for evenement in liste_des_evenements_de_l_annee_tmp if evenement.date.year == annee_int ]
+
+    return render(request, "evenements_de_l_annee.html", {"annee": annee_int, "liste_des_evenements_de_l_annee": liste_des_evenements_de_l_annee})
 
 
 # ==================================================================================================

@@ -77,6 +77,8 @@ urlpatterns = [
     path('association/bureau/', bureau, name='bureau'),
     path('association/les_pupitres/', les_pupitres, name='les_pupitres'),
     path('association/articles_de_presse/', articles_de_presse, name='articles_de_presse'),
+    path('association/historique_des_concerts/', historique_des_concerts, name='historique_des_concerts'),
+    re_path('association/liste_des_evenements_de_l_annee/(?P<annee>\d{4})/$', liste_des_evenements_de_l_annee, name='liste_des_evenements_de_l_annee'),
     path('association/soutiens/', soutiens, name='soutiens'),
 
     # Menu et sous-menus  : Zone de partage
