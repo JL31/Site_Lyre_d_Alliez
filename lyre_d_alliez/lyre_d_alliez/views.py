@@ -29,7 +29,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.urls import reverse
 
-from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm
+from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm
 from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien
 
 from .secret_data import ADMINS, MOT_DE_PASSE
@@ -167,6 +167,30 @@ def supprimer_logo_d_un_soutien(sender, instance, **kwargs):
     instance.logo.delete(False)
 
 
+# ===================================
+def envoi_mail_bis(dico_des_donnees):
+    """
+        Fonction qui permet d'envoyer un mail
+
+        :param dico_des_donnees: liste des paramètres nommés (sujet, message)
+        ::type dico_des_donnees: dict
+    """
+
+    expediteur = ADMINS[0][1]
+    destinataire = [ADMINS[0][1]]
+    utilisateur = ADMINS[0][1]
+    mot_de_passe = MOT_DE_PASSE
+
+    try:
+
+        send_mail(dico_des_donnees["sujet"], dico_des_donnees["message"], expediteur, destinataire, fail_silently=False, auth_user=utilisateur, auth_password=mot_de_passe)
+
+    except SMTPException:
+
+        msg = dico_des_donnees["message_d_erreur"]
+        raise SMTPException(msg)
+
+
 # ==================================================================================================
 # VUES
 # ==================================================================================================
@@ -251,7 +275,7 @@ def creation_profil_membre(request):
             form.save()
             msg = "Le profil a été crée avec succès, merci d'attendre l'email d'activation de votre compte"
             messages.info(request, msg)
-            return HttpResponseRedirect("/accueil/")
+            return HttpResponseRedirect(reverse("accueil/"))
 
     else:
 
@@ -324,8 +348,8 @@ def creation_evenement(request):
         :param request: instance de HttpRequest
         :type request: django.core.handlers.wsgi.WSGIRequest
 
-        :return: instance de HttpResponse
-        :rtype: django.http.response.HttpResponse
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
     if request.method == "POST":
@@ -336,7 +360,7 @@ def creation_evenement(request):
 
             form.save()
 
-            return HttpResponseRedirect("/accueil/")
+            return HttpResponseRedirect(reverse("accueil"))
 
     else:
 
@@ -393,7 +417,7 @@ def abonnement_evenement(request, nom_de_l_evenement):
                     msg = "Votre demande d'abonnement a bien été prise en compte. Vous recevrez un email pour vous alerter le {} à l'adresse suivante : {}".format(date_de_l_alerte.strftime("%A %d %B %Y"), adresse_mail_abonne)
                     messages.info(request, msg)
 
-            return HttpResponseRedirect("/actualites/agenda/")
+            return HttpResponseRedirect(reverse("agenda/"))
 
     else:
 
@@ -430,7 +454,7 @@ def envoi_alerte_abonne(request):
 
                 envoi_mail(sujet=sujet, message=message, msg_erreur=msg_erreur)
 
-    return HttpResponseRedirect("/accueil/")
+    return HttpResponseRedirect(reverse("accueil"))
 
 # ==================
 def bureau(request):
@@ -440,8 +464,8 @@ def bureau(request):
         :param request: instance de HttpRequest
         :type request: django.core.handlers.wsgi.WSGIRequest
 
-        :return: instance de HttpResponse ou de HttpResponseRedirect
-        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
     """
 
     chef = Membre.objects.filter(est_le_chef=True)
@@ -483,7 +507,7 @@ def creation_article(request):
             form.save()
             msg = "L'article a été crée avec succès"
             messages.info(request, msg)
-            return HttpResponseRedirect("/accueil/")
+            return HttpResponseRedirect(reverse("accueil"))
 
     else:
 
@@ -515,8 +539,8 @@ def lire_article(request, reference_de_l_article):
         :param request: instance de HttpRequest
         :type request: django.core.handlers.wsgi.WSGIRequest
 
-        :param reference_de_l_article:
-        :type reference_de_l_article:
+        :param reference_de_l_article: référence de l'article (sous forme d'id)
+        :type reference_de_l_article: int
 
         :return: instance de HttpResponse ou de HttpResponseRedirect
         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
@@ -592,8 +616,8 @@ def creation_article_de_presse(request):
         :param request: instance de HttpRequest
         :type request: django.core.handlers.wsgi.WSGIRequest
 
-        :return: instance de HttpResponse
-        :rtype: django.http.response.HttpResponse
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
     if request.method == "POST":
@@ -605,7 +629,7 @@ def creation_article_de_presse(request):
             form.save()
             msg = "Le lien vers l'article de presse a bien été ajouté"
             messages.info(request, msg)
-            return HttpResponseRedirect("/accueil/")
+            return HttpResponseRedirect(reverse("accueil"))
 
     else:
 
@@ -637,8 +661,8 @@ def creation_soutien(request):
         :param request: instance de HttpRequest
         :type request: django.core.handlers.wsgi.WSGIRequest
 
-        :return: instance de HttpResponse
-        :rtype: django.http.response.HttpResponse
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
     if request.method == "POST":
@@ -650,13 +674,94 @@ def creation_soutien(request):
             form.save()
             msg = "Le soutien a bien été ajouté"
             messages.info(request, msg)
-            return HttpResponseRedirect("/accueil/")
+            return HttpResponseRedirect(reverse("accueil"))
 
     else:
 
         form = SoutienForm()
 
     return render(request, "SoutienForm.html", {"form": form})
+
+# ========================================
+def demande_pour_devenir_soutien(request):
+    """
+        Vue du formulaire permettant la demande pour devenir un soutien de l'asso
+
+        :param request: instance de HttpRequest ou de HttpResponseRedirect
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    if request.method == "POST":
+
+        form = DemandeDevenirSoutienForm(request.POST)
+
+        if form.is_valid():
+
+            nom = form.cleaned_data["nom"]
+            prenom = form.cleaned_data["prenom"]
+            societe = form.cleaned_data["societe"]
+            adresse_email = form.cleaned_data["adresse_email"]
+            numero_de_telephone = form.cleaned_data["numero_de_telephone"]
+            message = form.cleaned_data["message"]
+
+            # définition du sujet du mail
+            sujet = "Demande pour devenir soutien de l'asso"
+
+            # définition des coordonnées de la personne qui envoie la demande de soutien
+            # améliorable avec la version 3.6 et le formatted string literal
+            coordonnees = ""
+
+            if adresse_email != "" and numero_de_telephone == "":
+
+                coordonnees = "adresse email : {}".format(adresse_email)
+
+            elif adresse_email == "" and numero_de_telephone != "":
+
+                coordonnees = "numéro de téléphone : {}".format(numero_de_telephone)
+
+            elif adresse_email != "" and numero_de_telephone != "":
+
+                coordonnees = "adresse email : {}\nnuméro de téléphone : {}".format(adresse_email, numero_de_telephone)
+
+            # définition du début du message (selon si un nom de société a été renseigné ou non)
+            if societe != "":
+
+                debut_message = ("La société {} souhaite devenir soutien de l'association.\n"
+                                 "La personne a contacter est {} {},").format(societe, prenom, nom)
+
+            else:
+
+                debut_message = "{} {} souhaite devenir soutien de l'association,".format(prenom, nom)
+
+            # définition du message à envoyer
+            message_a_envoyer = ("{} ses coordonnées sont :\n\n"
+                                 "{}\n\n"
+                                 "Voici son message :\n\n"
+                                 "{}").format(debut_message, coordonnees, message)
+
+            message_d_erreur = "Problème lors de l'envoi d'un mail de demande pour devenir soutien de l'asso"
+
+            # envoi d'un mail contenant les données définies précédemment
+            dico_des_donnees = {
+                                "sujet": sujet,
+                                "message": message_a_envoyer,
+                                "message_d_erreur": message_d_erreur
+                               }
+            envoi_mail_bis(dico_des_donnees)
+
+            msg = "Votre demande a bien été envoyée"
+            messages.info(request, msg)
+            return HttpResponseRedirect(reverse("soutiens"))
+
+    else:
+
+        form = DemandeDevenirSoutienForm()
+
+    return render(request, "DemandeDevenirSoutienForm.html", {"form": form})
+
 
 # ==================================================================================================
 # SIGNAUX

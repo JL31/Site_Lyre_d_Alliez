@@ -90,6 +90,7 @@ urlpatterns = [
     path('creation_article/', creation_article, name='creation_article'),
     path('creation_article_de_presse/', creation_article_de_presse, name='creation_article_de_presse'),
     path('creation_soutien/', creation_soutien, name='creation_soutien'),
+    path('demande_pour_devenir_soutien/', demande_pour_devenir_soutien, name='demande_pour_devenir_soutien'),
 
     # Connexion / deconnexion
     path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),

@@ -226,13 +226,6 @@ https://stackoverflow.com/questions/12784835/django-no-such-table
 
 
 # =====================================================================================================================
-# Notes diverses
-# =====================================================================================================================
-
-Créer une API pour obtenir les permissions attribuées à un membre ?
-
-
-# =====================================================================================================================
 # Infos Mailjet
 # =====================================================================================================================
 
@@ -264,23 +257,49 @@ Port
 
 1.0     tout implémenter côté back-end
 1.1     re-architecture du code avec plusieurs applications
-1.2     API REST (RESTFull ?)
+1.2     s'assurer que les API soient REST (RESTFull ?)
 1.3     déploiement avec Docker
 1.4     développer le front-end et l'aspect graphique/visuel du site
+        --> concernant les formulaires : penser à les gérer avec des requètes AJAX afin de ne pas faire les vérif côté back-end
+            ceci afin d'éviter de saturer la bande passante
+            cela permettra de ne pas vérifier le contenu des champ du formulaire des requêtes POST et éviter ainsi des allers-retours entre front et back
+1.5     architecture micro-services ?
 
 
 # =====================================================================================================================
 # Reste à faire
 # =====================================================================================================================
 
-Actualités      --> Calendrier                  --- n
+Actualités      --> Calendrier
 
-L'association   --> Historique des concerts     --- 1
-L'association   --> Nos soutiens                --- 1
+L'association   --> Historique des concerts
 
-Photos          -->                             --- 1
-Vidéos          -->                             --- 1
+Photos          --> tout
+Vidéos          --> tout
 
-Zone de partage --> Les bons plans              --- 1
-Zone de partage --> Conseils                    --- 1
-Zone de partage --> Tutoriels                   --- 1
+Zone de partage --> Les bons plans
+Zone de partage --> Conseils
+Zone de partage --> Tutoriels
+
+Revenir à la gestion des membres (cf ci-dessous)
+
+
+# =====================================================================================================================
+# Gestion des membres
+# =====================================================================================================================
+
+Au final mettre en place :
+
+1) si le membre n'est pas connecté afficher un lien "Se connecter" dans le bandeau.
+   lors du clic sur ce lien une fenêtre style pop-up apparaîtra pour afficher le formulaire de connexion
+   il faudra prévoir dans ce pop-up un lien vers "j'ai oublié mon mot de passe"
+   si les infos sont correctes alors le membre sera connecté et un message de bienvenue apparaîtra (via les messages des django)
+   le message sera affiché dans un bandeau qui apparaîtra puis disparaitra
+
+2) si le membre est connecté afficher dans le bandeau, à la place du lien "Se connecter", l'avatar du membre
+
+3) si un membre clique sur son avatar il pourra :
+   - accéder à ses informations personnelles pour les consulter
+   - modifier son mot de passe
+   - se déconnecter
+

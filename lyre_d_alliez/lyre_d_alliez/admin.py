@@ -20,6 +20,7 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.contrib import admin
+# from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, DemandeDevenirSoutien
 from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien
 
 
@@ -209,6 +210,34 @@ class SoutienAdmin(admin.ModelAdmin):
     search_fields = ("nom", )
 
 
+# # =================================================
+# class DemandeDevenirSoutienAdmin(admin.ModelAdmin):
+#     """
+#         Classe qui permet la gestion de l'administration des demandes pour devenir soutien de l'asso
+#     """
+#
+#     # Configuration de la liste d'articles
+#     list_display = ("nom",
+#                     "prenom",
+#                     "societe",
+#                     "adresse_email",
+#                     "numero_de_telephone")
+#
+#     list_filter = ("nom",
+#                     "prenom",
+#                     "societe",
+#                     "adresse_email",
+#                     "numero_de_telephone")
+#
+#     ordering = ("nom", )
+#
+#     search_fields = ("nom",
+#                     "prenom",
+#                     "societe",
+#                     "adresse_email",
+#                     "numero_de_telephone")
+
+
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================
@@ -224,3 +253,4 @@ admin.site.register(Article, ArticleAdmin)
 admin.site.register(Commentaire, CommentaireAdmin)
 admin.site.register(ArticleDePresse, ArticleDePresseAdmin)
 admin.site.register(Soutien, SoutienAdmin)
+# admin.site.register(DemandeDevenirSoutien, DemandeDevenirSoutienAdmin)

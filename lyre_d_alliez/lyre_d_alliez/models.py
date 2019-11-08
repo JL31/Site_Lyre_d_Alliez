@@ -22,6 +22,7 @@ __status__ = 'dev'
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+
 from PIL import Image
 
 
@@ -302,6 +303,49 @@ class Soutien(models.Model):
         size = (150, 150)
         image = image.resize(size, Image.ANTIALIAS)
         image.save(self.logo.path)
+
+
+# # ========================================
+# class DemandeDevenirSoutien(models.Model):
+#     """
+#         Classe qui décrit le modèle pour de demande pour devenir soutien de l'asso
+#     """
+#
+#     telephone_regexp = RegexValidator(regex=r"^0\d[ .]?(\d{2}[ .]?){4}$", message=("Le numéro de téléphone doit avoir l'un des formats suivant :\n"
+#                                                        "- 00.11.22.33.44,\n"
+#                                                        "- 0011223344,\n"
+#                                                        "- 00 11 22 33 44"))
+#
+#     nom = models.CharField(null=False, blank=False, max_length=250)
+#     prenom = models.CharField(null=False, blank=False, max_length=250)
+#     societe = models.CharField(null=True, blank=True, max_length=250)
+#     adresse_email = models.EmailField(null=True, blank=True, max_length=255)
+#     numero_de_telephone = models.CharField(null=True, blank=True, max_length=14, validators=[telephone_regexp])
+#     message = models.TextField(null=False, blank=False, max_length=5000)
+#
+#     # =========
+#     class Meta:
+#         """
+#             Configuration/définition des options de metadonnées du modèle
+#         """
+#
+#         verbose_name = "demande_devenir_soutien"
+#         ordering = ["nom",
+#                     "prenom",
+#                     "societe",
+#                     "adresse_email",
+#                     "numero_de_telephone",
+#                     "message"
+#                     ]
+#
+#     # ================
+#     def __str__(self):
+#         """
+#             Permet de faciliter la reconnaissance des objets lors de l'administration
+#         """
+#
+#         return self.nom
+
 
 # ==================================================================================================
 # FUNCTIONS
