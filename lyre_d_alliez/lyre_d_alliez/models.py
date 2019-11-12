@@ -306,6 +306,40 @@ class Soutien(models.Model):
         image.save(self.logo.path)
 
 
+# =========================
+class Photos(models.Model):
+    """
+        Classe qui décrit le modèle des soutiens
+    """
+
+    nom_de_la_photo = models.CharField(null=False, blank=False, max_length=250)
+    photo = models.ImageField(null=False, blank=False, upload_to="photos/")
+
+    nom_de_l_evenement = models.CharField(null=False, blank=False, max_length=250)
+    date_de_l_evenement = models.DateTimeField(null=False, blank=False)
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du modèle
+        """
+
+        verbose_name = "photo"
+        ordering = ["nom_de_la_photo",
+                    "photo",
+                    "nom_de_l_evenement",
+                    "date_de_l_evenement"
+                    ]
+
+    # ================
+    def __str__(self):
+        """
+            Permet de faciliter la reconnaissance des objets lors de l'administration
+        """
+
+        return self.nom_de_la_photo
+
+
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================

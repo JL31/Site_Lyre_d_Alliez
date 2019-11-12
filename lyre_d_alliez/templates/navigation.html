@@ -13,7 +13,7 @@
     
     {% if user.is_authenticated %}
     <li>
-        <a href="">Photos</a>
+        <a href="{% url 'photos' %}">Photos</a>
         {% block sous_menu_photos %}{% endblock %}
     </li>
     <li>

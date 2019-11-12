@@ -23,9 +23,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from django.forms import Form, CharField
+from django.forms import Form, CharField, FileField, ClearableFileInput
 
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photos
 from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput, Textarea
 
 from .settings import DATE_INPUTS_FORMATS
@@ -128,7 +128,6 @@ class EvenementForm(ModelForm):
 
 
 # =======================================
-# class AbonnementEvenementForm(BSModalForm):
 class AbonnementEvenementForm(ModelForm):
     """
         Classe qui permet la création d'un formulaire pour l'abonnement à un évènement
@@ -307,6 +306,35 @@ class DemandeDevenirSoutienForm(Form):
             raise ValidationError(message_d_erreur)
 
         return self.cleaned_data
+
+
+# ==========================
+class PhotosForm(ModelForm):
+    """
+        Classe qui permet la création d'un formulaire pour uploader une(des) photo(s)
+    """
+
+    photo = FileField(widget=ClearableFileInput(attrs={"multiple": True}))
+
+    # ==================================
+    def __init__(self, *args, **kwargs):
+        """
+            Constructeur de la classe
+        """
+
+        # Les deux lignes suivantes permettent de modifier le label du champ "site_internet" dans la page
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields["nom_de_l_evenement"].label = "Nom de l'évènement"
+        self.fields["date_de_l_evenement"].label = "Date de l'évènement"
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du formulaire
+        """
+
+        model = Photos
+        fields = ("nom_de_la_photo", "photo", "nom_de_l_evenement", "date_de_l_evenement")
 
 
 # ==================================================================================================

@@ -20,7 +20,7 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.contrib import admin
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photos
 
 
 # ==================================================================================================
@@ -206,6 +206,30 @@ class SoutienAdmin(admin.ModelAdmin):
     search_fields = ("nom", )
 
 
+# ==================================
+class PhotosAdmin(admin.ModelAdmin):
+    """
+        Classe qui permet la gestion de l'administration des soutiens
+    """
+
+    # Configuration de la liste d'articles
+    list_display = ("nom_de_la_photo",
+                    "nom_de_l_evenement",
+                    "date_de_l_evenement")
+
+    list_filter = ("nom_de_la_photo",
+                   "nom_de_l_evenement",
+                   "date_de_l_evenement")
+
+    date_hierarchy = "date_de_l_evenement"
+
+    ordering = ("date_de_l_evenement", )
+
+    search_fields = ("nom_de_la_photo",
+                     "nom_de_l_evenement",
+                     "date_de_l_evenement")
+
+
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================
@@ -221,3 +245,4 @@ admin.site.register(Article, ArticleAdmin)
 admin.site.register(Commentaire, CommentaireAdmin)
 admin.site.register(ArticleDePresse, ArticleDePresseAdmin)
 admin.site.register(Soutien, SoutienAdmin)
+admin.site.register(Photos, PhotosAdmin)

@@ -1,0 +1,21 @@
+{% extends "base_etendue.html" %}
+{% load static %}
+
+{% block contenu %}
+<h1>Photos</h1>
+<div>
+    <p>
+        Retrouvez, année par année, les photos de nos concerts et soirées.
+    </p>
+
+    <div class="conteneur_dossiers_photos">
+    {% for annee in liste_des_annees %}
+        <div class="conteneur_dossier_photo_annee">
+            <img src="{% static 'img/image_defaut_evenements_annee_200x200.jpg' %}" class="image_dossier_photo_annee"/>
+            <a href="{% url 'liste_des_photos_pour_annee' annee %}" class="lien_vers_photos_de_l_annee"><h2 class="titre_annee_dossier_photo_annee">{{ annee }}</h2></a>
+        </div>
+    {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

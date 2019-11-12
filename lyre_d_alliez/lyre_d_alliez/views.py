@@ -27,9 +27,10 @@ from django.core.mail import mail_admins, send_mail
 from django.contrib import messages
 from django.utils import timezone
 from django.urls import reverse
+from django.views.generic.edit import FormView
 
-from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien
+from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm, PhotosForm
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photos
 
 from .secret_data import ADMINS, MOT_DE_PASSE
 
@@ -50,16 +51,50 @@ from smtplib import SMTPException
 # ==================================================================================================
 
 
-# # ==============================================
-# class VueAbonnementEvenement(BSModalCreateView):
-#     """
-#         ...
-#     """
-#
-#     template_name = 'abonnement_evenement.html'
-#     form_class = AbonnementEvenementForm
-#     success_message = 'Abonnement réussi'
-#     success_url = reverse_lazy('creation_evenement')
+# =========================
+class PhotosView(FormView):
+    """
+        Classe générique permettant la gestion du chargement de plusieurs photos
+    """
+
+    form_class = PhotosForm
+    template_name = "AjoutPhotosForm.html"
+    success_url = reverse("accueil")
+
+    # =======================================
+    def post(self, request, *args, **kwargs):
+        """
+            Override of ProcessFormView post method :
+
+            Handle POST requests: instantiate a form instance with the passed
+            POST variables and then check if it's valid.
+
+            :param request: instance de HttpRequest
+            :type request: django.core.handlers.wsgi.WSGIRequest
+
+            :param args: non nammed arguments
+            :param kwargs: nammed arguments
+
+            :return:
+            :rtype:
+        """
+
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+
+        files = request.FILES.getlist("file_field")
+
+        if form.is_valid():
+
+            for file in files:
+
+                form.save()
+
+            return self.form_valid(form)
+
+        else:
+
+            return self.form_invalid(form)
 
 
 # ==================================================================================================
@@ -787,6 +822,7 @@ def historique_des_concerts(request):
     liste_des_evenements = OrderedDict()
 
     for evenement in liste_des_evenements_tmp:
+
         liste_des_evenements.setdefault(evenement.date.year, []).append(evenement)
 
     liste_des_annees = list(liste_des_evenements.keys())
@@ -832,7 +868,6 @@ def voir_programme(request, id_evenement, annee):
         :param annee: année choisie par le visiteur
         :type annee: str (converti automatiquement par django lors de l'utilisation d'expression régulières dans les URLs)
 
-
         :return: instance
         :rtype: django.http.response.HttpResponse
     """
@@ -848,9 +883,66 @@ def voir_programme(request, id_evenement, annee):
     else:
 
         for obj in evenement_choisi:
+
             evenement_choisi = obj
 
     return render(request, "voir_programme.html", {"evenement_choisi": evenement_choisi, "annee": annee})
+
+
+@login_required
+@user_passes_test(personne_autorisee)
+# ==================
+def photos(request):
+    """
+        Vue qui permet d'afficher les photos
+
+        :param request: instance de HttpRequest ou de HttpResponseRedirect
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance
+        :rtype: django.http.response.HttpResponse
+    """
+
+    liste_des_annees_tmp = Photos.objects.order_by("-date")
+    liste_des_annees = OrderedDict()
+
+    for photo in liste_des_annees_tmp:
+
+        liste_des_annees.setdefault(photo.date.year, []).append(photo)
+
+    return render(request, "photos.html", {"liste_des_annees": liste_des_annees})
+
+
+# @login_required
+# @user_passes_test(personne_autorisee)
+# # ==========================
+# def ajouter_photos(request):
+#     """
+#         Vue qui permet d'afficher les photos
+#
+#         :param request: instance de HttpRequest
+#         :type request: django.core.handlers.wsgi.WSGIRequest
+#
+#         :return: instance de HttpResponse ou de HttpResponseRedirect
+#         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+#     """
+#
+#     if request.method == "POST":
+#
+#         form = PhotosForm(request.POST, request.FILES)
+#
+#         if form.is_valid():
+#
+#             form.save()
+#             msg = "La(es) photo(s) a(ont) bien été ajoutée(s)"
+#             messages.info(request, msg)
+#             return HttpResponseRedirect(reverse("accueil"))
+#
+#     else:
+#
+#         form = PhotosForm()
+#
+#     return render(request, "AjoutPhotosForm.html", {"form": form})
 
 
 # ==================================================================================================

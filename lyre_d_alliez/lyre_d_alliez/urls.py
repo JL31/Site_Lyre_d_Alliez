@@ -80,8 +80,10 @@ urlpatterns = [
     path('association/historique_des_concerts/', historique_des_concerts, name='historique_des_concerts'),
     re_path('association/liste_des_evenements_de_l_annee/(?P<annee>\d{4})/$', liste_des_evenements_de_l_annee, name='liste_des_evenements_de_l_annee'),
     re_path('association/voir_programme/(?P<id_evenement>\d*)/(?P<annee>\d{4})/$', voir_programme, name='voir_programme'),
-
     path('association/soutiens/', soutiens, name='soutiens'),
+
+    # Menu Photos
+    path('photos/', photos, name='photos'),
 
     # Menu et sous-menus  : Zone de partage
     path('zone_de_partage/', zone_de_partage, name='zone_de_partage'),
@@ -95,6 +97,7 @@ urlpatterns = [
     path('creation_article_de_presse/', creation_article_de_presse, name='creation_article_de_presse'),
     path('creation_soutien/', creation_soutien, name='creation_soutien'),
     path('demande_pour_devenir_soutien/', demande_pour_devenir_soutien, name='demande_pour_devenir_soutien'),
+    path('ajouter_photos/', ajouter_photos, name='ajouter_photos'),
 
     # Connexion / deconnexion
     path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),

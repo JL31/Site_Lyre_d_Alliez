@@ -99,11 +99,14 @@ https://trco.si/dbmf/
 # Détail "Photos"
 # =====================================================================================================================
 
-Il y aura un dossier par année, le clic sur le menu fera apparaître un menu déroulant permettant de choisir l'année.
+Il y aura un dossier par année.
 Au sein d'une année il y aura plusieurs dossiers, un pour chaque évènement.
 Quid de l'affichage :
 --- carrés pour ensuite zoomer ?
 --- bandeau avec miniatures en dessous d'un zoom ?
+Associer la/les photos(s) à un évènement ?
+S'il n'y a pas d'évènements (par exemple auberge espagnole)
+Mettre en place une zone de glisser-déposer (https://simpleisbetterthancomplex.com/tutorial/2016/11/22/django-multiple-file-upload-using-ajax.html)
 
 
 # =====================================================================================================================
@@ -272,14 +275,14 @@ Port
 
 Actualités      --> Calendrier
 
-L'association   --> Historique des concerts
-
 Photos          --> tout
 Vidéos          --> tout
 
 Zone de partage --> Les bons plans
 Zone de partage --> Conseils
 Zone de partage --> Tutoriels
+
+re-créer le projet en améliorant la gestionde conf : créer une branche dev !
 
 Revenir à la gestion des membres (cf ci-dessous)
 
