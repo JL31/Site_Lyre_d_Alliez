@@ -850,7 +850,6 @@ def voir_programme(request, id_evenement, annee):
     """
 
     evenement_choisi = Evenement.objects.filter(pk=id_evenement)
-    annee_int = int(annee)
 
     if len(evenement_choisi) > 1:
 
@@ -864,7 +863,7 @@ def voir_programme(request, id_evenement, annee):
 
             evenement_choisi = obj
 
-    return render(request, "voir_programme.html", {"evenement_choisi": evenement_choisi, "annee": annee_int})
+    return render(request, "voir_programme.html", {"evenement_choisi": evenement_choisi, "annee": annee})
 
 
 # ==================================================================================================
