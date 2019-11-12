@@ -1,0 +1,16 @@
+{% extends "base_etendue.html" %}
+
+{% block contenu %}
+
+    <h1>Programme du {{ evenement_choisi.nom }}</h1>
+    <div>
+        <p>
+            {{ evenement_choisi.programme|safe }}
+        </p>
+
+        <form action="{% url 'liste_des_evenements_de_l_annee' annee %}" id="retour_evenements_de_l_annee">
+            <input type="submit" id="bouton_retour_evenements_de_l_annee" value="Retour" />
+        </form>
+    </div>
+
+{% endblock %}

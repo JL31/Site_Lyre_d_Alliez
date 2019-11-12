@@ -23,10 +23,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from django.forms import Form, CharField, EmailField, Textarea
+from django.forms import Form, CharField
 
 from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien
 from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput, Textarea
+
+from .settings import DATE_INPUTS_FORMATS
 
 # from bootstrap_modal_forms.forms import BSModalForm
 
@@ -109,8 +111,11 @@ class MembreForm(UserCreationForm):
 # =============================
 class EvenementForm(ModelForm):
     """
-        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouvel évènement
+        Classe qui permet la création
+        d'un formulaire pour renseigner les champs d'un nouvel évènement
     """
+
+    date = DateField(required=True, input_formats=DATE_INPUTS_FORMATS)
 
     # =========
     class Meta:
@@ -119,7 +124,7 @@ class EvenementForm(ModelForm):
         """
 
         model = Evenement
-        fields = ("nom", "lieu", "date")
+        fields = ("nom", "lieu", "date", "programme")
 
 
 # =======================================

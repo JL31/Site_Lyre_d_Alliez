@@ -11,7 +11,6 @@
             <p id="date_lecture_article">{{ article.date }}</p>
             <p id="description_lecture_article">{{ article.description }}</p>
             <form action="{% url 'liste_des_articles' %}" id="fin_lecture_article">
-                {% csrf_token %}
                 <input type="submit" id="bouton_retour_liste_des_articles" value="Retour"/>
             </form>
 

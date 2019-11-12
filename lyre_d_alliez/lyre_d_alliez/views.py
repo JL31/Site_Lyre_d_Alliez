@@ -366,7 +366,8 @@ def creation_evenement(request):
         if form.is_valid():
 
             form.save()
-
+            msg = "L'évènement a été crée avec succès"
+            messages.info(request, msg)
             return HttpResponseRedirect(reverse("accueil"))
 
     else:
@@ -817,7 +818,7 @@ def liste_des_evenements_de_l_annee(request, annee):
         :type annee: str (converti automatiquement par django lors de l'utilisation d'expression régulières dans les URLs)
 
         :return: instance de HttpResponse
-        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse
     """
 
     annee_int = int(annee)
@@ -827,6 +828,43 @@ def liste_des_evenements_de_l_annee(request, annee):
     liste_des_evenements_de_l_annee = [ evenement for evenement in liste_des_evenements_de_l_annee_tmp if evenement.date.year == annee_int ]
 
     return render(request, "evenements_de_l_annee.html", {"annee": annee_int, "liste_des_evenements_de_l_annee": liste_des_evenements_de_l_annee})
+
+
+# ===============================================
+def voir_programme(request, id_evenement, annee):
+    """
+        Vue qui permet d'afficher le programme de l'évènement choisi
+
+        :param request: instance de HttpRequest ou de HttpResponseRedirect
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param id_evenement: identifiant de l'évènement choisi
+        :type id_evenement: str
+
+        :param annee: année choisie par le visiteur
+        :type annee: str (converti automatiquement par django lors de l'utilisation d'expression régulières dans les URLs)
+
+
+        :return: instance
+        :rtype: django.http.response.HttpResponse
+    """
+
+    evenement_choisi = Evenement.objects.filter(pk=id_evenement)
+    annee_int = int(annee)
+
+    if len(evenement_choisi) > 1:
+
+        # à améliorer
+        msg = "Erreur --- vue abonnement_evenement --- filtre nom : plus d'une personne"
+        raise ValueError(msg)
+
+    else:
+
+        for obj in evenement_choisi:
+
+            evenement_choisi = obj
+
+    return render(request, "voir_programme.html", {"evenement_choisi": evenement_choisi, "annee": annee_int})
 
 
 # ==================================================================================================

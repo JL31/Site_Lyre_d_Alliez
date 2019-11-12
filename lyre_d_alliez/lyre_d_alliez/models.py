@@ -22,7 +22,6 @@ __status__ = 'dev'
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-# from django.core.validators import RegexValidator
 
 from PIL import Image
 
@@ -99,55 +98,16 @@ class Membre(User):
         image.save(self.avatar.path)
 
 
-# =============================
-class Abonnement(models.Model):
-    """
-        Classe qui décrit le modèle des abonnements
-    """
-
-    adresse_mail_abonne = models.EmailField(null=False, blank=False, max_length=255)
-    date_de_l_alerte = models.DateField(null=False, blank=False)
-
-    # =========
-    class Meta:
-        """
-            Configuration/définition des options de metadonnées du modèle
-        """
-
-        verbose_name = "abonnement"
-        ordering = ["adresse_mail_abonne",
-                    "date_de_l_alerte"]
-
-    # ================
-    def __str__(self):
-        """
-            Permet de faciliter la reconnaissance des objets lors de l'administration
-        """
-
-        return self.adresse_mail_abonne
-
-
 # ============================
 class Evenement(models.Model):
     """
         Classe qui décrit le modèle des évènements
     """
 
-    # date_regexp = RegexValidator(regex=r"^[0,1,2,3]?\d/[0,1]?\d/\d{4}$", message=("La date doit avoir le format suivant : jj/mm/aaaa"
-    #                                                                               "jj et mm peuvent être des chiffres.\n"
-    #                                                                               "Les exemples suivants sont tous valides pour la date du 1er janiver 2020:\n"
-    #                                                                               "- 1/1/2020"
-    #                                                                               "- 1/01/2020"
-    #                                                                               "- 01/1/2020"
-    #                                                                               "- 01/01/2020"))
-
     nom = models.CharField(null=False, blank=False, max_length=255)
     lieu = models.CharField(null=False, blank=False, max_length=255)
     date = models.DateField(null=False, blank=False)
-    # date = models.DateField(null=False, blank=False, max_length=10, validators=[date_regexp])
-    # abonnements = models.ManyToManyField(Abonnement)
-    # ==> à modifier en ForeignKey ?
-    # ==> la Foreign Key sera sur le modèle Abonnement
+    programme = models.TextField(null=False, blank=False, max_length=1500)
 
     # =========
     class Meta:
@@ -158,7 +118,8 @@ class Evenement(models.Model):
         verbose_name = "evenement"
         ordering = ["nom",
                     "lieu",
-                    "date"
+                    "date",
+                    "programme"
                    ]
 
     # ================
@@ -168,6 +129,36 @@ class Evenement(models.Model):
         """
 
         return self.nom
+
+
+# =============================
+class Abonnement(models.Model):
+    """
+        Classe qui décrit le modèle des abonnements
+    """
+
+    adresse_mail_abonne = models.EmailField(null=False, blank=False, max_length=255)
+    date_de_l_alerte = models.DateField(null=False, blank=False)
+    evenement = models.ForeignKey(Evenement, on_delete=models.SET_NULL, null=True)
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du modèle
+        """
+
+        verbose_name = "abonnement"
+        ordering = ["adresse_mail_abonne",
+                    "date_de_l_alerte",
+                    "evenement"]
+
+    # ================
+    def __str__(self):
+        """
+            Permet de faciliter la reconnaissance des objets lors de l'administration
+        """
+
+        return self.adresse_mail_abonne
 
 
 # ==========================
@@ -210,7 +201,7 @@ class Commentaire(models.Model):
     """
 
     texte = models.TextField(null=True, blank=False, max_length=5000)
-    date = models.DateTimeField(default=timezone.now())
+    date = models.DateTimeField(default=timezone.now)
     articles = models.ForeignKey(Article, on_delete=models.SET_NULL, null=True)
     redacteur = models.ForeignKey(Membre, on_delete=models.SET_NULL, null=True)
 
