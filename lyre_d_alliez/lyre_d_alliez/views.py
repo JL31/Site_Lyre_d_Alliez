@@ -14,7 +14,6 @@ __maintainer__ = 'Julien LEPAIN'
 __date__ = '10/2019'
 __status__ = 'dev'
 
-
 # ==================================================================================================
 # IMPORTS
 # ==================================================================================================
@@ -237,9 +236,10 @@ def association(request):
         :return: instance de HttpResponse
         :rtype: django.http.response.HttpResponse
     """
-    
+
     return render(request, "sous_menu_association.html")
-    
+
+
 @login_required
 @user_passes_test(personne_autorisee)
 # ===========================
@@ -274,7 +274,6 @@ def creation_profil_membre(request):
         form = MembreForm(request.POST, request.FILES)
 
         if form.is_valid():
-
             form.save()
             msg = "Le profil a été crée avec succès, merci d'attendre l'email d'activation de votre compte"
             messages.info(request, msg)
@@ -324,7 +323,6 @@ def les_pupitres(request):
         for membre in liste_des_membres:
 
             if instrument[0] in membre.instruments:
-
                 dico_instrument_membres.setdefault(instrument[0], {"instrument": instrument[1], "membres": []})["membres"].append(membre)
 
     return render(request, "les_pupitres.html", {"dico_instrument_membres": dico_instrument_membres})
@@ -364,7 +362,6 @@ def creation_evenement(request):
         form = EvenementForm(request.POST)
 
         if form.is_valid():
-
             form.save()
             msg = "L'évènement a été crée avec succès"
             messages.info(request, msg)
@@ -419,7 +416,6 @@ def abonnement_evenement(request, nom_de_l_evenement):
                 abonnement.save()
 
                 for obj in evenement:
-
                     obj.abonnements.add(abonnement)
 
                     setlocale(LC_TIME, "fr-FR")     # permet d'obtenir la date au format local (ici Fr)
@@ -456,7 +452,6 @@ def envoi_alerte_abonne(request):
         for abonne in liste_des_abonnes:
 
             if abonne.date_de_l_alerte.strftime("%Y-%m-%d") == datetime.now().strftime("%Y-%m-%d"):
-
                 sujet = " Rappel "
                 message = ("La Lyre d'Alliez vous rappelle que le {{ evenement.nom }} aura lieu à {{ evenement.lieu }} le {{ evenement.date }}<br />"
                            "Ceci est un message automatique envoyé à {{ abonne.adresse_mail_abonne }}")
@@ -490,7 +485,6 @@ def bureau(request):
     else:
 
         for obj in chef:
-
             chef = obj
 
     liste_des_membres_du_bureau = Membre.objects.filter(est_membre_du_bureau=True)
@@ -515,7 +509,6 @@ def creation_article(request):
         form = ArticleForm(request.POST, request.FILES)
 
         if form.is_valid():
-
             form.save()
             msg = "L'article a été crée avec succès"
             messages.info(request, msg)
@@ -579,7 +572,6 @@ def lire_article(request, reference_de_l_article):
     else:
 
         for obj in article:
-
             article = obj
             liste_des_commentaires = Commentaire.objects.filter(articles=obj).order_by("-date")
 
@@ -591,7 +583,6 @@ def lire_article(request, reference_de_l_article):
         form = CommentaireForm(request.POST)
 
         if form.is_valid():
-
             commentaire = form.save(commit=False)
             commentaire.date = timezone.now()
             commentaire.articles = article
@@ -641,7 +632,6 @@ def creation_article_de_presse(request):
         form = ArticleDepresseForm(request.POST)
 
         if form.is_valid():
-
             form.save()
             msg = "Le lien vers l'article de presse a bien été ajouté"
             messages.info(request, msg)
@@ -688,7 +678,6 @@ def creation_soutien(request):
         form = SoutienForm(request.POST, request.FILES)
 
         if form.is_valid():
-
             form.save()
             msg = "Le soutien a bien été ajouté"
             messages.info(request, msg)
@@ -798,7 +787,6 @@ def historique_des_concerts(request):
     liste_des_evenements = OrderedDict()
 
     for evenement in liste_des_evenements_tmp:
-
         liste_des_evenements.setdefault(evenement.date.year, []).append(evenement)
 
     liste_des_annees = list(liste_des_evenements.keys())
@@ -860,7 +848,6 @@ def voir_programme(request, id_evenement, annee):
     else:
 
         for obj in evenement_choisi:
-
             evenement_choisi = obj
 
     return render(request, "voir_programme.html", {"evenement_choisi": evenement_choisi, "annee": annee})
