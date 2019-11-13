@@ -32,7 +32,7 @@ from django.views.generic.edit import FormView
 from django.utils.decorators import method_decorator
 
 from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm, PhotoForm
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo, Video
 
 from .secret_data import ADMINS, MOT_DE_PASSE
 
@@ -942,7 +942,7 @@ def photos(request):
 @user_passes_test(personne_autorisee)
 def liste_des_photos_pour_annee(request, annee):
     """
-        Vue qui permet d'afficher les photos
+        Vue qui permet d'afficher les photos pour une année donnée
 
         :param request: instance de HttpRequest ou de HttpResponseRedirect
         :type request: django.core.handlers.wsgi.WSGIRequest
@@ -968,7 +968,7 @@ def liste_des_photos_pour_annee(request, annee):
 @user_passes_test(personne_autorisee)
 def voir_photos_evenement(request, evenement, annee):
     """
-        Vue qui permet d'afficher les photos pour l'évènement sélectionné par le visiteur
+        Vue qui permet d'afficher les photos pour l'évènement sélectionné par le visiteur pour une année donnée
 
         :param request: instance de HttpRequest ou de HttpResponseRedirect
         :type request: django.core.handlers.wsgi.WSGIRequest
@@ -993,6 +993,51 @@ def voir_photos_evenement(request, evenement, annee):
     return render(request, "photos_de_l_evenement_de_l_annee.html", {"liste_des_photos_de_l_evenement_pour_l_annee": liste_des_photos_de_l_evenement_pour_l_annee,
                                                                      "evenement":evenement,
                                                                      "annee":annee})
+
+
+# ===================================
+@login_required
+@user_passes_test(personne_autorisee)
+def videos(request):
+    """
+        Vue qui permet d'afficher une vidéo
+
+        :param request: instance de HttpRequest ou de HttpResponseRedirect
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance
+        :rtype: django.http.response.HttpResponse
+    """
+
+    # return render(request, "lire_videos.html")
+    liste_des_annees_tmp = Video.objects.order_by("-date_de_l_evenement")
+    liste_des_annees = OrderedDict()
+
+    for video in liste_des_annees_tmp:
+
+        liste_des_annees.setdefault(video.date_de_l_evenement.year, []).append(video)
+
+    return render(request, "videos.html", {"liste_des_annees": liste_des_annees})
+
+
+# ==============================================
+@login_required
+@user_passes_test(personne_autorisee)
+def liste_des_videos_pour_annee(request, annee):
+    """
+        Vue qui permet d'afficher les videos pour une année donnée
+
+        :param request: instance de HttpRequest ou de HttpResponseRedirect
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param annee: année choisie par le visiteur
+        :type annee: str (converti automatiquement par django lors de l'utilisation d'expression régulières dans les URLs)
+
+        :return: instance
+        :rtype: django.http.response.HttpResponse
+    """
+
+    return render(request, "accueil.html")
 
 
 # ==================================================================================================

@@ -125,6 +125,9 @@ https://www.w3schools.com/html/tryit.asp?filename=tryhtml_images_style
 Il y aura un dossier par année, le clic sur le menu fera apparaître un menu déroulant permettant de choisir l'année.
 Au sein d'une année il y aura plusieurs dossiers, un pour chaque évènement.
 
+https://stackoverflow.com/questions/20953301/playing-video-with-django-and-html5-tag
+
+
 
 # =====================================================================================================================
 # Détail des profils des membres

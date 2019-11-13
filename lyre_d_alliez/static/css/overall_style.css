@@ -427,3 +427,39 @@ strong
     color: black;
     text-decoration: none;
 }
+
+/* Mise en forme des dossiers des vidéos */
+/* ------------------------------------- */
+
+.conteneur_dossiers_videos
+{
+    display: flex;
+    flex-direction: row
+    align-items: center;
+}
+
+.conteneur_dossier_videos_annee
+{
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.image_dossier_video_annee
+{
+    border: 1px solid black;
+    margin-bottom: 0px;
+}
+
+.titre_annee_dossier_video_annee
+{
+    border: 1px solid black;
+    margin-top: 0px;
+    text-align: center;
+    background-color: RGB(242,231,191)
+}
+
+.lien_vers_video_de_l_annee
+{
+    color: black;
+    text-decoration: none;
+}

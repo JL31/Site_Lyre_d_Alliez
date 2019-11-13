@@ -25,7 +25,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.forms import Form, CharField, FileField, ClearableFileInput
 
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo, Video
 from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput, Textarea
 
 from .settings import DATE_INPUTS_FORMATS
@@ -321,7 +321,7 @@ class PhotoForm(ModelForm):
             Constructeur de la classe
         """
 
-        # Les deux lignes suivantes permettent de modifier le label du champ "site_internet" dans la page
+        # Les lignes suivantes permettent de modifier les labels de certains champs dans la page
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields["nom_de_l_evenement"].label = "Nom de l'évènement"
         self.fields["date_de_l_evenement"].label = "Date de l'évènement"
@@ -334,6 +334,36 @@ class PhotoForm(ModelForm):
 
         model = Photo
         fields = ("photo", "nom_de_l_evenement", "date_de_l_evenement")
+
+
+# =========================
+class VideoForm(ModelForm):
+    """
+        Classe qui permet la création d'un formulaire pour uploader une(des) vidéo(s)
+    """
+
+    video = FileField(widget=ClearableFileInput(attrs={"multiple": True}))
+    date_de_l_evenement = DateField(required=True, input_formats=DATE_INPUTS_FORMATS)
+
+    # ==================================
+    def __init__(self, *args, **kwargs):
+        """
+            Constructeur de la classe
+        """
+
+        # Les lignes suivantes permettent de modifier les labels de certains champs dans la page
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields["nom_de_l_evenement"].label = "Nom de l'évènement"
+        self.fields["date_de_l_evenement"].label = "Date de l'évènement"
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du formulaire
+        """
+
+        model = Video
+        fields = ("video", "nom_de_l_evenement", "date_de_l_evenement")
 
 
 # ==================================================================================================

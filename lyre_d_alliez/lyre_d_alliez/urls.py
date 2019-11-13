@@ -87,6 +87,10 @@ urlpatterns = [
     re_path('photos/liste_des_photos_pour_annee/(?P<annee>\d{4})/$', liste_des_photos_pour_annee, name='liste_des_photos_pour_annee'),
     re_path('photos/voir_photos_evenement/(?P<evenement>.*)/(?P<annee>\d{4})/$', voir_photos_evenement, name='voir_photos_evenement'),
 
+    # Menu Vidéos
+    path('videos/', videos, name='videos'),
+    re_path('videos/liste_des_videos_pour_annee/(?P<annee>\d{4})/$', liste_des_videos_pour_annee, name='liste_des_videos_pour_annee'),
+
     # Menu et sous-menus  : Zone de partage
     path('zone_de_partage/', zone_de_partage, name='zone_de_partage'),
 

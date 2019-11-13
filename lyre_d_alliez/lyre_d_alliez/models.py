@@ -340,6 +340,40 @@ class Photo(models.Model):
         return self.nom_de_la_photo
 
 
+# ========================
+class Video(models.Model):
+    """
+        Classe qui décrit le modèle des vidéos
+    """
+
+    nom_de_la_video = models.CharField(null=False, blank=False, max_length=250)
+    video = models.FileField(null=False, blank=False, upload_to="videos/")
+
+    nom_de_l_evenement = models.CharField(null=False, blank=False, max_length=250)
+    date_de_l_evenement = models.DateField(null=False, blank=False)
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du modèle
+        """
+
+        verbose_name = "video"
+        ordering = ["nom_de_la_video",
+                    "video",
+                    "nom_de_l_evenement",
+                    "date_de_l_evenement"
+                    ]
+
+    # ================
+    def __str__(self):
+        """
+            Permet de faciliter la reconnaissance des objets lors de l'administration
+        """
+
+        return self.nom_de_la_video
+
+
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================
