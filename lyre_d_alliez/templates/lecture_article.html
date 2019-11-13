@@ -35,11 +35,13 @@
 
             <!-- Affichage du formulaire permettant de rajouter des commentaires à l'article sélectionné -->
             {% if user.is_authenticated %}
-            <form action="{% url 'lire_article' article.id %}" method="POST" class="formulaire_ajout_commentaire">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Envoyer le commentaire" />
-            </form>
+                {% if request.user.membre.est_membre or request.user.membre.est_membre_du_bureau or request.user.membre.est_le_chef %}
+                    <form action="{% url 'lire_article' article.id %}" method="POST" class="formulaire_ajout_commentaire">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" value="Envoyer le commentaire" />
+                    </form>
+                {% endif %}
             {% endif %}
 
         </div>
