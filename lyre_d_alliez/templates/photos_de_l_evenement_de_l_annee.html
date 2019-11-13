@@ -1,0 +1,18 @@
+{% extends "base_etendue.html" %}
+{% load static %}
+
+{% block contenu %}
+<h1>Photos de {{ evenement }} de l'année {{ annee }}</h1>
+<div>
+    <form action="{% url 'liste_des_photos_pour_annee' annee %}" id="fin_visionnage_photos_de_l_evenement_de_l_annee">
+        <input type="submit" id="bouton_retour_photos_de_l_annee" value="Retour" />
+    </form>
+
+    <div class="conteneur_des_photos_pour_evenements">
+    {% for photo in liste_des_photos_de_l_evenement_pour_l_annee %}
+        <img src="{{ photo.photo.url }}" style="width:150px;height:150px;" class="image_dossier_photo_evenement_annee"/>
+    {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

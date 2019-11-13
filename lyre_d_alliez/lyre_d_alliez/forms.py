@@ -25,12 +25,10 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.forms import Form, CharField, FileField, ClearableFileInput
 
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photos
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo
 from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput, Textarea
 
 from .settings import DATE_INPUTS_FORMATS
-
-# from bootstrap_modal_forms.forms import BSModalForm
 
 
 # ==================================================================================================
@@ -308,13 +306,14 @@ class DemandeDevenirSoutienForm(Form):
         return self.cleaned_data
 
 
-# ==========================
-class PhotosForm(ModelForm):
+# =========================
+class PhotoForm(ModelForm):
     """
         Classe qui permet la création d'un formulaire pour uploader une(des) photo(s)
     """
 
     photo = FileField(widget=ClearableFileInput(attrs={"multiple": True}))
+    date_de_l_evenement = DateField(required=True, input_formats=DATE_INPUTS_FORMATS)
 
     # ==================================
     def __init__(self, *args, **kwargs):
@@ -333,8 +332,8 @@ class PhotosForm(ModelForm):
             Configuration/définition des options de metadonnées du formulaire
         """
 
-        model = Photos
-        fields = ("nom_de_la_photo", "photo", "nom_de_l_evenement", "date_de_l_evenement")
+        model = Photo
+        fields = ("photo", "nom_de_l_evenement", "date_de_l_evenement")
 
 
 # ==================================================================================================

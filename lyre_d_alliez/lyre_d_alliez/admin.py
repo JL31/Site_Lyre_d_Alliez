@@ -20,7 +20,7 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.contrib import admin
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photos
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo
 
 
 # ==================================================================================================
@@ -206,8 +206,8 @@ class SoutienAdmin(admin.ModelAdmin):
     search_fields = ("nom", )
 
 
-# ==================================
-class PhotosAdmin(admin.ModelAdmin):
+# =================================
+class PhotoAdmin(admin.ModelAdmin):
     """
         Classe qui permet la gestion de l'administration des soutiens
     """
@@ -245,4 +245,4 @@ admin.site.register(Article, ArticleAdmin)
 admin.site.register(Commentaire, CommentaireAdmin)
 admin.site.register(ArticleDePresse, ArticleDePresseAdmin)
 admin.site.register(Soutien, SoutienAdmin)
-admin.site.register(Photos, PhotosAdmin)
+admin.site.register(Photo, PhotoAdmin)

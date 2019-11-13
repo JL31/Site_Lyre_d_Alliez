@@ -25,76 +25,21 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver
 from django.core.mail import mail_admins, send_mail
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.utils import timezone
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import FormView
+from django.utils.decorators import method_decorator
 
-from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm, PhotosForm
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photos
+from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm, PhotoForm
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo
 
 from .secret_data import ADMINS, MOT_DE_PASSE
-
-# from bootstrap_modal_forms.generic import BSModalCreateView
 
 from collections import OrderedDict
 from datetime import datetime
 from locale import setlocale, LC_TIME
 from smtplib import SMTPException
-
-
-# ==================================================================================================
-# INITIALISATIONS
-# ==================================================================================================
-
-# ==================================================================================================
-# CLASSES
-# ==================================================================================================
-
-
-# =========================
-class PhotosView(FormView):
-    """
-        Classe générique permettant la gestion du chargement de plusieurs photos
-    """
-
-    form_class = PhotosForm
-    template_name = "AjoutPhotosForm.html"
-    success_url = reverse("accueil")
-
-    # =======================================
-    def post(self, request, *args, **kwargs):
-        """
-            Override of ProcessFormView post method :
-
-            Handle POST requests: instantiate a form instance with the passed
-            POST variables and then check if it's valid.
-
-            :param request: instance de HttpRequest
-            :type request: django.core.handlers.wsgi.WSGIRequest
-
-            :param args: non nammed arguments
-            :param kwargs: nammed arguments
-
-            :return:
-            :rtype:
-        """
-
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-
-        files = request.FILES.getlist("file_field")
-
-        if form.is_valid():
-
-            for file in files:
-
-                form.save()
-
-            return self.form_valid(form)
-
-        else:
-
-            return self.form_invalid(form)
 
 
 # ==================================================================================================
@@ -122,7 +67,14 @@ def personne_autorisee(request):
         :rtype: bool
     """
 
-    return request.membre.est_membre or request.membre.est_membre_du_bureau or request.membre.est_le_chef
+    try:
+
+        return request.membre.est_membre or request.membre.est_membre_du_bureau or request.membre.est_le_chef
+
+    except AttributeError:
+        "La gestion de cette erreur est nécessaire car les instances d'objet 'AnonymousUser' ne possèdent pas l'attribut 'membre'"
+
+        return False
 
 
 # ============================================
@@ -154,8 +106,8 @@ def envoi_mail_admin_nouveau_membre(**kwargs):
         raise SMTPException(msg)
 
 
+# =================================
 @receiver(post_save, sender=Membre)
-# ===============================
 def envoi_mail(sender, **kwargs):
     """
         Fonction qui permet d'envoyer un mail
@@ -185,8 +137,8 @@ def envoi_mail(sender, **kwargs):
         raise SMTPException(msg)
 
 
-@receiver(post_delete, sender=Soutien)
 # ==========================================================
+@receiver(post_delete, sender=Soutien)
 def supprimer_logo_d_un_soutien(sender, instance, **kwargs):
     """
         Fonction qui permet de supprimer, sur le serveur, le logo d'un soutien dans le cas où ce dernier serait supprimé
@@ -223,6 +175,71 @@ def envoi_mail_bis(dico_des_donnees):
 
         msg = dico_des_donnees["message_d_erreur"]
         raise SMTPException(msg)
+
+
+# ==================================================================================================
+# INITIALISATIONS
+# ==================================================================================================
+
+decorators = [login_required, user_passes_test(personne_autorisee)]
+
+
+# ==================================================================================================
+# CLASSES
+# ==================================================================================================
+
+
+# =============================================
+@method_decorator(decorators, name='dispatch')
+class PhotoView(SuccessMessageMixin, FormView):
+    """
+        Classe générique permettant la gestion du chargement de plusieurs photos
+    """
+
+    form_class = PhotoForm
+    template_name = "AjoutPhotosForm.html"
+    success_url = reverse_lazy("accueil")
+    success_message = "La(les) photo(s) a(ont) bien été ajoutée(s)"
+
+    # =======================================
+    def post(self, request, *args, **kwargs):
+        """
+            Override of ProcessFormView post method :
+
+            Handle POST requests: instantiate a form instance with the passed
+            POST variables and then check if it's valid.
+
+            :param request: instance de HttpRequest
+            :type request: django.core.handlers.wsgi.WSGIRequest
+
+            :param args: non nammed arguments
+            :param kwargs: nammed arguments
+
+            :return:
+            :rtype:
+        """
+
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+
+        files = request.FILES.getlist("photo")
+
+        if form.is_valid():
+
+            for file in files:
+
+                photo_en_cours = Photo()
+                photo_en_cours.photo = file
+                photo_en_cours.nom_de_la_photo = file.name
+                photo_en_cours.nom_de_l_evenement = form.cleaned_data.get("nom_de_l_evenement")
+                photo_en_cours.date_de_l_evenement = form.cleaned_data.get("date_de_l_evenement")
+                photo_en_cours.save()
+
+            return self.form_valid(form)
+
+        else:
+
+            return self.form_invalid(form)
 
 
 # ==================================================================================================
@@ -275,9 +292,9 @@ def association(request):
     return render(request, "sous_menu_association.html")
 
 
+# ===================================
 @login_required
 @user_passes_test(personne_autorisee)
-# ===========================
 def zone_de_partage(request):
     """
         Vue pour la zone de partage
@@ -312,7 +329,7 @@ def creation_profil_membre(request):
             form.save()
             msg = "Le profil a été crée avec succès, merci d'attendre l'email d'activation de votre compte"
             messages.info(request, msg)
-            return HttpResponseRedirect(reverse("accueil/"))
+            return HttpResponseRedirect(reverse("accueil"))
 
     else:
 
@@ -380,7 +397,9 @@ def agenda(request):
     return render(request, "agenda.html", {"liste_des_evenements": liste_des_evenements})
 
 
-# ==============================
+# ===================================
+@login_required
+@user_passes_test(personne_autorisee)
 def creation_evenement(request):
     """
         Vue pour la création d'un évènement
@@ -457,7 +476,7 @@ def abonnement_evenement(request, nom_de_l_evenement):
                     msg = "Votre demande d'abonnement a bien été prise en compte. Vous recevrez un email pour vous alerter le {} à l'adresse suivante : {}".format(date_de_l_alerte.strftime("%A %d %B %Y"), adresse_mail_abonne)
                     messages.info(request, msg)
 
-            return HttpResponseRedirect(reverse("agenda/"))
+            return HttpResponseRedirect(reverse("agenda"))
 
     else:
 
@@ -527,7 +546,9 @@ def bureau(request):
     return render(request, "bureau.html", {"chef": chef, "liste_des_membres_du_bureau": liste_des_membres_du_bureau})
 
 
-# ============================
+# ===================================
+@login_required
+@user_passes_test(personne_autorisee)
 def creation_article(request):
     """
         Vue du formulaire permettant la création d'un nouvel article
@@ -651,6 +672,8 @@ def articles_de_presse(request):
 
 
 # ======================================
+@login_required
+@user_passes_test(personne_autorisee)
 def creation_article_de_presse(request):
     """
         Vue du formulaire permettant la création d'un nouvel article
@@ -696,7 +719,9 @@ def soutiens(request):
     return render(request, "soutiens.html", {"liste_des_soutiens": liste_des_soutiens})
 
 
-# ============================
+# ===================================
+@login_required
+@user_passes_test(personne_autorisee)
 def creation_soutien(request):
     """
         Vue du formulaire permettant la création d'un nouvel article
@@ -848,7 +873,6 @@ def liste_des_evenements_de_l_annee(request, annee):
     annee_int = int(annee)
 
     liste_des_evenements_de_l_annee_tmp = Evenement.objects.order_by("-date")
-
     liste_des_evenements_de_l_annee = [ evenement for evenement in liste_des_evenements_de_l_annee_tmp if evenement.date.year == annee_int ]
 
     return render(request, "evenements_de_l_annee.html", {"annee": annee_int, "liste_des_evenements_de_l_annee": liste_des_evenements_de_l_annee})
@@ -889,9 +913,9 @@ def voir_programme(request, id_evenement, annee):
     return render(request, "voir_programme.html", {"evenement_choisi": evenement_choisi, "annee": annee})
 
 
+# ===================================
 @login_required
 @user_passes_test(personne_autorisee)
-# ==================
 def photos(request):
     """
         Vue qui permet d'afficher les photos
@@ -903,46 +927,72 @@ def photos(request):
         :rtype: django.http.response.HttpResponse
     """
 
-    liste_des_annees_tmp = Photos.objects.order_by("-date")
+    liste_des_annees_tmp = Photo.objects.order_by("-date_de_l_evenement")
     liste_des_annees = OrderedDict()
 
     for photo in liste_des_annees_tmp:
 
-        liste_des_annees.setdefault(photo.date.year, []).append(photo)
+        liste_des_annees.setdefault(photo.date_de_l_evenement.year, []).append(photo)
 
     return render(request, "photos.html", {"liste_des_annees": liste_des_annees})
 
 
-# @login_required
-# @user_passes_test(personne_autorisee)
-# # ==========================
-# def ajouter_photos(request):
-#     """
-#         Vue qui permet d'afficher les photos
-#
-#         :param request: instance de HttpRequest
-#         :type request: django.core.handlers.wsgi.WSGIRequest
-#
-#         :return: instance de HttpResponse ou de HttpResponseRedirect
-#         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
-#     """
-#
-#     if request.method == "POST":
-#
-#         form = PhotosForm(request.POST, request.FILES)
-#
-#         if form.is_valid():
-#
-#             form.save()
-#             msg = "La(es) photo(s) a(ont) bien été ajoutée(s)"
-#             messages.info(request, msg)
-#             return HttpResponseRedirect(reverse("accueil"))
-#
-#     else:
-#
-#         form = PhotosForm()
-#
-#     return render(request, "AjoutPhotosForm.html", {"form": form})
+# ==============================================
+@login_required
+@user_passes_test(personne_autorisee)
+def liste_des_photos_pour_annee(request, annee):
+    """
+        Vue qui permet d'afficher les photos
+
+        :param request: instance de HttpRequest ou de HttpResponseRedirect
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param annee: année choisie par le visiteur
+        :type annee: str (converti automatiquement par django lors de l'utilisation d'expression régulières dans les URLs)
+
+        :return: instance
+        :rtype: django.http.response.HttpResponse
+    """
+
+    annee_int = int(annee)
+
+    liste_des_photos_de_l_annee = Photo.objects.order_by("-date_de_l_evenement")
+    liste_des_evenements_de_l_annee = [ photo.nom_de_l_evenement for photo in liste_des_photos_de_l_annee if photo.date_de_l_evenement.year == annee_int ]
+    liste_des_evenements_de_l_annee = set(liste_des_evenements_de_l_annee)
+
+    return render(request, "photos_de_l_annee.html", {"liste_des_evenements_de_l_annee": liste_des_evenements_de_l_annee, "annee": annee})
+
+
+# ===================================================
+@login_required
+@user_passes_test(personne_autorisee)
+def voir_photos_evenement(request, evenement, annee):
+    """
+        Vue qui permet d'afficher les photos pour l'évènement sélectionné par le visiteur
+
+        :param request: instance de HttpRequest ou de HttpResponseRedirect
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param evenement: évènement sélectionné par le visiteur
+        :type evenement: str
+
+        :param annee: année choisie par le visiteur
+        :type annee: str (converti automatiquement par django lors de l'utilisation d'expression régulières dans les URLs)
+
+        :return: instance
+        :rtype: django.http.response.HttpResponse
+    """
+
+    annee_int = int(annee)
+
+    liste_des_photos_de_l_evenement_pour_l_annee_tmp = Photo.objects.order_by("date_de_l_evenement")
+    liste_des_photos_de_l_evenement_pour_l_annee_tmp = [ photo for photo in liste_des_photos_de_l_evenement_pour_l_annee_tmp if photo.date_de_l_evenement.year == annee_int ]
+
+    liste_des_photos_de_l_evenement_pour_l_annee = [ photo for photo in liste_des_photos_de_l_evenement_pour_l_annee_tmp if photo.nom_de_l_evenement == evenement ]
+
+    return render(request, "photos_de_l_evenement_de_l_annee.html", {"liste_des_photos_de_l_evenement_pour_l_annee": liste_des_photos_de_l_evenement_pour_l_annee,
+                                                                     "evenement":evenement,
+                                                                     "annee":annee})
 
 
 # ==================================================================================================

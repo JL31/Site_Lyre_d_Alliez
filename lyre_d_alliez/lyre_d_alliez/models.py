@@ -306,17 +306,17 @@ class Soutien(models.Model):
         image.save(self.logo.path)
 
 
-# =========================
-class Photos(models.Model):
+# ========================
+class Photo(models.Model):
     """
-        Classe qui décrit le modèle des soutiens
+        Classe qui décrit le modèle des photos
     """
 
     nom_de_la_photo = models.CharField(null=False, blank=False, max_length=250)
     photo = models.ImageField(null=False, blank=False, upload_to="photos/")
 
     nom_de_l_evenement = models.CharField(null=False, blank=False, max_length=250)
-    date_de_l_evenement = models.DateTimeField(null=False, blank=False)
+    date_de_l_evenement = models.DateField(null=False, blank=False)
 
     # =========
     class Meta:
