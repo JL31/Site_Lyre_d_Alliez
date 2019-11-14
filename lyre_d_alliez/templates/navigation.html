@@ -21,16 +21,18 @@
             <a href="{% url 'videos' %}">Vidéos</a>
             {% block sous_menu_videos %}{% endblock %}
         </li>
-        <li>
+        <!-- <li>
+            {% comment %}
             <a href="{% url 'zone_de_partage' %}">Zone de partage</a>
             {% block sous_menu_zone_de_partage %}{% endblock %}
-        </li>
+            {% endcomment %}
+        </li> -->
         {% endif%}
     {% endif%}                
     
     {% if user.is_authenticated and request.user.membre.est_le_chef %}
     <li>
-        <a href="">Les outils du chef</a>
+        <a href="{% url 'les_outils_du_chef' %}">Les outils du chef</a>
     </li>
     {% endif %}
 </ul>

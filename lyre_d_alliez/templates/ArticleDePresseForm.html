@@ -1,6 +1,7 @@
 {% extends "base_etendue.html" %}
 
 {% block contenu %}
+<h1>Formulaire de création d'un article de presse</h1>
 <form action="{% url 'creation_article_de_presse' %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}

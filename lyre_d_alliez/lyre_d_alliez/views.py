@@ -177,11 +177,35 @@ def envoi_mail_bis(dico_des_donnees):
         raise SMTPException(msg)
 
 
+# ====================================
+def acces_restreints_au_chef(request):
+    """
+        Fonction pour vérifier si le visiteur est le chef
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: un booléen indiquant :
+                 - True si le visiteur est le chef
+                 - False sinon
+        :rtype: bool
+    """
+
+    try:
+
+        return request.membre.est_le_chef
+
+    except AttributeError:
+        "La gestion de cette erreur est nécessaire car les instances d'objet 'AnonymousUser' ne possèdent pas l'attribut 'membre'"
+
+        return False
+
+
 # ==================================================================================================
 # INITIALISATIONS
 # ==================================================================================================
 
-decorators = [login_required, user_passes_test(personne_autorisee)]
+decorators = [login_required, user_passes_test(acces_restreints_au_chef)]
 
 
 # ==================================================================================================
@@ -351,21 +375,21 @@ def association(request):
     return render(request, "sous_menu_association.html")
 
 
-# ===================================
-@login_required
-@user_passes_test(personne_autorisee)
-def zone_de_partage(request):
-    """
-        Vue pour la zone de partage
-
-        :param request: instance de HttpRequest
-        :type request: django.core.handlers.wsgi.WSGIRequest
-
-        :return: instance de HttpResponse
-        :rtype: django.http.response.HttpResponse
-    """
-
-    return render(request, "sous_menu_zone_de_partage.html")
+# # ===================================
+# @login_required
+# @user_passes_test(personne_autorisee)
+# def zone_de_partage(request):
+#     """
+#         Vue pour la zone de partage
+#
+#         :param request: instance de HttpRequest
+#         :type request: django.core.handlers.wsgi.WSGIRequest
+#
+#         :return: instance de HttpResponse
+#         :rtype: django.http.response.HttpResponse
+#     """
+#
+#     return render(request, "sous_menu_zone_de_partage.html")
 
 
 # ==================================
@@ -456,9 +480,9 @@ def agenda(request):
     return render(request, "agenda.html", {"liste_des_evenements": liste_des_evenements})
 
 
-# ===================================
+# =========================================
 @login_required
-@user_passes_test(personne_autorisee)
+@user_passes_test(acces_restreints_au_chef)
 def creation_evenement(request):
     """
         Vue pour la création d'un évènement
@@ -605,9 +629,9 @@ def bureau(request):
     return render(request, "bureau.html", {"chef": chef, "liste_des_membres_du_bureau": liste_des_membres_du_bureau})
 
 
-# ===================================
+# =========================================
 @login_required
-@user_passes_test(personne_autorisee)
+@user_passes_test(acces_restreints_au_chef)
 def creation_article(request):
     """
         Vue du formulaire permettant la création d'un nouvel article
@@ -713,7 +737,9 @@ def lire_article(request, reference_de_l_article):
     return render(request, "lecture_article.html", {"article": article, "liste_des_commentaires": liste_des_commentaires, "form": form})
 
 
-# ==============================
+# =========================================
+@login_required
+@user_passes_test(personne_autorisee)
 def articles_de_presse(request):
     """
         Vue qui permet de lire un article
@@ -730,9 +756,9 @@ def articles_de_presse(request):
     return render(request, "articles_de_presse.html", {"liste_des_articles_de_presse": liste_des_articles_de_presse})
 
 
-# ======================================
+# =========================================
 @login_required
-@user_passes_test(personne_autorisee)
+@user_passes_test(acces_restreints_au_chef)
 def creation_article_de_presse(request):
     """
         Vue du formulaire permettant la création d'un nouvel article
@@ -778,12 +804,12 @@ def soutiens(request):
     return render(request, "soutiens.html", {"liste_des_soutiens": liste_des_soutiens})
 
 
-# ===================================
+# =========================================
 @login_required
-@user_passes_test(personne_autorisee)
+@user_passes_test(acces_restreints_au_chef)
 def creation_soutien(request):
     """
-        Vue du formulaire permettant la création d'un nouvel article
+        Vue du formulaire permettant la création d'un nouveau soutien
 
         :param request: instance de HttpRequest
         :type request: django.core.handlers.wsgi.WSGIRequest
@@ -1137,9 +1163,33 @@ def voir_videos_evenement(request, evenement, annee):
                                                                      "annee": annee})
 
 
-# ==================================================================================================
-# SIGNAUX
-# ==================================================================================================
+# =========================================
+@login_required
+@user_passes_test(acces_restreints_au_chef)
+def les_outils_du_chef(request):
+    """
+        Vue qui permet d'afficher les photos
+
+        :param request: instance de HttpRequest ou de HttpResponseRedirect
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance
+        :rtype: django.http.response.HttpResponse
+    """
+
+    liste_des_APIs_tmp = []
+
+    liste_des_APIs_tmp.append(['creation_evenement', 'Créer un évènement'])
+    liste_des_APIs_tmp.append(['creation_article', 'Créer un article'])
+    liste_des_APIs_tmp.append(['creation_article_de_presse', 'Créer un article de presse'])
+    liste_des_APIs_tmp.append(['creation_soutien', 'Créer un soutien'])
+    liste_des_APIs_tmp.append(['ajouter_photos', 'Ajouter des photos'])
+    liste_des_APIs_tmp.append(['ajouter_videos', 'Ajouter des vidéos'])
+
+    liste_des_APIs = [ {"url": api[0], "nom": api[1]} for api in liste_des_APIs_tmp ]
+
+    return render(request, "les_outils_du_chef.html", {"liste_des_APIs": liste_des_APIs})
+
 
 # ==================================================================================================
 # UTILISATION

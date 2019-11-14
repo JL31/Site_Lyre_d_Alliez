@@ -1,0 +1,17 @@
+{% extends "base_etendue.html" %}
+
+{% block contenu %}
+<h1>Les outils du chef</h1>
+<div>
+    <p>
+        Salut chef ! Voici les outils qui vont t'aider à gérer le contenu du site et bien d'autres choses encore !<br />
+        Clique sur un bouton pour accéder au formulaire associé.
+    </p>
+
+    {% for api in liste_des_APIs %}
+        <form action="{% url api.url %}">
+            <input type="submit" id="bouton_outil_du_chef" value="{{ api.nom }}"/>
+        </form>
+    {% endfor %}
+</div>
+{% endblock %}

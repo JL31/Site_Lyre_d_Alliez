@@ -93,7 +93,10 @@ urlpatterns = [
     re_path('videos/voir_videos_evenement/(?P<evenement>.*)/(?P<annee>\d{4})/$', voir_videos_evenement, name='voir_videos_evenement'),
 
     # Menu et sous-menus  : Zone de partage
-    path('zone_de_partage/', zone_de_partage, name='zone_de_partage'),
+    # path('zone_de_partage/', zone_de_partage, name='zone_de_partage'),
+
+    # Menu Les outils du chef
+    path('les_outils_du_chef/', les_outils_du_chef, name='les_outils_du_chef'),
 
     # APIs
     path('creation_profil_membre/', creation_profil_membre, name='creation_profil_membre'),
