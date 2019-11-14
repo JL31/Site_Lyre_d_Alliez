@@ -31,7 +31,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import FormView
 from django.utils.decorators import method_decorator
 
-from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm, PhotoForm
+from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm, PhotoForm, VideoForm
 from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo, Video
 
 from .secret_data import ADMINS, MOT_DE_PASSE
@@ -204,19 +204,22 @@ class PhotoView(SuccessMessageMixin, FormView):
     # =======================================
     def post(self, request, *args, **kwargs):
         """
-            Override of ProcessFormView post method :
+            Surcharge de la méthode 'post' de la classe 'ProcessFormView':
 
-            Handle POST requests: instantiate a form instance with the passed
-            POST variables and then check if it's valid.
+            Gère les requête POST : instantie une instance 'form' avec les
+            variables POST passées en argument puis vérifie si c'est valide
 
             :param request: instance de HttpRequest
             :type request: django.core.handlers.wsgi.WSGIRequest
 
-            :param args: non nammed arguments
-            :param kwargs: nammed arguments
+            :param args: arguments non nommés
+            :type args: List
 
-            :return:
-            :rtype:
+            :param kwargs: arguments nommés
+            :type kwargs: dict
+
+            :return: instance de HttpResponse
+            :rtype: django.http.response.HttpResponseRedirect
         """
 
         form_class = self.get_form_class()
@@ -234,6 +237,62 @@ class PhotoView(SuccessMessageMixin, FormView):
                 photo_en_cours.nom_de_l_evenement = form.cleaned_data.get("nom_de_l_evenement")
                 photo_en_cours.date_de_l_evenement = form.cleaned_data.get("date_de_l_evenement")
                 photo_en_cours.save()
+
+            return self.form_valid(form)
+
+        else:
+
+            return self.form_invalid(form)
+
+
+# =============================================
+@method_decorator(decorators, name='dispatch')
+class VideoView(SuccessMessageMixin, FormView):
+    """
+        Classe générique permettant la gestion du chargement de plusieurs vidéos
+    """
+
+    form_class = VideoForm
+    template_name = "AjoutVideoForm.html"
+    success_url = reverse_lazy("accueil")
+    success_message = "La(les) vidéo(s) a(ont) bien été ajoutée(s)"
+
+    # =======================================
+    def post(self, request, *args, **kwargs):
+        """
+            Surcharge de la méthode 'post' de la classe 'ProcessFormView':
+
+            Gère les requête POST : instantie une instance 'form' avec les
+            variables POST passées en argument puis vérifie si c'est valide
+
+            :param request: instance de HttpRequest
+            :type request: django.core.handlers.wsgi.WSGIRequest
+
+            :param args: arguments non nommés
+            :type args: List
+
+            :param kwargs: arguments nommés
+            :type kwargs: dict
+
+            :return: instance de HttpResponse
+            :rtype: django.http.response.HttpResponseRedirect
+        """
+
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+
+        files = request.FILES.getlist("video")
+
+        if form.is_valid():
+
+            for file in files:
+
+                video_en_cours = Video()
+                video_en_cours.video = file
+                video_en_cours.nom_de_la_video = file.name
+                video_en_cours.nom_de_l_evenement = form.cleaned_data.get("nom_de_l_evenement")
+                video_en_cours.date_de_l_evenement = form.cleaned_data.get("date_de_l_evenement")
+                video_en_cours.save()
 
             return self.form_valid(form)
 
@@ -1025,7 +1084,7 @@ def videos(request):
 @user_passes_test(personne_autorisee)
 def liste_des_videos_pour_annee(request, annee):
     """
-        Vue qui permet d'afficher les videos pour une année donnée
+        Vue qui permet d'afficher les vidéos pour une année donnée
 
         :param request: instance de HttpRequest ou de HttpResponseRedirect
         :type request: django.core.handlers.wsgi.WSGIRequest
@@ -1037,7 +1096,45 @@ def liste_des_videos_pour_annee(request, annee):
         :rtype: django.http.response.HttpResponse
     """
 
-    return render(request, "accueil.html")
+    annee_int = int(annee)
+
+    liste_des_videos_de_l_annee = Video.objects.order_by("-date_de_l_evenement")
+    liste_des_evenements_de_l_annee = [ video.nom_de_l_evenement for video in liste_des_videos_de_l_annee if video.date_de_l_evenement.year == annee_int ]
+    liste_des_evenements_de_l_annee = set(liste_des_evenements_de_l_annee)
+
+    return render(request, "videos_de_l_annee.html", {"liste_des_evenements_de_l_annee": liste_des_evenements_de_l_annee, "annee": annee})
+
+
+# ===================================
+@login_required
+@user_passes_test(personne_autorisee)
+def voir_videos_evenement(request, evenement, annee):
+    """
+        Vue qui permet d'afficher les vidéos pour l'évènement sélectionné par le visiteur pour une année donnée
+
+        :param request: instance de HttpRequest ou de HttpResponseRedirect
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param evenement: évènement sélectionné par le visiteur
+        :type evenement: str
+
+        :param annee: année choisie par le visiteur
+        :type annee: str (converti automatiquement par django lors de l'utilisation d'expression régulières dans les URLs)
+
+        :return: instance
+        :rtype: django.http.response.HttpResponse
+    """
+
+    annee_int = int(annee)
+
+    liste_des_videos_de_l_evenement_pour_l_annee_tmp = Video.objects.order_by("date_de_l_evenement")
+    liste_des_videos_de_l_evenement_pour_l_annee_tmp = [ video for video in liste_des_videos_de_l_evenement_pour_l_annee_tmp if video.date_de_l_evenement.year == annee_int ]
+
+    liste_des_videos_de_l_evenement_pour_l_annee = [ video for video in liste_des_videos_de_l_evenement_pour_l_annee_tmp if video.nom_de_l_evenement == evenement ]
+
+    return render(request, "videos_de_l_evenement_de_l_annee.html", {"liste_des_videos_de_l_evenement_pour_l_annee": liste_des_videos_de_l_evenement_pour_l_annee,
+                                                                     "evenement": evenement,
+                                                                     "annee": annee})
 
 
 # ==================================================================================================

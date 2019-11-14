@@ -1,0 +1,19 @@
+{% extends "base_etendue.html" %}
+
+{% block contenu %}
+<h1>Vidéos de {{ evenement }} de l'année {{ annee }}</h1>
+<div>
+    <form action="{% url 'liste_des_videos_pour_annee' annee %}" id="fin_visionnage_videos_de_l_evenement_de_l_annee">
+        <input type="submit" id="bouton_retour_videos_de_l_annee" value="Retour" />
+    </form>
+
+    <div class="conteneur_des_videos_pour_evenements">
+    {% for video in liste_des_videos_de_l_evenement_pour_l_annee %}
+        <video controls width="30%" height="30%">
+            <source src="{{ video.video.url }}" type="video/mp4" class=""></source>
+        </video>
+    {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

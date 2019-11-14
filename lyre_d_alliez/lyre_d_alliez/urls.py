@@ -90,6 +90,7 @@ urlpatterns = [
     # Menu Vidéos
     path('videos/', videos, name='videos'),
     re_path('videos/liste_des_videos_pour_annee/(?P<annee>\d{4})/$', liste_des_videos_pour_annee, name='liste_des_videos_pour_annee'),
+    re_path('videos/voir_videos_evenement/(?P<evenement>.*)/(?P<annee>\d{4})/$', voir_videos_evenement, name='voir_videos_evenement'),
 
     # Menu et sous-menus  : Zone de partage
     path('zone_de_partage/', zone_de_partage, name='zone_de_partage'),
@@ -104,6 +105,7 @@ urlpatterns = [
     path('creation_soutien/', creation_soutien, name='creation_soutien'),
     path('demande_pour_devenir_soutien/', demande_pour_devenir_soutien, name='demande_pour_devenir_soutien'),
     path('ajouter_photos/', PhotoView.as_view(), name='ajouter_photos'),
+    path('ajouter_videos/', VideoView.as_view(), name='ajouter_videos'),
 
     # Connexion / deconnexion
     path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),

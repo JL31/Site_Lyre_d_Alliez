@@ -20,7 +20,7 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.contrib import admin
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo
+from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo, Video
 
 
 # ==================================================================================================
@@ -209,7 +209,7 @@ class SoutienAdmin(admin.ModelAdmin):
 # =================================
 class PhotoAdmin(admin.ModelAdmin):
     """
-        Classe qui permet la gestion de l'administration des soutiens
+        Classe qui permet la gestion de l'administration des photos
     """
 
     # Configuration de la liste d'articles
@@ -230,6 +230,30 @@ class PhotoAdmin(admin.ModelAdmin):
                      "date_de_l_evenement")
 
 
+# =================================
+class VideoAdmin(admin.ModelAdmin):
+    """
+        Classe qui permet la gestion de l'administration des vidéos
+    """
+
+    # Configuration de la liste d'articles
+    list_display = ("nom_de_la_video",
+                    "nom_de_l_evenement",
+                    "date_de_l_evenement")
+
+    list_filter = ("nom_de_la_video",
+                   "nom_de_l_evenement",
+                   "date_de_l_evenement")
+
+    date_hierarchy = "date_de_l_evenement"
+
+    ordering = ("date_de_l_evenement", )
+
+    search_fields = ("nom_de_la_video",
+                     "nom_de_l_evenement",
+                     "date_de_l_evenement")
+
+
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================
@@ -246,3 +270,4 @@ admin.site.register(Commentaire, CommentaireAdmin)
 admin.site.register(ArticleDePresse, ArticleDePresseAdmin)
 admin.site.register(Soutien, SoutienAdmin)
 admin.site.register(Photo, PhotoAdmin)
+admin.site.register(Video, VideoAdmin)

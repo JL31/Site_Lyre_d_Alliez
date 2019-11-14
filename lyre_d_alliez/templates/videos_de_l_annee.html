@@ -1,0 +1,25 @@
+{% extends "base_etendue.html" %}
+{% load static %}
+
+{% block contenu %}
+<h1>Evènements de l'année {{ annee }}</h1>
+<div>
+    <p>
+        Retrouvez tous nos vidéos pour l'année {{ annee }}. Cliquez sur un évènement pour afficher les vidéos associées.
+    </p>
+
+    <form action="{% url 'videos' %}" id="fin_visionnage_videos_de_l_annee">
+        <input type="submit" id="bouton_retour_videos" value="Retour" />
+    </form>
+
+    <div class="conteneur_des_videos_pour_evenements_annee">
+    {% for evenement in liste_des_evenements_de_l_annee %}
+        <div class="conteneur_dossier_videos_evenements_annee">
+            <img src="{% static 'img/image_defaut_evenements_annee_200x200.jpg' %}" class="image_dossier_video_evenement_annee"/>
+            <a href="{% url 'voir_videos_evenement' evenement annee %}" class="lien_vers_videos_pour_evenement_de_l_annee"><h2 class="titre_videos_pour_evenement_de_l_annee">{{ evenement }}</h2></a>
+        </div>
+    {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
