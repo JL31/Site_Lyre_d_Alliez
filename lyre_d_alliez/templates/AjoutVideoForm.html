@@ -7,4 +7,12 @@
     {{ form.as_p }}
     <input type="submit" value="Charger les vidéos" />
 </form>
+
+<script>
+    $(function () {
+        $("#id_date_de_l_evenement").datepicker({
+            format:'dd/mm/yyyy',
+            });
+    });
+</script>
 {% endblock %}

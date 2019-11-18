@@ -7,4 +7,12 @@
     {{ form.as_p }}
     <input type="submit" value="Créer l'évènement" />
 </form>
+
+<script>
+    $(function () {
+        $("#id_date").datepicker({
+            format:'dd/mm/yyyy',
+            });
+    });
+</script>
 {% endblock %}
