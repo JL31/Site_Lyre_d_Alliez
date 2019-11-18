@@ -302,14 +302,9 @@ Port
 
 Actualités      --> Calendrier
 
-Photos          --> tout
-Vidéos          --> tout
-
 Zone de partage --> Les bons plans
 Zone de partage --> Conseils
 Zone de partage --> Tutoriels
-
-re-créer le projet en améliorant la gestionde conf : créer une branche dev !
 
 Revenir à la gestion des membres (cf ci-dessous)
 
@@ -340,3 +335,23 @@ Au final mettre en place :
    - modifier son mot de passe
    - se déconnecter
 
+
+# =====================================================================================================================
+# Création des profils membres
+# =====================================================================================================================
+
+Envoyer un mail avec un lien vers le formulaire de création d'un compte membre
+Si la personne clique sur le lien alors elle sera redirigée vers le formulaire de création d'un compte membre
+et lors de la soumission du formulaire elle enverra également une clé unique (généré aléatoirement et assocéie à son email)
+qui aura été envoyée par l'email et qui apparaîtra dans l'URL lors de l'accès au formulaire de création d'un compte membre
+
+Exemple :
+
+un mail est envoyé à a.b@c.fr avec un lien qui redirige vers le formulaire de création d'un compte membre
+lors du clic sur le lien la personne sera redirigér vers le formulaire de création d'un compte membre
+dans l'url figurera la clé unique générée aléatoirement et associée à son email
+lors de la soumisison du formulaire la clé unique sera également envoyée pour vérification de la bonne association adresse mail/clé unique
+si la vérification est positive alors un email de validation du compte sera envoyé au membre
+
+https://simpleisbetterthancomplex.com/tutorial/2016/08/24/how-to-create-one-time-link.html
+https://simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sign-up-view.html
