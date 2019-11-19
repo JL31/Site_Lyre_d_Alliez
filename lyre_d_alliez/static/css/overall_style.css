@@ -499,3 +499,26 @@ strong
     color: black;
     text-decoration: none;
 }
+
+/* Mise en forme des outils du chef */
+/* -------------------------------- */
+
+#conteneur_boutons_outils_du_chef
+{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.bouton_outils_du_chef
+{
+    width: 130px;
+    height:130px;
+    border-radius: 15px;
+    font: Bold 12px Arial;
+    padding: 5px;
+    background: RGB(216,125,52);
+    color: RGB(0,0,0);
+    box-shadow: 3px 3px 3px RGB(153,153,153);
+    white-space: normal;
+    margin-right: 10px;
+}

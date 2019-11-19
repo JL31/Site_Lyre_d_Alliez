@@ -8,10 +8,12 @@
         Clique sur un bouton pour accéder au formulaire associé.
     </p>
 
+    <div id="conteneur_boutons_outils_du_chef">
     {% for api in liste_des_APIs %}
         <form action="{% url api.url %}">
-            <input type="submit" id="bouton_outil_du_chef" value="{{ api.nom }}"/>
+            <input type="submit" class="bouton_outils_du_chef" value="{{ api.nom }}"/>
         </form>
     {% endfor %}
+    </div>
 </div>
 {% endblock %}

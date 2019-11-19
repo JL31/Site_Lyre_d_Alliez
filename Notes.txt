@@ -355,3 +355,19 @@ si la vérification est positive alors un email de validation du compte sera env
 
 https://simpleisbetterthancomplex.com/tutorial/2016/08/24/how-to-create-one-time-link.html
 https://simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sign-up-view.html
+
+
+# =====================================================================================================================
+# Outils du chef
+# =====================================================================================================================
+
+Prévoir de gros boutons (du style 130 x 130 pixels)
+le clic sur l'un des boutons permettra d'afficher un pop-up avec le contenu du formulaire
+
+
+# =====================================================================================================================
+# Aspect général
+# =====================================================================================================================
+
+le contenu sera affiché sur une bande centrée d'une largeur 2/3 de la largeur de l'écran
+
