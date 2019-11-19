@@ -7,13 +7,14 @@
        <link rel="stylesheet" type="text/css" href="{% static 'css/overall_style.css' %}" />
        <title>{% block title %}La Lyre d'Alliez{% endblock %}</title>
 
-       <!-- jQuery -->
-       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <!-- Feuilles de style -->
+        <!-- ----------------- -->
 
-       <!-- Fengyuan Chen's Datepicker -->
+        <!-- Fengyuan Chen's Datepicker -->
        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
-       <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
 
+        <!-- feuille de style bootstrap -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
     </head>
     <body>
         <header>
@@ -34,5 +35,20 @@
         </header>
         <section id="contenu">{% block contenu %}{% endblock %}</section>
         <footer id="footer">{% block footer %}{% endblock %}</footer>
+
+        <!-- Scripts Javascript -->
+        <!-- ------------------ -->
+
+        <!-- jQuery -->
+        <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+        <script src="{% static 'js/jquery.js' %}"></script>
+
+        <!-- Fengyuan Chen's Datepicker -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+
+        <!-- Bootstrap -->
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+        {% block javascripts %}{% endblock %}
     </body>
 </html>

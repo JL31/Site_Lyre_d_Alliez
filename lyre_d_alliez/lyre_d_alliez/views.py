@@ -19,7 +19,7 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver
@@ -30,6 +30,7 @@ from django.utils import timezone
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import FormView
 from django.utils.decorators import method_decorator
+from django.template.loader import render_to_string
 
 from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm, PhotoForm, VideoForm
 from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo, Video
@@ -511,20 +512,74 @@ def creation_evenement(request):
     return render(request, "EvenementForm.html", {"form": form})
 
 
-# ====================================================
-def abonnement_evenement(request, nom_de_l_evenement):
+# # ====================================================
+# def abonnement_evenement(request, nom_de_l_evenement):
+#     """
+#         Vue pour la gestion d'un abonnement à un évènement
+#
+#         :param request: instance de HttpRequest
+#         :type request: django.core.handlers.wsgi.WSGIRequest
+#
+#         :param nom_de_l_evenement: nom de l'évènement auquel il faut rattacher l'abonnement
+#         :type nom_de_l_evenement: str
+#
+#         :return: instance de HttpResponse ou de HttpResponseRedirect
+#         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+#     """
+#
+#     if request.method == "POST":
+#
+#         form = AbonnementEvenementForm(request.POST)
+#
+#         if form.is_valid():
+#
+#             evenement = Evenement.objects.filter(nom=nom_de_l_evenement)
+#
+#             if len(evenement) > 1:
+#
+#                 # à améliorer
+#                 msg = "Erreur --- vue abonnement_evenement --- filtre nom : plus d'une personne"
+#                 raise ValueError(msg)
+#
+#             else:
+#
+#                 # mettre en place un système pour éviter les doublons
+#                 # quid si un même visiteur souhaite programmer deux alertes à la même date ?
+#
+#                 adresse_mail_abonne = form.cleaned_data.get("adresse_email")
+#                 date_de_l_alerte = form.cleaned_data.get("date_envoi_alerte")
+#
+#                 abonnement = Abonnement(adresse_mail_abonne=adresse_mail_abonne,
+#                                         date_de_l_alerte=date_de_l_alerte)
+#                 abonnement.save()
+#
+#                 for obj in evenement:
+#                     obj.abonnements.add(abonnement)
+#
+#                     setlocale(LC_TIME, "fr-FR")     # permet d'obtenir la date au format local (ici Fr)
+#                     msg = "Votre demande d'abonnement a bien été prise en compte. Vous recevrez un email pour vous alerter le {} à l'adresse suivante : {}".format(date_de_l_alerte.strftime("%A %d %B %Y"), adresse_mail_abonne)
+#                     messages.info(request, msg)
+#
+#             return HttpResponseRedirect(reverse("agenda"))
+#
+#     else:
+#
+#         form = AbonnementEvenementForm()
+#
+#     return render(request, "abonnement_evenement_bis.html", {"form": form, "nom_de_l_evenement": nom_de_l_evenement})
+# ================================
+def abonnement_evenement(request):
     """
         Vue pour la gestion d'un abonnement à un évènement
 
         :param request: instance de HttpRequest
         :type request: django.core.handlers.wsgi.WSGIRequest
 
-        :param nom_de_l_evenement: nom de l'évènement auquel il faut rattacher l'abonnement
-        :type nom_de_l_evenement: str
-
-        :return: instance de HttpResponse ou de HttpResponseRedirect
-        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
     """
+
+    data = dict()
 
     if request.method == "POST":
 
@@ -532,40 +587,48 @@ def abonnement_evenement(request, nom_de_l_evenement):
 
         if form.is_valid():
 
-            evenement = Evenement.objects.filter(nom=nom_de_l_evenement)
+            # evenement = Evenement.objects.filter(nom=nom_de_l_evenement)
+            #
+            # if len(evenement) > 1:
+            #
+            #     # à améliorer
+            #     msg = "Erreur --- vue abonnement_evenement --- filtre nom : plus d'une personne"
+            #     raise ValueError(msg)
+            #
+            # else:
+            #
+            #     # mettre en place un système pour éviter les doublons
+            #     # quid si un même visiteur souhaite programmer deux alertes à la même date ?
 
-            if len(evenement) > 1:
+            adresse_mail_abonne = form.cleaned_data.get("adresse_email")
+            date_de_l_alerte = form.cleaned_data.get("date_envoi_alerte")
 
-                # à améliorer
-                msg = "Erreur --- vue abonnement_evenement --- filtre nom : plus d'une personne"
-                raise ValueError(msg)
+            setlocale(LC_TIME, "fr-FR")  # permet d'obtenir la date au format local (ici Fr)
 
-            else:
+            abonnement = Abonnement(adresse_mail_abonne=adresse_mail_abonne, date_de_l_alerte=date_de_l_alerte)
+            abonnement.save()
 
-                # mettre en place un système pour éviter les doublons
-                # quid si un même visiteur souhaite programmer deux alertes à la même date ?
+            # for obj in evenement:
+            #
+            #     obj.abonnements.add(abonnement)
 
-                adresse_mail_abonne = form.cleaned_data.get("adresse_email")
-                date_de_l_alerte = form.cleaned_data.get("date_envoi_alerte")
+            msg = "Votre demande d'abonnement a bien été prise en compte. Vous recevrez un email pour vous alerter le {} à l'adresse suivante : {}".format(date_de_l_alerte.strftime("%A %d %B %Y"), adresse_mail_abonne)
+            messages.info(request, msg)
 
-                abonnement = Abonnement(adresse_mail_abonne=adresse_mail_abonne,
-                                        date_de_l_alerte=date_de_l_alerte)
-                abonnement.save()
+            data["form_is_valid"] = True
 
-                for obj in evenement:
-                    obj.abonnements.add(abonnement)
+        else:
 
-                    setlocale(LC_TIME, "fr-FR")     # permet d'obtenir la date au format local (ici Fr)
-                    msg = "Votre demande d'abonnement a bien été prise en compte. Vous recevrez un email pour vous alerter le {} à l'adresse suivante : {}".format(date_de_l_alerte.strftime("%A %d %B %Y"), adresse_mail_abonne)
-                    messages.info(request, msg)
-
-            return HttpResponseRedirect(reverse("agenda"))
+            data["form_is_valid"] = False
 
     else:
 
-        form = AbonnementEvenementForm()
+            form = AbonnementEvenementForm()
 
-    return render(request, "abonnement_evenement_bis.html", {"form": form, "nom_de_l_evenement": nom_de_l_evenement})
+    context = {"form": form}
+    data["html_form"] = render_to_string("formulaire_abonnement_evenement.html", context, request=request)
+
+    return JsonResponse(data)
 
 
 # ===============================

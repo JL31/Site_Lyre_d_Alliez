@@ -153,24 +153,24 @@ class AbonnementEvenementForm(ModelForm):
                                                   attrs={'class': 'myDateClass', 'placeholder': 'Choisissez une date', 'required': True})
                   }
 
-    # ==============
-    def clean(self):
-        """
-            Surcharge de la méthode clean
-
-            :return: les données nettoyées
-            :rtype: dict
-        """
-
-        adresse_email = self.cleaned_data.get("adresse_email")
-        confirmation_adresse_email = self.cleaned_data.get("confirmation_adresse_email")
-
-        if adresse_email != confirmation_adresse_email:
-
-            message_d_erreur = "Les deux adresses mail ne sont pas identiques, merci de corriger votre saisie"
-            raise ValidationError(message_d_erreur)
-
-        return self.cleaned_data
+    # # ==============
+    # def clean(self):
+    #     """
+    #         Surcharge de la méthode clean
+    #
+    #         :return: les données nettoyées
+    #         :rtype: dict
+    #     """
+    #
+    #     adresse_email = self.cleaned_data.get("adresse_email")
+    #     confirmation_adresse_email = self.cleaned_data.get("confirmation_adresse_email")
+    #
+    #     if adresse_email != confirmation_adresse_email:
+    #
+    #         message_d_erreur = "Les deux adresses mail ne sont pas identiques, merci de corriger votre saisie"
+    #         raise ValidationError(message_d_erreur)
+    #
+    #     return self.cleaned_data
 
 
 # ===========================
@@ -313,7 +313,7 @@ class PhotoForm(ModelForm):
     """
 
     photo = FileField(widget=ClearableFileInput(attrs={"multiple": True}))
-    date_de_l_evenement = DateField(required=True, input_formats=DATE_INPUTS_FORMATS)
+    date_de_l_evenement = DateField(required=True, input_formats=DATE_INPUTS_FORMATS)   # utiliser plutôt l'attribut label comme pour AbonnementEvenementForm
 
     # ==================================
     def __init__(self, *args, **kwargs):
@@ -324,7 +324,7 @@ class PhotoForm(ModelForm):
         # Les lignes suivantes permettent de modifier les labels de certains champs dans la page
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields["nom_de_l_evenement"].label = "Nom de l'évènement"
-        self.fields["date_de_l_evenement"].label = "Date de l'évènement"
+        self.fields["date_de_l_evenement"].label = "Date de l'évènement"    # utiliser plutôt l'attribut label comme pour AbonnementEvenementForm
 
     # =========
     class Meta:
@@ -343,7 +343,7 @@ class VideoForm(ModelForm):
     """
 
     video = FileField(widget=ClearableFileInput(attrs={"multiple": True}))
-    date_de_l_evenement = DateField(required=True, input_formats=DATE_INPUTS_FORMATS)
+    date_de_l_evenement = DateField(required=True, input_formats=DATE_INPUTS_FORMATS)   # utiliser plutôt l'attribut label comme pour AbonnementEvenementForm
 
     # ==================================
     def __init__(self, *args, **kwargs):
@@ -354,7 +354,7 @@ class VideoForm(ModelForm):
         # Les lignes suivantes permettent de modifier les labels de certains champs dans la page
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields["nom_de_l_evenement"].label = "Nom de l'évènement"
-        self.fields["date_de_l_evenement"].label = "Date de l'évènement"
+        self.fields["date_de_l_evenement"].label = "Date de l'évènement"    # utiliser plutôt l'attribut label comme pour AbonnementEvenementForm
 
     # =========
     class Meta:

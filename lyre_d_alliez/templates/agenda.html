@@ -1,6 +1,10 @@
 {% extends "base_etendue.html" %}
 {% load static %}
 
+{% block javascripts %}
+    <script src="{% static 'js/abonnement_evenement.js' %}"></script>
+{% endblock %}
+
 {% block contenu %}
 <h1>Agenda</h1>
 <div id="">
@@ -19,9 +23,19 @@
                 Lieu : {{ evenement.lieu }}<br />
                 Date : {{ evenement.date }}
             </p>
-            <a class="lien_abonnement_evenement" href="{% url 'abonnement_evenement' evenement.nom %}"><img src="{% static 'img/test_ajout.png' %}" /></a>
+            <button type="button" class="btn btn-primary js-abonnement-evenement">
+                S'abonner à l'évènement
+            </button>
         </div>
     {% endfor %}
 
+</div>
+
+<!-- Bootstrap modal -->
+<div class="modal fade" id="modal-abonnement-evenement">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
 </div>
 {% endblock %}
