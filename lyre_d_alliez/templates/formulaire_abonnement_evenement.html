@@ -1,0 +1,48 @@
+{% load widget_tweaks %}
+
+<form method="post" action="{% url 'abonnement_evenement' %}" class="js-abonnement-evenement-creation-formulaire">
+    {% csrf_token %}
+
+    <!-- header du formulaire -->
+    <div class="modal-header">
+        <h4 class="modal-title">Abonnement à l'évènement</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <!-- corps du formulaire -->
+    <div class="modal-body">
+        {% for field in form %}
+            <div class="form-group{% if field.errors %} has-error{% endif %}">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% render_field field class="form-control" %}
+
+                {% for error in field.errors %}
+                    <p class="help-block">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- footer du formulaire -->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-primary">S'abonner à l'évènement</button>
+    </div>
+
+    <script>
+        $(function ()
+        {
+            $("#id_date_envoi_alerte").datepicker(
+            {
+                format:'dd/mm/yyyy',
+            });
+
+            $("#id_date_envoi_alerte").popover(
+            {
+                container: '#modal-abonnement-evenement',
+            });
+        });
+    </script>
+</form>
