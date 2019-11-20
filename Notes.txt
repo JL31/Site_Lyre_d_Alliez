@@ -371,3 +371,6 @@ le clic sur l'un des boutons permettra d'afficher un pop-up avec le contenu du f
 
 le contenu sera affiché sur une bande centrée d'une largeur 2/3 de la largeur de l'écran
 
+https://www.w3schools.com/bootstrap/bootstrap_buttons.asp
+
+https://flexboxfroggy.com/#fr

@@ -4,7 +4,6 @@
 <html lang="fr">
     <head>
        <meta charset="utf-8" />
-       <link rel="stylesheet" type="text/css" href="{% static 'css/overall_style.css' %}" />
        <title>{% block title %}La Lyre d'Alliez{% endblock %}</title>
 
         <!-- Feuilles de style -->
@@ -15,6 +14,9 @@
 
         <!-- feuille de style bootstrap -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+        <!-- feuille de style globale -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/overall_style.css' %}" />
     </head>
     <body>
         <header>
@@ -33,7 +35,11 @@
                 <nav id="navigation">{% block navigation %}{% endblock %}</nav>
             </div>
         </header>
-        <section id="contenu">{% block contenu %}{% endblock %}</section>
+        <section id="contenu">
+            <div id="conteneur-du-contenu">
+                {% block contenu %}{% endblock %}
+            </div>
+        </section>
         <footer id="footer">{% block footer %}{% endblock %}</footer>
 
         <!-- Scripts Javascript -->

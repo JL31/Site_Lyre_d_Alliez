@@ -2,9 +2,11 @@ $(function ()
 {
     $(".js-abonnement-evenement").click(function ()
     {
+        let btn = $(this);
+
         $.ajax(
         {
-            url: '/abonnement_evenement/',
+            url: btn.attr("data-url"),
             type: 'get',
             dataType: 'json',
             beforeSend: function ()
@@ -20,7 +22,7 @@ $(function ()
 
     $("#modal-abonnement-evenement").on("submit", ".js-abonnement-evenement-creation-formulaire", function ()
     {
-        var form = $(this);
+        let form = $(this);
 
         $.ajax(
         {

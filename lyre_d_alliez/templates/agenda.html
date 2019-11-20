@@ -23,9 +23,11 @@
                 Lieu : {{ evenement.lieu }}<br />
                 Date : {{ evenement.date }}
             </p>
-            <button type="button" class="btn btn-primary js-abonnement-evenement">
-                S'abonner à l'évènement
-            </button>
+            <p id="conteneur-bouton-abonnement">
+                <button type="button" class="btn btn-success js-abonnement-evenement" data-url="{% url 'abonnement_evenement' %}">
+                    S'abonner
+                </button>
+            </p>
         </div>
     {% endfor %}
 
