@@ -1,6 +1,9 @@
 $(function ()
 {
-    $(".js-abonnement-evenement").click(function ()
+    /* Fonctions */
+    /* --------- */
+
+    let chargementFormulaireAbonnementEvenement = function()
     {
         let btn = $(this);
 
@@ -18,9 +21,9 @@ $(function ()
                 $("#modal-abonnement-evenement .modal-content").html(data.html_form);
             }
         });
-    });
+    };
 
-    $("#modal-abonnement-evenement").on("submit", ".js-abonnement-evenement-creation-formulaire", function ()
+    let sauvegardeFormulaireAbonnementEvenement = function()
     {
         let form = $(this);
 
@@ -46,5 +49,12 @@ $(function ()
 
         return false;
 
-    });
+    };
+
+    /* Liens */
+    /* ----- */
+
+    $(".js-abonnement-evenement").click(chargementFormulaireAbonnementEvenement);
+    $("#modal-abonnement-evenement").on("submit", ".js-abonnement-evenement-creation-formulaire", sauvegardeFormulaireAbonnementEvenement);
+
 });
