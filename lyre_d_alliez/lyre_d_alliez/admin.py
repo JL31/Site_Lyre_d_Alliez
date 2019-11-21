@@ -113,17 +113,20 @@ class AbonnementAdmin(admin.ModelAdmin):
 
     # Configuration de la liste d'articles
     list_display = ("adresse_mail_abonne",
-                    "date_de_l_alerte")
+                    "date_de_l_alerte",
+                    "evenement")
 
     list_filter = ("adresse_mail_abonne",
-                    "date_de_l_alerte")
+                    "date_de_l_alerte",
+                    "evenement")
 
     date_hierarchy = "date_de_l_alerte"
 
     ordering = ("date_de_l_alerte",)
 
     search_fields = ("adresse_mail_abonne",
-                    "date_de_l_alerte")
+                     "date_de_l_alerte",
+                     "evenement")
 
 
 # ===================================

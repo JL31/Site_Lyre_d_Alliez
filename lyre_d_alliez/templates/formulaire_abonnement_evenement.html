@@ -1,6 +1,6 @@
 {% load widget_tweaks %}
 
-<form method="post" action="{% url 'abonnement_evenement' %}" class="js-abonnement-evenement-creation-formulaire">
+<form method="post" action="{% url 'abonnement_evenement' id_evenement %}" class="js-abonnement-evenement-creation-formulaire">
     {% csrf_token %}
 
     <!-- header du formulaire -->

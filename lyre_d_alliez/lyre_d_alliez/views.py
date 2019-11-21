@@ -567,13 +567,16 @@ def creation_evenement(request):
 #         form = AbonnementEvenementForm()
 #
 #     return render(request, "abonnement_evenement_bis.html", {"form": form, "nom_de_l_evenement": nom_de_l_evenement})
-# ================================
-def abonnement_evenement(request):
+# ==============================================
+def abonnement_evenement(request, id_evenement):
     """
         Vue pour la gestion d'un abonnement à un évènement
 
         :param request: instance de HttpRequest
         :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param id_evenement: id de l'évènement
+        :type id_evenement: str (int onverti automatiquement par django lors de l'utilisation d'expression régulières dans les URLs)
 
         :return: instance de JsonResponse
         :rtype: django.http.response.JsonResponse
@@ -581,39 +584,41 @@ def abonnement_evenement(request):
 
     data = dict()
 
+    id_evenement_int = int(id_evenement)
+
     if request.method == "POST":
 
         form = AbonnementEvenementForm(request.POST)
 
         if form.is_valid():
 
-            # evenement = Evenement.objects.filter(nom=nom_de_l_evenement)
-            #
-            # if len(evenement) > 1:
-            #
-            #     # à améliorer
-            #     msg = "Erreur --- vue abonnement_evenement --- filtre nom : plus d'une personne"
-            #     raise ValueError(msg)
-            #
-            # else:
-            #
-            #     # mettre en place un système pour éviter les doublons
-            #     # quid si un même visiteur souhaite programmer deux alertes à la même date ?
+            evenement = Evenement.objects.filter(id=id_evenement_int)
 
-            adresse_mail_abonne = form.cleaned_data.get("adresse_email")
-            date_de_l_alerte = form.cleaned_data.get("date_envoi_alerte")
+            if len(evenement) > 1:
 
-            setlocale(LC_TIME, "fr-FR")  # permet d'obtenir la date au format local (ici Fr)
+                # à améliorer
+                msg = "Erreur --- vue abonnement_evenement --- filtre nom : plus d'une personne"
+                raise ValueError(msg)
 
-            abonnement = Abonnement(adresse_mail_abonne=adresse_mail_abonne, date_de_l_alerte=date_de_l_alerte)
-            abonnement.save()
+            else:
 
-            # for obj in evenement:
-            #
-            #     obj.abonnements.add(abonnement)
+                # mettre en place un système pour éviter les doublons
+                # quid si un même visiteur souhaite programmer deux alertes à la même date ?
 
-            msg = "Votre demande d'abonnement a bien été prise en compte. Vous recevrez un email pour vous alerter le {} à l'adresse suivante : {}".format(date_de_l_alerte.strftime("%A %d %B %Y"), adresse_mail_abonne)
-            messages.info(request, msg)
+                adresse_mail_abonne = form.cleaned_data.get("adresse_email")
+                date_de_l_alerte = form.cleaned_data.get("date_envoi_alerte")
+
+                setlocale(LC_TIME, "fr-FR")  # permet d'obtenir la date au format local (ici Fr)
+
+                abonnement = Abonnement(adresse_mail_abonne=adresse_mail_abonne, date_de_l_alerte=date_de_l_alerte)
+                abonnement.save()
+
+                for obj in evenement:
+
+                    abonnement.evenement = obj
+                    abonnement.save()
+                    msg = "Votre demande d'abonnement a bien été prise en compte. Vous recevrez un email pour vous alerter le {} à l'adresse suivante : {}".format(date_de_l_alerte.strftime("%A %d %B %Y"), adresse_mail_abonne)
+                    messages.info(request, msg)
 
             data["form_is_valid"] = True
 
@@ -625,7 +630,7 @@ def abonnement_evenement(request):
 
             form = AbonnementEvenementForm()
 
-    context = {"form": form}
+    context = {"form": form, "id_evenement": id_evenement}
     data["html_form"] = render_to_string("formulaire_abonnement_evenement.html", context, request=request)
 
     return JsonResponse(data)
@@ -785,6 +790,7 @@ def lire_article(request, reference_de_l_article):
         form = CommentaireForm(request.POST)
 
         if form.is_valid():
+
             commentaire = form.save(commit=False)
             commentaire.date = timezone.now()
             commentaire.articles = article

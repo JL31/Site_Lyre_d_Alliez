@@ -24,7 +24,7 @@
                 Date : {{ evenement.date }}
             </p>
             <p id="conteneur-bouton-abonnement">
-                <button type="button" class="btn btn-success js-abonnement-evenement" data-url="{% url 'abonnement_evenement' %}">
+                <button type="button" class="btn btn-success js-abonnement-evenement" data-url="{% url 'abonnement_evenement' evenement.id %}">
                     S'abonner
                 </button>
             </p>
