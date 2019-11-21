@@ -1181,6 +1181,41 @@ def photos(request):
 # ==============================================
 @login_required
 @user_passes_test(personne_autorisee)
+def ajouter_photos(request):
+    """
+        Vue du formulaire permettant l'ajout de photos
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    # Définition des valeurs des paramètres du contexte
+    url_pour_action = creation_evenement.__name__
+    titre_du_formulaire = "Ajout de photos"
+    classe_pour_envoi_formulaire = "js-ajouter-photos-creation-formulaire"
+    titre_du_bouton_pour_validation = "Ajouter la(les) photo(s)"
+    id_champ_date = "#id_date_de_l_evenement"
+    formulaire = PhotoForm
+
+    # Création du contexte
+    donnees = {
+        "url_pour_action": url_pour_action,
+        "titre_du_formulaire": titre_du_formulaire,
+        "classe_pour_envoi_formulaire": classe_pour_envoi_formulaire,
+        "titre_du_bouton_pour_validation": titre_du_bouton_pour_validation,
+        "id_champ_date": id_champ_date,
+        "formulaire": formulaire
+    }
+
+    return creation_formulaire_outils_du_chef(request, donnees)
+
+
+# ==============================================
+@login_required
+@user_passes_test(personne_autorisee)
 def liste_des_photos_pour_annee(request, annee):
     """
         Vue qui permet d'afficher les photos pour une année donnée
@@ -1234,6 +1269,41 @@ def voir_photos_evenement(request, evenement, annee):
     return render(request, "photos_de_l_evenement_de_l_annee.html", {"liste_des_photos_de_l_evenement_pour_l_annee": liste_des_photos_de_l_evenement_pour_l_annee,
                                                                      "evenement":evenement,
                                                                      "annee":annee})
+
+
+# ==============================================
+@login_required
+@user_passes_test(personne_autorisee)
+def ajouter_videos(request):
+    """
+        Vue du formulaire permettant l'ajout de vidéos
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    # Définition des valeurs des paramètres du contexte
+    url_pour_action = creation_evenement.__name__
+    titre_du_formulaire = "Ajout de vidéos"
+    classe_pour_envoi_formulaire = "js-ajouter-videos-creation-formulaire"
+    titre_du_bouton_pour_validation = "Ajouter la(les) vidéo(s)"
+    id_champ_date = "#id_date_de_l_evenement"
+    formulaire = VideoForm
+
+    # Création du contexte
+    donnees = {
+        "url_pour_action": url_pour_action,
+        "titre_du_formulaire": titre_du_formulaire,
+        "classe_pour_envoi_formulaire": classe_pour_envoi_formulaire,
+        "titre_du_bouton_pour_validation": titre_du_bouton_pour_validation,
+        "id_champ_date": id_champ_date,
+        "formulaire": formulaire
+    }
+
+    return creation_formulaire_outils_du_chef(request, donnees)
 
 
 # ===================================
