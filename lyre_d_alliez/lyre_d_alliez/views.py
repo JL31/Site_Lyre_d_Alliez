@@ -481,6 +481,35 @@ def agenda(request):
     return render(request, "agenda.html", {"liste_des_evenements": liste_des_evenements})
 
 
+# # =========================================
+# @login_required
+# @user_passes_test(acces_restreints_au_chef)
+# def creation_evenement(request):
+#     """
+#         Vue pour la création d'un évènement
+#
+#         :param request: instance de HttpRequest
+#         :type request: django.core.handlers.wsgi.WSGIRequest
+#
+#         :return: instance de HttpResponse ou de HttpResponseRedirect
+#         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+#     """
+#
+#     if request.method == "POST":
+#
+#         form = EvenementForm(request.POST)
+#
+#         if form.is_valid():
+#             form.save()
+#             msg = "L'évènement a été crée avec succès"
+#             messages.info(request, msg)
+#             return HttpResponseRedirect(reverse("accueil"))
+#
+#     else:
+#
+#         form = EvenementForm()
+#
+#     return render(request, "EvenementForm.html", {"form": form})
 # =========================================
 @login_required
 @user_passes_test(acces_restreints_au_chef)
@@ -491,25 +520,78 @@ def creation_evenement(request):
         :param request: instance de HttpRequest
         :type request: django.core.handlers.wsgi.WSGIRequest
 
-        :return: instance de HttpResponse ou de HttpResponseRedirect
-        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
     """
+
+    # Définition des valeurs des paramètres du contexte
+    url_pour_action = creation_evenement.__name__
+    titre_du_formulaire = "Création d'un évènement"
+    classe_pour_envoi_formulaire = "js-creation-evenement-creation-formulaire"
+    titre_du_bouton_pour_validation = "Créer l'évènement"
+    id_champ_date = "#id_date"
+    formulaire = EvenementForm
+
+    # Création du contexte
+    donnees = {
+               "url_pour_action": url_pour_action,
+               "titre_du_formulaire": titre_du_formulaire,
+               "classe_pour_envoi_formulaire": classe_pour_envoi_formulaire,
+               "titre_du_bouton_pour_validation": titre_du_bouton_pour_validation,
+               "id_champ_date": id_champ_date,
+               "formulaire": formulaire
+              }
+
+    return creation_formulaire_outils_du_chef(request, donnees)
+
+
+# =======================================================
+@login_required
+@user_passes_test(acces_restreints_au_chef)
+def creation_formulaire_outils_du_chef(request, donnees):
+    """
+        Vue qui permet d'afficher le formulaire demandé avec les données passées en argument
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param donnees: données issues de la vue appelant la vue
+        :type donnees: dict
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    data = dict()
 
     if request.method == "POST":
 
-        form = EvenementForm(request.POST)
+        form = donnees["formulaire"](request.POST)
 
         if form.is_valid():
+
             form.save()
+
+            data["form_is_valid"] = True
+
             msg = "L'évènement a été crée avec succès"
             messages.info(request, msg)
-            return HttpResponseRedirect(reverse("accueil"))
+
+        else:
+
+            data["form_is_valid"] = False
 
     else:
 
-        form = EvenementForm()
+        form = donnees["formulaire"]()
 
-    return render(request, "EvenementForm.html", {"form": form})
+    context = {"form": form}
+    context.update(donnees)
+    del context["formulaire"]
+
+    data["html_form"] = render_to_string("formulaire_outils_du_chef.html", context, request=request)
+
+    return JsonResponse(data)
 
 
 # ==============================================
@@ -656,21 +738,41 @@ def creation_article(request):
         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
-    if request.method == "POST":
+    # if request.method == "POST":
+    #
+    #     form = ArticleForm(request.POST, request.FILES)
+    #
+    #     if form.is_valid():
+    #         form.save()
+    #         msg = "L'article a été crée avec succès"
+    #         messages.info(request, msg)
+    #         return HttpResponseRedirect(reverse("accueil"))
+    #
+    # else:
+    #
+    #     form = ArticleForm()
+    #
+    # return render(request, "ArticleForm.html", {"form": form})
 
-        form = ArticleForm(request.POST, request.FILES)
+    # Définition des valeurs des paramètres du contexte
+    url_pour_action = creation_evenement.__name__
+    titre_du_formulaire = "Création d'un article"
+    classe_pour_envoi_formulaire = "js-creation-article-creation-formulaire"
+    titre_du_bouton_pour_validation = "Créer l'article"
+    id_champ_date = ""
+    formulaire = ArticleForm
 
-        if form.is_valid():
-            form.save()
-            msg = "L'article a été crée avec succès"
-            messages.info(request, msg)
-            return HttpResponseRedirect(reverse("accueil"))
+    # Création du contexte
+    donnees = {
+               "url_pour_action": url_pour_action,
+               "titre_du_formulaire": titre_du_formulaire,
+               "classe_pour_envoi_formulaire": classe_pour_envoi_formulaire,
+               "titre_du_bouton_pour_validation": titre_du_bouton_pour_validation,
+               "id_champ_date": id_champ_date,
+               "formulaire": formulaire
+              }
 
-    else:
-
-        form = ArticleForm()
-
-    return render(request, "ArticleForm.html", {"form": form})
+    return creation_formulaire_outils_du_chef(request, donnees)
 
 
 # ==============================
@@ -784,21 +886,41 @@ def creation_article_de_presse(request):
         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
-    if request.method == "POST":
+    # if request.method == "POST":
+    #
+    #     form = ArticleDepresseForm(request.POST)
+    #
+    #     if form.is_valid():
+    #         form.save()
+    #         msg = "Le lien vers l'article de presse a bien été ajouté"
+    #         messages.info(request, msg)
+    #         return HttpResponseRedirect(reverse("accueil"))
+    #
+    # else:
+    #
+    #     form = ArticleDepresseForm()
+    #
+    # return render(request, "ArticleDePresseForm.html", {"form": form})
 
-        form = ArticleDepresseForm(request.POST)
+    # Définition des valeurs des paramètres du contexte
+    url_pour_action = creation_evenement.__name__
+    titre_du_formulaire = "Création d'un article de presse"
+    classe_pour_envoi_formulaire = "js-creation-article-de-presse-creation-formulaire"
+    titre_du_bouton_pour_validation = "Créer l'article de presse"
+    id_champ_date = ""
+    formulaire = ArticleDepresseForm
 
-        if form.is_valid():
-            form.save()
-            msg = "Le lien vers l'article de presse a bien été ajouté"
-            messages.info(request, msg)
-            return HttpResponseRedirect(reverse("accueil"))
+    # Création du contexte
+    donnees = {
+        "url_pour_action": url_pour_action,
+        "titre_du_formulaire": titre_du_formulaire,
+        "classe_pour_envoi_formulaire": classe_pour_envoi_formulaire,
+        "titre_du_bouton_pour_validation": titre_du_bouton_pour_validation,
+        "id_champ_date": id_champ_date,
+        "formulaire": formulaire
+    }
 
-    else:
-
-        form = ArticleDepresseForm()
-
-    return render(request, "ArticleDePresseForm.html", {"form": form})
+    return creation_formulaire_outils_du_chef(request, donnees)
 
 
 # ====================
@@ -832,21 +954,41 @@ def creation_soutien(request):
         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
-    if request.method == "POST":
+    # if request.method == "POST":
+    #
+    #     form = SoutienForm(request.POST, request.FILES)
+    #
+    #     if form.is_valid():
+    #         form.save()
+    #         msg = "Le soutien a bien été ajouté"
+    #         messages.info(request, msg)
+    #         return HttpResponseRedirect(reverse("accueil"))
+    #
+    # else:
+    #
+    #     form = SoutienForm()
+    #
+    # return render(request, "SoutienForm.html", {"form": form})
 
-        form = SoutienForm(request.POST, request.FILES)
+    # Définition des valeurs des paramètres du contexte
+    url_pour_action = creation_evenement.__name__
+    titre_du_formulaire = "Création d'un soutien"
+    classe_pour_envoi_formulaire = "js-creation-soutien-creation-formulaire"
+    titre_du_bouton_pour_validation = "Créer le soutien"
+    id_champ_date = ""
+    formulaire = SoutienForm
 
-        if form.is_valid():
-            form.save()
-            msg = "Le soutien a bien été ajouté"
-            messages.info(request, msg)
-            return HttpResponseRedirect(reverse("accueil"))
+    # Création du contexte
+    donnees = {
+        "url_pour_action": url_pour_action,
+        "titre_du_formulaire": titre_du_formulaire,
+        "classe_pour_envoi_formulaire": classe_pour_envoi_formulaire,
+        "titre_du_bouton_pour_validation": titre_du_bouton_pour_validation,
+        "id_champ_date": id_champ_date,
+        "formulaire": formulaire
+    }
 
-    else:
-
-        form = SoutienForm()
-
-    return render(request, "SoutienForm.html", {"form": form})
+    return creation_formulaire_outils_du_chef(request, donnees)
 
 
 # ========================================
@@ -1182,7 +1324,7 @@ def voir_videos_evenement(request, evenement, annee):
 @user_passes_test(acces_restreints_au_chef)
 def les_outils_du_chef(request):
     """
-        Vue qui permet d'afficher les photos
+        Vue qui permet d'afficher les outils du chef
 
         :param request: instance de HttpRequest ou de HttpResponseRedirect
         :type request: django.core.handlers.wsgi.WSGIRequest
@@ -1191,18 +1333,22 @@ def les_outils_du_chef(request):
         :rtype: django.http.response.HttpResponse
     """
 
-    liste_des_APIs_tmp = []
+    liste_des_outils_tmp = []
 
-    liste_des_APIs_tmp.append(['creation_evenement', 'Créer un évènement'])
-    liste_des_APIs_tmp.append(['creation_article', 'Créer un article'])
-    liste_des_APIs_tmp.append(['creation_article_de_presse', 'Créer un article de presse'])
-    liste_des_APIs_tmp.append(['creation_soutien', 'Créer un soutien'])
-    liste_des_APIs_tmp.append(['ajouter_photos', 'Ajouter des photos'])
-    liste_des_APIs_tmp.append(['ajouter_videos', 'Ajouter des vidéos'])
+    liste_des_outils_tmp.append(['creation_evenement', 'Créer un évènement', 'bouton_outils_du_chef js-creation-evenement'])
+    liste_des_outils_tmp.append(['creation_article', 'Créer un article', 'bouton_outils_du_chef js-creation-article'])
+    liste_des_outils_tmp.append(['creation_article_de_presse', 'Créer un article de presse', 'bouton_outils_du_chef js-creation-article-de-presse'])
+    liste_des_outils_tmp.append(['creation_soutien', 'Créer un soutien', 'bouton_outils_du_chef js-creation-soutien'])
+    liste_des_outils_tmp.append(['ajouter_photos', 'Ajouter des photos', 'bouton_outils_du_chef js-ajouter-photos'])
+    liste_des_outils_tmp.append(['ajouter_videos', 'Ajouter des vidéos', 'bouton_outils_du_chef js-ajouter-videos'])
 
-    liste_des_APIs = [ {"url": api[0], "nom": api[1]} for api in liste_des_APIs_tmp ]
+    liste_des_outils = [ {
+                          "url": outil[0],
+                          "nom": outil[1],
+                          "classe": outil[2]
+                         } for outil in liste_des_outils_tmp ]
 
-    return render(request, "les_outils_du_chef.html", {"liste_des_APIs": liste_des_APIs})
+    return render(request, "les_outils_du_chef.html", {"liste_des_outils": liste_des_outils})
 
 
 # ==================================================================================================

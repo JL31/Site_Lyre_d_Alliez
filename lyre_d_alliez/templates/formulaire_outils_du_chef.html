@@ -1,0 +1,45 @@
+{% load widget_tweaks %}
+
+<form id="formulaire-outils-du-chef" method="post" action="{% url url_pour_action %}" class="{{ classe_pour_envoi_formulaire }}">
+    {% csrf_token %}
+
+    <!-- header du formulaire -->
+    <div class="modal-header">
+        <h4 class="modal-title">{{ titre_du_formulaire }}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <!-- corps du formulaire -->
+    <div class="modal-body">
+        {% for field in form %}
+            <div class="form-group{% if field.errors %} has-error{% endif %}">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% render_field field class="form-control" %}
+
+                {% for error in field.errors %}
+                    <p class="help-block">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- footer du formulaire -->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-success">{{ titre_du_bouton_pour_validation }}</button>
+    </div>
+
+    {% if id_champ_date and id_champ_date.strip %}
+    <script>
+        $(function ()
+        {
+            $("{{ id_champ_date }}").datepicker(
+            {
+                format:'dd/mm/yyyy',
+            });
+        });
+    </script>
+    {% endif %}
+</form>

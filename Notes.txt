@@ -335,6 +335,9 @@ Au final mettre en place :
    - modifier son mot de passe
    - se déconnecter
 
+    l'apparition de ces infos se fera via un bandeau latéral droit à apparition fondue, bandeau qui sera semi-transparent.
+    L'avatar demeurera sur ce bandeau sur la partie haute, centré, et ne sera pas transparent.
+
 
 # =====================================================================================================================
 # Création des profils membres
@@ -372,5 +375,21 @@ le clic sur l'un des boutons permettra d'afficher un pop-up avec le contenu du f
 le contenu sera affiché sur une bande centrée d'une largeur 2/3 de la largeur de l'écran
 
 https://www.w3schools.com/bootstrap/bootstrap_buttons.asp
-
+http://sdz.tdct.org/sdz/bootstrap-de-twitter-un-kit-css-et-plus.html
 https://flexboxfroggy.com/#fr
+
+
+# =====================================================================================================================
+# Super tip pour test
+# =====================================================================================================================
+
+https://stackoverflow.com/questions/6637168/python-django-templates-and-testing-if-a-variable-is-null-or-empty-string
+
+utiliser manage.py shell:
+
+>>> import django
+>>> from django.template import Template, Context
+>>> t = Template("{% if x and x.strip %}OK{% else %}Empty{% endif %}")
+>>> t.render(Context({"x": "ola"}))
+u'OK'
+

@@ -1,5 +1,11 @@
 {% extends "base_etendue.html" %}
 
+{% load static %}
+
+{% block javascripts %}
+    <script src="{% static 'js/outils_du_chef.js' %}"></script>
+{% endblock %}
+
 {% block contenu %}
 <h1>Les outils du chef</h1>
 <div>
@@ -9,11 +15,19 @@
     </p>
 
     <div id="conteneur_boutons_outils_du_chef">
-    {% for api in liste_des_APIs %}
-        <form action="{% url api.url %}">
-            <input type="submit" class="bouton_outils_du_chef" value="{{ api.nom }}"/>
-        </form>
+    {% for outil in liste_des_outils %}
+        <button type="button" class="{{ outil.classe }}" data-url="{% url outil.url %}">
+                {{ outil.nom }}
+        </button>
     {% endfor %}
+    </div>
+</div>
+
+<!-- Bootstrap modal -->
+<div class="modal fade" id="modal-outils-du-chef">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
     </div>
 </div>
 {% endblock %}

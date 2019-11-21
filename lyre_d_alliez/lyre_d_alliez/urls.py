@@ -98,17 +98,19 @@ urlpatterns = [
     # Menu Les outils du chef
     path('les_outils_du_chef/', les_outils_du_chef, name='les_outils_du_chef'),
 
-    # APIs
-    path('creation_profil_membre/', creation_profil_membre, name='creation_profil_membre'),
     path('creation_evenement/', creation_evenement, name='creation_evenement'),
-    re_path(r'^abonnement_evenement/(?P<id_evenement>\d+)/$', abonnement_evenement, name='abonnement_evenement'),
-    path('envoi_alerte_abonne/', envoi_alerte_abonne, name='envoi_alerte_abonne'),
     path('creation_article/', creation_article, name='creation_article'),
     path('creation_article_de_presse/', creation_article_de_presse, name='creation_article_de_presse'),
     path('creation_soutien/', creation_soutien, name='creation_soutien'),
-    path('demande_pour_devenir_soutien/', demande_pour_devenir_soutien, name='demande_pour_devenir_soutien'),
     path('ajouter_photos/', PhotoView.as_view(), name='ajouter_photos'),
     path('ajouter_videos/', VideoView.as_view(), name='ajouter_videos'),
+
+    # Autres
+    path('creation_profil_membre/', creation_profil_membre, name='creation_profil_membre'),
+    re_path(r'^abonnement_evenement/(?P<id_evenement>\d+)/$', abonnement_evenement, name='abonnement_evenement'),
+    path('envoi_alerte_abonne/', envoi_alerte_abonne, name='envoi_alerte_abonne'),
+
+    path('demande_pour_devenir_soutien/', demande_pour_devenir_soutien, name='demande_pour_devenir_soutien'),
 
     # Connexion / deconnexion
     path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),
