@@ -82,8 +82,23 @@ nav ul
 
 nav li
 {
-    padding: 0 15px 0 15px; /* haut droite bas gauche */
+    padding: 0 15px 10px 15px; /* haut droite bas gauche */
+}
+
+.sous-menu
+{
+    background-image: url('../img/marker.jpg');
+    background-repeat: no-repeat;
+
+    line-height: 20px;
+    padding-left: 30px;
+}
+
+#sous_menu_actualites, #sous_menu_association
+{
+    margin-left: 20px;
     border: 1px solid black;
+    background-color: RGB(216,125,52);
 }
 
 nav a
@@ -93,13 +108,15 @@ nav a
     text-decoration: none;
 }
 
-#sous_menu_actualites, #sous_menu_association, #sous_menu_zone_de_partage
+nav a:hover
 {
-    display: flex;
-    flex-direction: column;
-    list-style: none;
-    padding-left: 0px;
+    color: black;
+    text-decoration: none;
 }
+
+
+/* Mise en forme de la page des pupitres */
+/* ------------------------------------- */
 
 .instrument
 {

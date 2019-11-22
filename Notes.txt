@@ -375,9 +375,9 @@ https://simpleisbetterthancomplex.com/tutorial/2016/08/29/how-to-work-with-ajax-
 # =====================================================================================================================
 
 le contenu sera affiché sur une bande centrée d'une largeur 2/3 de la largeur de l'écran
+http://sdz.tdct.org/sdz/bootstrap-de-twitter-un-kit-css-et-plus.html
 
 https://www.w3schools.com/bootstrap/bootstrap_buttons.asp
-http://sdz.tdct.org/sdz/bootstrap-de-twitter-un-kit-css-et-plus.html
 https://flexboxfroggy.com/#fr
 
 

@@ -227,36 +227,6 @@ def accueil(request):
     return render(request, "base_etendue.html")
 
 
-# ======================
-def actualites(request):
-    """
-        Vue pour les actualités
-
-        :param request: instance de HttpRequest
-        :type request: django.core.handlers.wsgi.WSGIRequest
-
-        :return: instance de HttpResponse
-        :rtype: django.http.response.HttpResponse
-    """
-
-    return render(request, "sous_menu_actualites.html")
-
-
-# =======================
-def association(request):
-    """
-        Vue pour l'association
-
-        :param request: instance de HttpRequest
-        :type request: django.core.handlers.wsgi.WSGIRequest
-
-        :return: instance de HttpResponse
-        :rtype: django.http.response.HttpResponse
-    """
-
-    return render(request, "sous_menu_association.html")
-
-
 # ==================================
 def creation_profil_membre(request):
     """

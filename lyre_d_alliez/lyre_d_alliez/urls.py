@@ -66,13 +66,11 @@ urlpatterns = [
     path('accueil/', accueil, name='accueil'),
 
     # Menu et sous-menus : Actualités
-    path('actualites/', actualites, name='actualites'),
     path('actualites/agenda/', agenda, name='agenda'),
     path('actualites/articles/', liste_des_articles, name='liste_des_articles'),
     re_path(r'^actualites/article/(?P<reference_de_l_article>\d+)/$', lire_article, name='lire_article'),
 
     # Menu et sous-menus  : Association
-    path('association/', association, name='association'),
     path('association/presentation/', flatpage, {'url': '/association/presentation/'}, name='presentation'),
     path('association/bureau/', bureau, name='bureau'),
     path('association/les_pupitres/', les_pupitres, name='les_pupitres'),

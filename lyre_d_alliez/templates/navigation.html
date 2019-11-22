@@ -1,39 +1,62 @@
 ﻿{% extends "authentification.html" %}
 
 {% block navigation %}
-<ul>
-    <li>
-        <a href="{% url 'actualites' %}">Actualités</a>
-        {% block sous_menu_actualites %}{% endblock %}
-    </li>
-    <li>
-        <a href="{% url 'association' %}">L'association</a>
-        {% block sous_menu_association %}{% endblock %}
-    </li>
-    
-    {% if user.is_authenticated %}
-        {% if request.user.membre.est_membre or request.user.membre.est_membre_du_bureau or request.user.membre.est_le_chef %}
-        <li>
-            <a href="{% url 'photos' %}">Photos</a>
-            {% block sous_menu_photos %}{% endblock %}
-        </li>
-        <li>
-            <a href="{% url 'videos' %}">Vidéos</a>
-            {% block sous_menu_videos %}{% endblock %}
-        </li>
-        <!-- <li>
-            {% comment %}
-            <a href="{% url 'zone_de_partage' %}">Zone de partage</a>
-            {% block sous_menu_zone_de_partage %}{% endblock %}
-            {% endcomment %}
-        </li> -->
-        {% endif%}
-    {% endif%}                
-    
-    {% if user.is_authenticated and request.user.membre.est_le_chef %}
-    <li>
-        <a href="{% url 'les_outils_du_chef' %}">Les outils du chef</a>
-    </li>
-    {% endif %}
-</ul>
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container">
+            <ul class="nav">
+                <li class="dropdown">
+                    <!-- {% comment %} <a href="{% url 'actualites' %}">Actualités</a> {% endcomment %} -->
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Actualités <b class="caret"></b></a>
+                    <ul id="sous_menu_actualites" class="dropdown-menu">
+                        <li class="sous-menu"><a href="{% url 'agenda' %}">Agenda</a></li>
+                        <li class="sous-menu"><a href="">Calendrier</a></li>
+                        <li class="sous-menu"><a href="{% url 'liste_des_articles' %}">Articles</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <!-- {% comment %} <a href="{% url 'association' %}">L'association</a> {% endcomment %} -->
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">L'association <b class="caret"></b></a>
+                    <ul id="sous_menu_association" class="dropdown-menu">
+                        <li class="sous-menu"><a href="{% url 'presentation' %}">Présentation : notre histoire</a></li>
+                        <li class="sous-menu"><a href="{% url 'bureau' %}">Le bureau</a></li>
+                        <li class="sous-menu"><a href="{% url 'les_pupitres' %}">Les pupitres</a></li>
+                        <li class="sous-menu"><a href="{% url 'articles_de_presse' %}">Articles de presse</a></li>
+                        <li class="sous-menu"><a href="{% url 'historique_des_concerts' %}">Historique des concerts</a></li>
+                        <li class="sous-menu"><a href="{% url 'soutiens' %}">Nos soutiens</a></li>
+                    </ul>
+                </li>
+
+                {% if user.is_authenticated %}
+                    {% if request.user.membre.est_membre or request.user.membre.est_membre_du_bureau or request.user.membre.est_le_chef %}
+                    <li>
+                        <!-- {% comment %} <a href="{% url 'photos' %}">Photos</a> {% endcomment %} -->
+                        <a href="{% url 'photos' %}">Photos</a>
+                        {% block sous_menu_photos %}{% endblock %}
+                    </li>
+                    <li>
+                        <!-- {% comment %} <a href="{% url 'videos' %}">Vidéos</a> {% endcomment %} -->
+                        <a href="{% url 'videos' %}">Vidéos</a>
+                        {% block sous_menu_videos %}{% endblock %}
+                    </li>
+                    <!-- <li>
+                        {% comment %}
+                        <a href="{% url 'zone_de_partage' %}">Zone de partage</a>
+                        {% block sous_menu_zone_de_partage %}{% endblock %}
+                        {% endcomment %}
+                    </li> -->
+                    {% endif%}
+                {% endif%}
+
+                {% if user.is_authenticated and request.user.membre.est_le_chef %}
+                <li>
+                    <!-- {% comment %} <a href="{% url 'les_outils_du_chef' %}">Les outils du chef</a> {% endcomment %} -->
+                    <a href="{% url 'les_outils_du_chef' %}">Les outils du chef</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}
