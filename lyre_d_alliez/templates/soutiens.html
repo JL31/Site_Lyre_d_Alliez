@@ -1,5 +1,11 @@
 {% extends "base_etendue.html" %}
 
+{% load static %}
+
+{% block javascripts %}
+    <script src="{% static 'js/devenir_soutien.js' %}"></script>
+{% endblock %}
+
 {% block contenu %}
 <h1>Nos soutiens</h1>
 <div>
@@ -7,9 +13,13 @@
         <p>
             Merci à nos soutiens qui nous aident dans l'organisation d'évènements, comme lors du concert des 20 ans de l'association !<br />
             <br />
-            Si vous aussi vous souhaitez contribuer à notre association merci de cliquer sur le lien suivant et de remplir le formulaire.<br />
+            Si vous aussi vous souhaitez contribuer à notre association merci de cliquer sur le bouton suivant et de remplir le formulaire.<br />
         </p>
-        <a href="{% url 'demande_pour_devenir_soutien' %}">Devenir soutien de la Lyre d'Alliez</a>
+        <p id="conteneur-bouton-pour-demande-devenir-soutien">
+            <button type="button" class="btn btn-warning btn-sm js-demande-pour-devenir-soutien" data-url="{% url 'demande_pour_devenir_soutien' %}">
+                Devenir soutien de la Lyre d'Alliez
+            </button>
+        </p>
     </div>
 
     <br />
@@ -26,5 +36,13 @@
     {% endfor %}
     </div>
 
+</div>
+
+<!-- Bootstrap modal -->
+<div class="modal fade" id="modal-devenir-soutien" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
 </div>
 {% endblock %}

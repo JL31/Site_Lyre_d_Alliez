@@ -366,6 +366,8 @@ https://simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sig
 
 Prévoir de gros boutons (du style 130 x 130 pixels)
 le clic sur l'un des boutons permettra d'afficher un pop-up avec le contenu du formulaire
+https://simpleisbetterthancomplex.com/tutorial/2016/11/15/how-to-implement-a-crud-using-ajax-and-json.html
+https://simpleisbetterthancomplex.com/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html
 
 
 # =====================================================================================================================
@@ -392,4 +394,70 @@ utiliser manage.py shell:
 >>> t = Template("{% if x and x.strip %}OK{% else %}Empty{% endif %}")
 >>> t.render(Context({"x": "ola"}))
 u'OK'
+
+
+# =====================================================================================================================
+# Infos Git
+# =====================================================================================================================
+
+https://www.atlassian.com/git/tutorials/git-move-repository
+https://gist.github.com/JamesMGreene/cdd0ac49f90c987e45ac
+https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow
+https://www.jetbrains.com/help/pycharm/apply-changes-from-one-branch-to-another.html
+
+
+re-créer proprement un projet en gestion de conf avec branches
+
+cd Desktop/Perso/Site_Lyre/Test_git/
+git init Lyre_d_Alliez
+	aller dans le dossier et créer le fichier "LM.txt"
+	via git bash se déplacer dans le dossier
+cd Lyre_d_Alliez/
+git add LM.txt
+git commit -m "Création du projet"
+
+git flow feature start Premiere_version
+
+git remote add tmp https://github.com/JL31/Site_Lyre_d_Alliez.git
+git fetch tmp
+
+(git checkout -b dev remotes/tmp/master)
+git branch master-tmp remotes/tmp/master
+
+git remote rm tmp
+
+(git checkout master
+git merge --allow-unrelated-histories dev)
+
+git rebase master-tmp
+git branch -d master-tmp
+
+https://www.atlassian.com/git/tutorials/git-move-repository
+https://stackoverflow.com/questions/9767381/importing-one-git-repo-as-a-branch-into-another-git-repo
+https://stackoverflow.com/questions/292357/what-is-the-difference-between-git-pull-and-git-fetch
+
+https://www.atlassian.com/git/tutorials/using-branches/git-merge
+
+-------------------------------------------
+
+Démarrer un nouveau projet PyCharm (Par exemple Test)
+Autoriser le suivi de version via Git (Enable Version Control Integration)
+Dans Git > Gitflow fairt un "Init Repo" puis ok
+ouvrir le git bash puis aller dans le dossier du projet PyCharm (ici Test)
+faire :
+
+git checkout -b feature/Premiere_version develop
+git remote add tmp https://github.com/JL31/Site_Lyre_d_Alliez.git
+git fetch tmp
+git branch master-tmp remotes/tmp/master
+git remote rm tmp
+git rebase master-tmp
+git branch -d master-tmp
+git checkout develop
+git merge --no-ff feature/Premiere_version --allow-unrelated-histories
+	--> taper :q puis Entrée pour quitter le message de commit/merge)
+git branch -d Premiere_version
+	--> facultatif si on veut pouvoir continuer à bosser dessus ?!
+
+git checkout -b feature/Premiere_version develop && git remote add tmp https://github.com/JL31/Site_Lyre_d_Alliez.git && git fetch tmp && git branch master-tmp remotes/tmp/master && git remote rm tmp && git rebase master-tmp && git branch -d master-tmp && git checkout develop && git merge --no-ff feature/Premiere_version --allow-unrelated-histories
 

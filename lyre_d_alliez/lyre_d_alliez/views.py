@@ -25,11 +25,8 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver
 from django.core.mail import mail_admins, send_mail
 from django.contrib import messages
-from django.contrib.messages.views import SuccessMessageMixin
 from django.utils import timezone
-from django.urls import reverse, reverse_lazy
-from django.views.generic.edit import FormView
-from django.utils.decorators import method_decorator
+from django.urls import reverse
 from django.template.loader import render_to_string
 
 from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm, PhotoForm, VideoForm
@@ -206,125 +203,9 @@ def acces_restreints_au_chef(request):
 # INITIALISATIONS
 # ==================================================================================================
 
-decorators = [login_required, user_passes_test(acces_restreints_au_chef)]
-
-
 # ==================================================================================================
 # CLASSES
 # ==================================================================================================
-
-
-# =============================================
-@method_decorator(decorators, name='dispatch')
-class PhotoView(SuccessMessageMixin, FormView):
-    """
-        Classe générique permettant la gestion du chargement de plusieurs photos
-    """
-
-    form_class = PhotoForm
-    template_name = "AjoutPhotosForm.html"
-    success_url = reverse_lazy("accueil")
-    success_message = "La(les) photo(s) a(ont) bien été ajoutée(s)"
-
-    # =======================================
-    def post(self, request, *args, **kwargs):
-        """
-            Surcharge de la méthode 'post' de la classe 'ProcessFormView':
-
-            Gère les requête POST : instantie une instance 'form' avec les
-            variables POST passées en argument puis vérifie si c'est valide
-
-            :param request: instance de HttpRequest
-            :type request: django.core.handlers.wsgi.WSGIRequest
-
-            :param args: arguments non nommés
-            :type args: List
-
-            :param kwargs: arguments nommés
-            :type kwargs: dict
-
-            :return: instance de HttpResponse
-            :rtype: django.http.response.HttpResponseRedirect
-        """
-
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-
-        files = request.FILES.getlist("photo")
-
-        if form.is_valid():
-
-            for file in files:
-
-                photo_en_cours = Photo()
-                photo_en_cours.photo = file
-                photo_en_cours.nom_de_la_photo = file.name
-                photo_en_cours.nom_de_l_evenement = form.cleaned_data.get("nom_de_l_evenement")
-                photo_en_cours.date_de_l_evenement = form.cleaned_data.get("date_de_l_evenement")
-                photo_en_cours.save()
-
-            return self.form_valid(form)
-
-        else:
-
-            return self.form_invalid(form)
-
-
-# =============================================
-@method_decorator(decorators, name='dispatch')
-class VideoView(SuccessMessageMixin, FormView):
-    """
-        Classe générique permettant la gestion du chargement de plusieurs vidéos
-    """
-
-    form_class = VideoForm
-    template_name = "AjoutVideoForm.html"
-    success_url = reverse_lazy("accueil")
-    success_message = "La(les) vidéo(s) a(ont) bien été ajoutée(s)"
-
-    # =======================================
-    def post(self, request, *args, **kwargs):
-        """
-            Surcharge de la méthode 'post' de la classe 'ProcessFormView':
-
-            Gère les requête POST : instantie une instance 'form' avec les
-            variables POST passées en argument puis vérifie si c'est valide
-
-            :param request: instance de HttpRequest
-            :type request: django.core.handlers.wsgi.WSGIRequest
-
-            :param args: arguments non nommés
-            :type args: List
-
-            :param kwargs: arguments nommés
-            :type kwargs: dict
-
-            :return: instance de HttpResponse
-            :rtype: django.http.response.HttpResponseRedirect
-        """
-
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-
-        files = request.FILES.getlist("video")
-
-        if form.is_valid():
-
-            for file in files:
-
-                video_en_cours = Video()
-                video_en_cours.video = file
-                video_en_cours.nom_de_la_video = file.name
-                video_en_cours.nom_de_l_evenement = form.cleaned_data.get("nom_de_l_evenement")
-                video_en_cours.date_de_l_evenement = form.cleaned_data.get("date_de_l_evenement")
-                video_en_cours.save()
-
-            return self.form_valid(form)
-
-        else:
-
-            return self.form_invalid(form)
-
 
 # ==================================================================================================
 # VUES
@@ -374,23 +255,6 @@ def association(request):
     """
 
     return render(request, "sous_menu_association.html")
-
-
-# # ===================================
-# @login_required
-# @user_passes_test(personne_autorisee)
-# def zone_de_partage(request):
-#     """
-#         Vue pour la zone de partage
-#
-#         :param request: instance de HttpRequest
-#         :type request: django.core.handlers.wsgi.WSGIRequest
-#
-#         :return: instance de HttpResponse
-#         :rtype: django.http.response.HttpResponse
-#     """
-#
-#     return render(request, "sous_menu_zone_de_partage.html")
 
 
 # ==================================
@@ -481,35 +345,6 @@ def agenda(request):
     return render(request, "agenda.html", {"liste_des_evenements": liste_des_evenements})
 
 
-# # =========================================
-# @login_required
-# @user_passes_test(acces_restreints_au_chef)
-# def creation_evenement(request):
-#     """
-#         Vue pour la création d'un évènement
-#
-#         :param request: instance de HttpRequest
-#         :type request: django.core.handlers.wsgi.WSGIRequest
-#
-#         :return: instance de HttpResponse ou de HttpResponseRedirect
-#         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
-#     """
-#
-#     if request.method == "POST":
-#
-#         form = EvenementForm(request.POST)
-#
-#         if form.is_valid():
-#             form.save()
-#             msg = "L'évènement a été crée avec succès"
-#             messages.info(request, msg)
-#             return HttpResponseRedirect(reverse("accueil"))
-#
-#     else:
-#
-#         form = EvenementForm()
-#
-#     return render(request, "EvenementForm.html", {"form": form})
 # =========================================
 @login_required
 @user_passes_test(acces_restreints_au_chef)
@@ -738,24 +573,8 @@ def creation_article(request):
         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
-    # if request.method == "POST":
-    #
-    #     form = ArticleForm(request.POST, request.FILES)
-    #
-    #     if form.is_valid():
-    #         form.save()
-    #         msg = "L'article a été crée avec succès"
-    #         messages.info(request, msg)
-    #         return HttpResponseRedirect(reverse("accueil"))
-    #
-    # else:
-    #
-    #     form = ArticleForm()
-    #
-    # return render(request, "ArticleForm.html", {"form": form})
-
     # Définition des valeurs des paramètres du contexte
-    url_pour_action = creation_evenement.__name__
+    url_pour_action = creation_article.__name__
     titre_du_formulaire = "Création d'un article"
     classe_pour_envoi_formulaire = "js-creation-article-creation-formulaire"
     titre_du_bouton_pour_validation = "Créer l'article"
@@ -886,24 +705,8 @@ def creation_article_de_presse(request):
         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
-    # if request.method == "POST":
-    #
-    #     form = ArticleDepresseForm(request.POST)
-    #
-    #     if form.is_valid():
-    #         form.save()
-    #         msg = "Le lien vers l'article de presse a bien été ajouté"
-    #         messages.info(request, msg)
-    #         return HttpResponseRedirect(reverse("accueil"))
-    #
-    # else:
-    #
-    #     form = ArticleDepresseForm()
-    #
-    # return render(request, "ArticleDePresseForm.html", {"form": form})
-
     # Définition des valeurs des paramètres du contexte
-    url_pour_action = creation_evenement.__name__
+    url_pour_action = creation_article_de_presse.__name__
     titre_du_formulaire = "Création d'un article de presse"
     classe_pour_envoi_formulaire = "js-creation-article-de-presse-creation-formulaire"
     titre_du_bouton_pour_validation = "Créer l'article de presse"
@@ -954,24 +757,8 @@ def creation_soutien(request):
         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
-    # if request.method == "POST":
-    #
-    #     form = SoutienForm(request.POST, request.FILES)
-    #
-    #     if form.is_valid():
-    #         form.save()
-    #         msg = "Le soutien a bien été ajouté"
-    #         messages.info(request, msg)
-    #         return HttpResponseRedirect(reverse("accueil"))
-    #
-    # else:
-    #
-    #     form = SoutienForm()
-    #
-    # return render(request, "SoutienForm.html", {"form": form})
-
     # Définition des valeurs des paramètres du contexte
-    url_pour_action = creation_evenement.__name__
+    url_pour_action = creation_soutien.__name__
     titre_du_formulaire = "Création d'un soutien"
     classe_pour_envoi_formulaire = "js-creation-soutien-creation-formulaire"
     titre_du_bouton_pour_validation = "Créer le soutien"
@@ -1003,12 +790,53 @@ def demande_pour_devenir_soutien(request):
         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
+    # Définition des valeurs des paramètres du contexte
+    url_pour_action = demande_pour_devenir_soutien.__name__
+    titre_du_formulaire = "Demande pour devenir soutien de la Lyre d'Alliez"
+    classe_pour_envoi_formulaire = "js-demande-pour-devenir-soutien-creation-formulaire"
+    titre_du_bouton_pour_validation = "Envoyer la demande"
+    id_champ_date = ""
+    formulaire = DemandeDevenirSoutienForm
+
+    # Création du contexte
+    donnees = {
+               "url_pour_action": url_pour_action,
+               "titre_du_formulaire": titre_du_formulaire,
+               "classe_pour_envoi_formulaire": classe_pour_envoi_formulaire,
+               "titre_du_bouton_pour_validation": titre_du_bouton_pour_validation,
+               "id_champ_date": id_champ_date,
+               "formulaire": formulaire
+              }
+
+    return creation_formulaire_demande_pour_devenir_soutien(request, donnees)
+
+
+# =====================================================================
+@login_required
+@user_passes_test(acces_restreints_au_chef)
+def creation_formulaire_demande_pour_devenir_soutien(request, donnees):
+    """
+        Vue qui permet d'afficher le formulaire demandé avec les données passées en argument
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param donnees: données issues de la vue appelant la vue
+        :type donnees: dict
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    data = dict()
+
     if request.method == "POST":
 
-        form = DemandeDevenirSoutienForm(request.POST)
+        form = donnees["formulaire"](request.POST)
 
         if form.is_valid():
 
+            # récupération des données du formulaire
             nom = form.cleaned_data["nom"]
             prenom = form.cleaned_data["prenom"]
             societe = form.cleaned_data["societe"]
@@ -1059,17 +887,29 @@ def demande_pour_devenir_soutien(request):
                                 "message": message_a_envoyer,
                                 "message_d_erreur": message_d_erreur
                                }
+
             envoi_mail_bis(dico_des_donnees)
 
-            msg = "Votre demande a bien été envoyée"
+            data["form_is_valid"] = True
+
+            msg = "La demande a été envoyée"
             messages.info(request, msg)
-            return HttpResponseRedirect(reverse("soutiens"))
+
+        else:
+
+            data["form_is_valid"] = False
 
     else:
 
-        form = DemandeDevenirSoutienForm()
+        form = donnees["formulaire"]()
 
-    return render(request, "DemandeDevenirSoutienForm.html", {"form": form})
+    context = {"form": form}
+    context.update(donnees)
+    del context["formulaire"]
+
+    data["html_form"] = render_to_string("formulaire_demande_devenir_soutien.html", context, request=request)
+
+    return JsonResponse(data)
 
 
 # ===================================
@@ -1193,7 +1033,7 @@ def ajouter_photos(request):
     """
 
     # Définition des valeurs des paramètres du contexte
-    url_pour_action = creation_evenement.__name__
+    url_pour_action = ajouter_photos.__name__
     titre_du_formulaire = "Ajout de photos"
     classe_pour_envoi_formulaire = "js-ajouter-photos-creation-formulaire"
     titre_du_bouton_pour_validation = "Ajouter la(les) photo(s)"
@@ -1286,7 +1126,7 @@ def ajouter_videos(request):
     """
 
     # Définition des valeurs des paramètres du contexte
-    url_pour_action = creation_evenement.__name__
+    url_pour_action = ajouter_videos.__name__
     titre_du_formulaire = "Ajout de vidéos"
     classe_pour_envoi_formulaire = "js-ajouter-videos-creation-formulaire"
     titre_du_bouton_pour_validation = "Ajouter la(les) vidéo(s)"

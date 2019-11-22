@@ -102,9 +102,7 @@ urlpatterns = [
     path('creation_article/', creation_article, name='creation_article'),
     path('creation_article_de_presse/', creation_article_de_presse, name='creation_article_de_presse'),
     path('creation_soutien/', creation_soutien, name='creation_soutien'),
-    # path('ajouter_photos/', PhotoView.as_view(), name='ajouter_photos'),
     path('ajouter_photos/', ajouter_photos, name='ajouter_photos'),
-    # path('ajouter_videos/', VideoView.as_view(), name='ajouter_videos'),
     path('ajouter_videos/', ajouter_videos, name='ajouter_videos'),
 
     # Autres
