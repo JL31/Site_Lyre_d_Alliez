@@ -1,18 +1,16 @@
 {% extends "base.html" %}
 
 {% block authentification %}
-    
+
     {% if user.is_authenticated %}
-        
         <div>
-            Salut {{ user.username }} :-)<br/>
             <img src="{{ request.user.membre.avatar.url }}" id="avatar_membre"/><br />
             <a href="{% url 'deconnexion' %}" id="lien_deconnexion">Se déconnecter</a>
         </div>
         
     {% else %}
         
-        <a href="{% url 'connexion' %}" id="lien_connexion">Se connecter</a>
+        <p id="lien_connexion" data-url="{% url 'authentification' %}" verification-login-url="{% url 'verification_login' %}">Se connecter</p>
         
     {% endif %}
     

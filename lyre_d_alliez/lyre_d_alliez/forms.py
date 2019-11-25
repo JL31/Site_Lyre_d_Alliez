@@ -23,7 +23,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from django.forms import Form, CharField, FileField, ClearableFileInput
+from django.forms import Form, CharField, FileField, ClearableFileInput, PasswordInput
 
 from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo, Video
 from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput, Textarea
@@ -365,6 +365,24 @@ class VideoForm(ModelForm):
 
         model = Video
         fields = ("video", "poster_de_la_video", "nom_de_l_evenement", "date_de_l_evenement")
+
+
+# ===============================
+class AuthentificationForm(Form):
+    """
+        Classe qui permet la création d'un formulaire pour l'authentification
+    """
+
+    login = CharField(required=True, max_length=250, label="Nom d'utilisateur")
+    mot_de_passe = CharField(required=True, widget=PasswordInput())
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du formulaire
+        """
+
+        fields = ("login", "mot_de_passe")
 
 
 # ==================================================================================================

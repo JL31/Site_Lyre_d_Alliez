@@ -28,8 +28,9 @@ from django.contrib import messages
 from django.utils import timezone
 from django.urls import reverse
 from django.template.loader import render_to_string
+from django.contrib.auth import authenticate, login, logout
 
-from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm, PhotoForm, VideoForm
+from .forms import MembreForm, LISTE_DES_INSTRUMENTS, EvenementForm, AbonnementEvenementForm, ArticleForm, CommentaireForm, ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm, PhotoForm, VideoForm, AuthentificationForm
 from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo, Video
 
 from .secret_data import ADMINS, MOT_DE_PASSE
@@ -1229,6 +1230,138 @@ def les_outils_du_chef(request):
                          } for outil in liste_des_outils_tmp ]
 
     return render(request, "les_outils_du_chef.html", {"liste_des_outils": liste_des_outils})
+
+
+# ============================
+def authentification(request):
+    """
+        Vue pour l'authentification
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    # Définition des valeurs des paramètres du contexte
+    url_pour_action = authentification.__name__
+    titre_du_formulaire = "Authentification"
+    classe_pour_envoi_formulaire = "js-authentification-creation-formulaire"
+    titre_du_bouton_pour_validation = "Se connecter"
+    id_champ_date = ""
+    formulaire = AuthentificationForm
+
+    # Création du contexte
+    donnees = {
+               "url_pour_action": url_pour_action,
+               "titre_du_formulaire": titre_du_formulaire,
+               "classe_pour_envoi_formulaire": classe_pour_envoi_formulaire,
+               "titre_du_bouton_pour_validation": titre_du_bouton_pour_validation,
+               "id_champ_date": id_champ_date,
+               "formulaire": formulaire
+    }
+
+    return creation_formulaire_authentification(request, donnees)
+
+
+# =========================================================
+def creation_formulaire_authentification(request, donnees):
+    """
+        Vue qui permet d'afficher le formulaire pour l'authentification
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param donnees: données issues de la vue appelant la vue
+        :type donnees: dict
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    data = dict()
+
+    if request.method == "POST":
+
+        form = donnees["formulaire"](request.POST)
+
+        if form.is_valid():
+
+            login_utilisateur = form.cleaned_data["login"]
+            mot_de_passe_utilisateur = form.cleaned_data["mot_de_passe"]
+
+            utilisateur = authenticate(username=login_utilisateur, password=mot_de_passe_utilisateur )
+
+            if utilisateur is not None:
+
+                data["user_authenticated"] = True
+                login(request, utilisateur)
+                data["url_pour_redirection"] = reverse("accueil")
+
+                msg = "Bienvenue"
+                messages.info(request, msg)
+
+            else:
+
+                data["user_authenticated"] = False
+
+            data["form_is_valid"] = True
+
+        else:
+
+            data["form_is_valid"] = False
+
+    else:
+
+        form = donnees["formulaire"]()
+
+    context = {"form": form}
+    context.update(donnees)
+    del context["formulaire"]
+
+    data["html_form"] = render_to_string("formulaire_authentification.html", context, request=request)
+
+    return JsonResponse(data)
+
+
+# ==============================
+def verification_login(request):
+    """
+        Vue qui permet de vérifier que le login existe bien
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    login = request.GET.get("login", None)
+    data = {"login_existe": Membre.objects.filter(username__iexact=login).exists()}
+
+    return JsonResponse(data)
+
+
+# =======================
+def deconnexion(request):
+    """
+        Vue qui permet de déconnecter un utilisateur
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    data = dict()
+
+    if request.method == "POST":
+
+        data["html_form"] = render_to_string("formulaire_authentification.html", context, request=request)
+
+    return JsonResponse(data)
 
 
 # ==================================================================================================

@@ -37,6 +37,14 @@
                 </div>
                 <nav id="navigation">{% block navigation %}{% endblock %}</nav>
             </div>
+
+            <!-- Bootstrap modal -->
+            <div class="modal fade" id="modal-authentification" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    </div>
+                </div>
+            </div>
         </header>
         <section id="contenu">
             <div id="conteneur-du-contenu">
@@ -56,6 +64,9 @@
 
         <!-- Datepicker Bootstrap -->
         <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+
+        <!-- Formulaire d'authentification -->
+        <script src="{% static 'js/authentification.js' %}"></script>
 
         {% block javascripts %}{% endblock %}
     </body>

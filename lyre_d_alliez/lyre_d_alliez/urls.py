@@ -111,8 +111,11 @@ urlpatterns = [
     path('demande_pour_devenir_soutien/', demande_pour_devenir_soutien, name='demande_pour_devenir_soutien'),
 
     # Connexion / deconnexion
-    path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),
+    # path('connexion/', LoginView.as_view(template_name='connexion.html'), name='connexion'),
     path('deconnexion/', LogoutView.as_view(template_name='deconnexion.html'), name='deconnexion'),
+    path('authentification/', authentification, name='authentification'),
+    path('verification_login/', verification_login,name="verification_login"),
+    # path('deconnexion/', deconnexion, name='deconnexion'),
     path('acces_interdit/', acces_interdit, name='acces_interdit'),
 ]
 

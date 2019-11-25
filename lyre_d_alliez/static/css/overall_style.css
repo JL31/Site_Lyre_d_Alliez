@@ -16,9 +16,9 @@ header
 #lien_connexion, #lien_deconnexion
 {
     font-size: 1.1em;
-    color: black;
+    font-family: fantasy, cursive;
+    color: RGB(88,41,0);
     text-decoration: none;
-    text-decoration: underline;
 }
 
 #avatar_membre
