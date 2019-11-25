@@ -1,19 +1,48 @@
 {% extends "base_etendue.html" %}
 
+{% load static %}
+
+{% block javascripts %}
+    <script src="{% static 'js/blueimp-gallery.min.js' %}"></script>
+    <script>
+        document.getElementById('links').onclick = function(event)
+        {
+            event = event || window.event
+            let target = event.target || event.srcElement,
+            link = target.src ? target.parentNode : target,
+            options = { index: link, event: event},
+            links = this.getElementsByTagName('a')
+            blueimp.Gallery(links, options)
+        }
+    </script>
+{% endblock %}
+
 {% block contenu %}
 <h1>Vidéos de {{ evenement }} de l'année {{ annee }}</h1>
 <div>
+    <!-- Bouton de retour -->
     <form action="{% url 'liste_des_videos_pour_annee' annee %}" id="fin_visionnage_videos_de_l_evenement_de_l_annee">
         <input type="submit" id="bouton_retour_videos_de_l_annee" value="Retour" />
     </form>
 
-    <div class="conteneur_des_videos_pour_evenements">
+    <!-- Images -->
+    <div id="links" class="links">
     {% for video in liste_des_videos_de_l_evenement_pour_l_annee %}
-        <video controls width="30%" height="30%">
-            <source src="{{ video.video.url }}" type="video/mp4" class=""></source>
-        </video>
+        <a href="{{ video.video.url }}" type="video/mp4" data-poster="{{ video.poster_de_la_video.url }}" data-sources="{{ video.video.url }}">
+            <img src="{{ video.poster_de_la_video.url }}" style="width:150px;height:150px;" class="image_dossier_video_evenement_annee"/>
+        </a>
     {% endfor %}
     </div>
 
+    <!-- La gallerie en tant que 'lightbox dialog' -->
+    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+        <div class="slides"></div>
+        <h3 class="title"></h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator show"></ol>
+    </div>
 </div>
 {% endblock %}

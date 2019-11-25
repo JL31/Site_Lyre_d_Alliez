@@ -348,6 +348,7 @@ class Video(models.Model):
 
     nom_de_la_video = models.CharField(null=False, blank=False, max_length=250)
     video = models.FileField(null=False, blank=False, upload_to="videos/")
+    poster_de_la_video = models.ImageField(null=False, blank=False, upload_to="posters_videos/")
 
     nom_de_l_evenement = models.CharField(null=False, blank=False, max_length=250)
     date_de_l_evenement = models.DateField(null=False, blank=False)
@@ -361,6 +362,7 @@ class Video(models.Model):
         verbose_name = "video"
         ordering = ["nom_de_la_video",
                     "video",
+                    "poster_de_la_video",
                     "nom_de_l_evenement",
                     "date_de_l_evenement"
                     ]

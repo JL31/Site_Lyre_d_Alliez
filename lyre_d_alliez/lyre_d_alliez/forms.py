@@ -355,6 +355,7 @@ class VideoForm(ModelForm):
         super(ModelForm, self).__init__(*args, **kwargs)
         self.fields["nom_de_l_evenement"].label = "Nom de l'évènement"
         self.fields["date_de_l_evenement"].label = "Date de l'évènement"    # utiliser plutôt l'attribut label comme pour AbonnementEvenementForm
+        self.fields["poster_de_la_video"].label = "Poster de la vidéo"  # utiliser plutôt l'attribut label comme pour AbonnementEvenementForm
 
     # =========
     class Meta:
@@ -363,7 +364,7 @@ class VideoForm(ModelForm):
         """
 
         model = Video
-        fields = ("video", "nom_de_l_evenement", "date_de_l_evenement")
+        fields = ("video", "poster_de_la_video", "nom_de_l_evenement", "date_de_l_evenement")
 
 
 # ==================================================================================================
