@@ -1355,11 +1355,16 @@ def deconnexion(request):
         :rtype: django.http.response.JsonResponse
     """
 
+    context = dict()
+    context["url_pour_action"] = deconnexion.__name__
+
     data = dict()
+    data["url_pour_redirection"] = reverse("accueil")
+    data["html_content"] = render_to_string("deconnexion.html", context, request=request)
 
     if request.method == "POST":
 
-        data["html_form"] = render_to_string("formulaire_authentification.html", context, request=request)
+        logout(request)
 
     return JsonResponse(data)
 

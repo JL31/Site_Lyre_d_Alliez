@@ -1,7 +1,23 @@
-<h1>Vous avez été déconnecté</h1>
-<div id="message_retour_accueil">
-    Pour retourner à la page d'accueil du site cliquez sur le lien suivant :
-    <br />
-    <br />
-    <a href="{% url 'accueil' %}">Accueil</a>
-</div>
+{% load widget_tweaks %}
+
+<form method="post" action="{% url url_pour_action %}" class="js-ok-deconnexion">
+    {% csrf_token %}
+
+    <!-- header du formulaire -->
+    <div class="modal-header">
+        <h3 class="modal-title">Déconnexion</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <!-- corps du formulaire -->
+    <div class="modal-body">
+        <h5>Merci pour votre visite, vous êtes maintenant déconnecté.</h5>
+    </div>
+
+    <!-- footer du formulaire -->
+    <div class="modal-footer">
+        <button type="submit" id="bouton-retour-accueil-deconnexion" class="btn btn-success">Retour à l'accueil</button>
+    </div>
+</form>

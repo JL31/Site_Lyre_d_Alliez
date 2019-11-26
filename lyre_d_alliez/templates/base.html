@@ -40,7 +40,7 @@
             <!-- Zone pour l'affichage du titre et du menu -->
             <div id="titre_et_menu">
                 <div id="titre_header">
-                    <h3><a href="{% url 'accueil' %}">Bienvenue sur le site de la Lyre d'Alliez</a></h3>
+                    <h3>Bienvenue sur le site de la Lyre d'Alliez</h3>
                 </div>
                 <nav id="navigation">{% block navigation %}{% endblock %}</nav>
             </div>
@@ -62,8 +62,19 @@
                         </div>
 
                         <div class="modal-body panneau-lateral">
-                            <a href="{% url 'deconnexion' %}" id="lien_deconnexion">Se déconnecter</a>
+                            <button type="button" class="btn" data-toggle="modal" id="lien_deconnexion" data-url="{% url 'deconnexion' %}">
+                                Se déconnecter
+                            </button>
+                            <!-- {% comment %} <a href="" id="lien_deconnexion" data-url="{% url 'deconnexion' %}">Se déconnecter</a> {% endcomment %} -->
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bootstrap modal pour la déconnexion -->
+            <div class="modal fade" id="modal-deconnexion" tabindex="-1">
+                <div class="modal-dialog deconnexion">
+                    <div class="modal-content deconnexion">
                     </div>
                 </div>
             </div>
@@ -91,6 +102,9 @@
 
         <!-- Formulaire d'authentification -->
         <script src="{% static 'js/authentification.js' %}"></script>
+
+        <!-- Déconnexion -->
+        <script src="{% static 'js/deconnexion.js' %}"></script>
 
         {% block javascripts %}{% endblock %}
     </body>
