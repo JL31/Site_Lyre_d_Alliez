@@ -54,22 +54,7 @@
             </div>
 
             <!-- Bootstrap modal pour le panneau latéral du membre connecté -->
-            <div class="modal right panneau-lateral fade" id="id_panneau_lateral" tabindex="-1" role="dialog" aria-labelledby="panneau-lateral-label">
-                <div class="modal-dialog panneau-lateral" role="document">
-                    <div class="modal-content panneau-lateral">
-                        <div class="modal-header panneau-lateral">
-                            <img src="{{ request.user.membre.avatar.url }}" id="avatar_membre"/>
-                        </div>
-
-                        <div class="modal-body panneau-lateral">
-                            <button type="button" class="btn" data-toggle="modal" id="lien_deconnexion" data-url="{% url 'deconnexion' %}">
-                                Se déconnecter
-                            </button>
-                            <!-- {% comment %} <a href="" id="lien_deconnexion" data-url="{% url 'deconnexion' %}">Se déconnecter</a> {% endcomment %} -->
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% block deconnexion %}{% endblock %}
 
             <!-- Bootstrap modal pour la déconnexion -->
             <div class="modal fade" id="modal-deconnexion" tabindex="-1">
