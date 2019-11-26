@@ -18,19 +18,26 @@
         <!-- feuille de style blueimp Gallery -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/blueimp-gallery.min.css' %}" />
 
+        <!-- feuille de style pour le panneau latéral du membre connecté -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/panneau_lateral.css' %}" />
+
         <!-- feuille de style globale -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/overall_style.css' %}" />
     </head>
+
     <body>
         <header>
+            <!-- Zone pour l'affichage de messages -->
             <div id="zone_de_messages">
                 {% block zone_de_messages %}{% endblock %}
             </div>
 
+            <!-- Zone pour l'authentification -->
             <div id="authentification">
                 {% block authentification %}{% endblock %}
             </div>
 
+            <!-- Zone pour l'affichage du titre et du menu -->
             <div id="titre_et_menu">
                 <div id="titre_header">
                     <h3><a href="{% url 'accueil' %}">Bienvenue sur le site de la Lyre d'Alliez</a></h3>
@@ -38,19 +45,36 @@
                 <nav id="navigation">{% block navigation %}{% endblock %}</nav>
             </div>
 
-            <!-- Bootstrap modal -->
+            <!-- Bootstrap modal pour l'authentification -->
             <div class="modal fade" id="modal-authentification" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
                     </div>
                 </div>
             </div>
+
+            <!-- Bootstrap modal pour le panneau latéral du membre connecté -->
+            <div class="modal right panneau-lateral fade" id="id_panneau_lateral" tabindex="-1" role="dialog" aria-labelledby="panneau-lateral-label">
+                <div class="modal-dialog panneau-lateral" role="document">
+                    <div class="modal-content panneau-lateral">
+                        <div class="modal-header panneau-lateral">
+                            <img src="{{ request.user.membre.avatar.url }}" id="avatar_membre"/>
+                        </div>
+
+                        <div class="modal-body panneau-lateral">
+                            <a href="{% url 'deconnexion' %}" id="lien_deconnexion">Se déconnecter</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </header>
+
         <section id="contenu">
             <div id="conteneur-du-contenu">
                 {% block contenu %}{% endblock %}
             </div>
         </section>
+
         <footer id="footer">{% block footer %}{% endblock %}</footer>
 
         <!-- Scripts Javascript -->

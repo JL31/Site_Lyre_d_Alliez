@@ -1,0 +1,54 @@
+
+/* Mise en forme du panneau latéral du membre connecté */
+/* --------------------------------------------------- */
+
+.modal.right.panneau-lateral .modal-dialog.panneau-lateral
+{
+    position: fixed;
+    margin: auto;
+    width: 320px;
+    height: 100%;
+    -webkit-transform: translate3d(0%, 0, 0);
+	    -ms-transform: translate3d(0%, 0, 0);
+		 -o-transform: translate3d(0%, 0, 0);
+		    transform: translate3d(0%, 0, 0);
+}
+
+.modal.right.panneau-lateral .modal-content.panneau-lateral
+{
+    height: 100%;
+    overflow-y: auto;
+}
+
+.modal.right.panneau-lateral .modal-body.panneau-lateral
+{
+    padding: 15px 15px 80px;
+}
+
+.modal.right.panneau-lateral.fade .modal-dialog.panneau-lateral
+{
+    right: 0px;
+    -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+       -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+         -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+            transition: opacity 0.3s linear, right 0.3s ease-out;
+}
+
+.modal.right.panneau-lateral.fade.in .modal-dialog.panneau-lateral
+{
+    right: 0px;
+}
+
+/* style du modal */
+.modal-content.panneau-lateral
+{
+    border-radius: 0;
+    border: none;
+    background-color: RGB(255,217,179);
+}
+
+.modal-header.panneau-lateral
+{
+    display: flex;
+    justify-content: center;
+}
