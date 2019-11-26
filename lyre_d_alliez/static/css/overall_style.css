@@ -603,3 +603,19 @@ strong
     margin-right: 10px;
 }
 
+/* Mise en forme des options du memebre connecté */
+/* --------------------------------------------- */
+
+hr
+{
+    height: 1px;
+    width: 91%;
+    color: RGB(200,200,200);
+    background-color: RGB(200,200,200);
+    border: none;
+}
+
+#bouton_information_personnelles:hover, #bouton_changement_mot_de_passe:hover, #bouton_deconnexion:hover
+{
+    border: 1px solid black;
+}

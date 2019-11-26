@@ -47,6 +47,6 @@ $(function ()
     /* Liens */
     /* ----- */
 
-    $("#lien_deconnexion").click(affichageDeconnexion);
+    $("#bouton_deconnexion").click(affichageDeconnexion);
     $("#modal-deconnexion").on("submit", ".js-ok-deconnexion", fermetureDeconnexion);
 });
