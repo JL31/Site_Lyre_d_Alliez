@@ -6,7 +6,6 @@
         <div class="container">
             <ul class="nav">
                 <li class="dropdown">
-                    <!-- {% comment %} <a href="{% url 'actualites' %}">Actualités</a> {% endcomment %} -->
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Actualités <b class="caret"></b></a>
                     <ul id="sous_menu_actualites" class="dropdown-menu">
                         <li class="sous-menu"><a href="{% url 'agenda' %}">Agenda</a></li>
@@ -16,7 +15,6 @@
                 </li>
 
                 <li class="dropdown">
-                    <!-- {% comment %} <a href="{% url 'association' %}">L'association</a> {% endcomment %} -->
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">L'association <b class="caret"></b></a>
                     <ul id="sous_menu_association" class="dropdown-menu">
                         <li class="sous-menu"><a href="{% url 'presentation' %}">Présentation : notre histoire</a></li>
@@ -31,12 +29,10 @@
                 {% if user.is_authenticated %}
                     {% if request.user.membre.est_membre or request.user.membre.est_membre_du_bureau or request.user.membre.est_le_chef %}
                     <li>
-                        <!-- {% comment %} <a href="{% url 'photos' %}">Photos</a> {% endcomment %} -->
                         <a href="{% url 'photos' %}">Photos</a>
                         {% block sous_menu_photos %}{% endblock %}
                     </li>
                     <li>
-                        <!-- {% comment %} <a href="{% url 'videos' %}">Vidéos</a> {% endcomment %} -->
                         <a href="{% url 'videos' %}">Vidéos</a>
                         {% block sous_menu_videos %}{% endblock %}
                     </li>
@@ -51,7 +47,6 @@
 
                 {% if user.is_authenticated and request.user.membre.est_le_chef %}
                 <li>
-                    <!-- {% comment %} <a href="{% url 'les_outils_du_chef' %}">Les outils du chef</a> {% endcomment %} -->
                     <a href="{% url 'les_outils_du_chef' %}">Les outils du chef</a>
                 </li>
                 {% endif %}
