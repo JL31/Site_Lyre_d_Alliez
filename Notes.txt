@@ -466,3 +466,12 @@ git branch -d Premiere_version
 
 git checkout -b feature/Premiere_version develop && git remote add tmp https://github.com/JL31/Site_Lyre_d_Alliez.git && git fetch tmp && git branch master-tmp remotes/tmp/master && git remote rm tmp && git rebase master-tmp && git branch -d master-tmp && git checkout develop && git merge --no-ff feature/Premiere_version --allow-unrelated-histories
 
+
+# =====================================================================================================================
+# Calendrier
+# =====================================================================================================================
+
+https://django-story.readthedocs.io/en/latest/src/014.tp.agenda.templates.html
+https://fullcalendar.io/#demos
+https://fullcalendar.io/docs/initialize-globals
+

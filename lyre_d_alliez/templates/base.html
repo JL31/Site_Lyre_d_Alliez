@@ -21,6 +21,10 @@
         <!-- feuille de style pour le panneau latéral du membre connecté -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/panneau_lateral.css' %}" />
 
+        <!-- feuilles de style du calendrier -->
+        <link rel='stylesheet' type="text/css" href="{% static 'fullcalendar/packages/core/main.css' %}"/>
+        <link rel='stylesheet' type="text/css" href="{% static 'fullcalendar/packages/daygrid/main.css' %}"/>
+
         <!-- feuille de style globale -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/overall_style.css' %}" />
     </head>
@@ -90,6 +94,11 @@
 
         <!-- Déconnexion -->
         <script src="{% static 'js/deconnexion.js' %}"></script>
+
+        <!-- Calendrier -->
+        <script src="{% static 'fullcalendar/packages/core/main.js' %}"></script>
+        <script src="{% static 'fullcalendar/packages/daygrid/main.js' %}"></script>
+        <script src="{% static 'fullcalendar/packages/interaction/main.js' %}"></script>    <!-- pour la sélection d'un élément du calendrier -->
 
         {% block javascripts %}{% endblock %}
     </body>

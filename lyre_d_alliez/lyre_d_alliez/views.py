@@ -643,9 +643,7 @@ def lire_article(request, reference_de_l_article):
     return render(request, "lecture_article.html", {"article": article, "liste_des_commentaires": liste_des_commentaires, "form": form})
 
 
-# =========================================
-@login_required
-@user_passes_test(personne_autorisee)
+# ==============================
 def articles_de_presse(request):
     """
         Vue qui permet de lire un article
@@ -783,8 +781,6 @@ def demande_pour_devenir_soutien(request):
 
 
 # =====================================================================
-@login_required
-@user_passes_test(acces_restreints_au_chef)
 def creation_formulaire_demande_pour_devenir_soutien(request, donnees):
     """
         Vue qui permet d'afficher le formulaire demandé avec les données passées en argument
@@ -1367,6 +1363,21 @@ def deconnexion(request):
         logout(request)
 
     return JsonResponse(data)
+
+
+# ======================
+def calendrier(request):
+    """
+        Vue qui permet de voir le calendrier
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    return render(request, "calendrier.html")
 
 
 # ==================================================================================================

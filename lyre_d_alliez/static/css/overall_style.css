@@ -654,3 +654,28 @@ hr
     padding-left: 10px;
 }
 
+/* Mise en forme du calendrier */
+/* --------------------------- */
+
+#id_calendrier
+{
+    padding: 20px;
+}
+
+// Permet de mettre la première lettre du mois en cours en majuscule
+.fc-toolbar
+{
+    text-transform: capitalize;
+}
+
+
+/* Mise en forme xxx */
+/* --------------------------- */
+
+#id_mot_de_passe_oublie
+{
+    position: absolute;
+    left: 10px;
+    text-decoration: underline;
+}
+

@@ -66,6 +66,7 @@ urlpatterns = [
 
     # Menu et sous-menus : Actualités
     path('actualites/agenda/', agenda, name='agenda'),
+    path('actualites/calendrier/', calendrier, name='calendrier'),
     path('actualites/articles/', liste_des_articles, name='liste_des_articles'),
     re_path(r'^actualites/article/(?P<reference_de_l_article>\d+)/$', lire_article, name='lire_article'),
 
