@@ -1,0 +1,47 @@
+{% extends "base_etendue.html" %}
+
+{% block contenu %}
+    <div id="id_calendrier"></div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function()
+    {
+        var calendarEl = document.getElementById("id_calendrier");
+
+        var calendar = new FullCalendar.Calendar(calendarEl,
+                                                 {
+                                                    plugins: [ 'dayGrid', 'interaction' ],
+
+                                                    // permet de sélectionner un jour dans le calendrier (nécessite l'utilisation du package 'interaction')
+                                                    selectable: true,
+
+                                                    // permet de basculer la langue en Français
+                                                    locale: 'fr',
+
+                                                    // permet de sélectionner le lundi comme premier jour de la semaine
+                                                    firstDay: 1,
+
+                                                    // modification du header
+                                                    header:
+                                                    {
+                                                        left: 'prev,next today',
+                                                        center: 'title',
+                                                        // permet d'ajouter les boutons qui filtrent l'affichage soit par mois soit par semaine
+                                                        right: 'dayGridMonth,dayGridWeek'
+                                                    },
+
+                                                    // affichage par défaut (ce sera celui du mois)
+                                                    defaultView: 'dayGridMonth',
+
+                                                    select: function(info)
+                                                    {
+                                                        alert('selected ' + info.startStr + ' to ' + info.endStr);
+                                                    }
+                                                 });
+
+        calendar.render();
+    });
+  </script>
+{% endblock %}
