@@ -25,10 +25,10 @@
         <input type="submit" id="bouton_retour_videos_de_l_annee" value="Retour" />
     </form>
 
-    <!-- Images -->
+    <!-- Vidéos -->
     <div id="links" class="links">
     {% for video in liste_des_videos_de_l_evenement_pour_l_annee %}
-        <a href="{{ video.video.url }}" type="video/mp4" data-poster="{{ video.poster_de_la_video.url }}" data-sources="{{ video.video.url }}">
+        <a href="{{ video.fichier.url }}" type="video/mp4" data-poster="{{ video.poster_de_la_video.url }}" data-sources="{{ video.fichier.url }}">
             <img src="{{ video.poster_de_la_video.url }}" style="width:150px;height:150px;" class="image_dossier_video_evenement_annee"/>
         </a>
     {% endfor %}

@@ -20,7 +20,12 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.contrib import admin
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo, Video
+
+from lyre_d_alliez.models import Membre
+from actualites.models import Evenement, Article, Commentaire, Abonnement
+from association.models import ArticleDePresse, Soutien
+from photos.models import Photo
+from videos.models import Video
 
 
 # ==================================================================================================
@@ -216,11 +221,11 @@ class PhotoAdmin(admin.ModelAdmin):
     """
 
     # Configuration de la liste d'articles
-    list_display = ("nom_de_la_photo",
+    list_display = ("nom_du_fichier",
                     "nom_de_l_evenement",
                     "date_de_l_evenement")
 
-    list_filter = ("nom_de_la_photo",
+    list_filter = ("nom_du_fichier",
                    "nom_de_l_evenement",
                    "date_de_l_evenement")
 
@@ -228,7 +233,7 @@ class PhotoAdmin(admin.ModelAdmin):
 
     ordering = ("date_de_l_evenement", )
 
-    search_fields = ("nom_de_la_photo",
+    search_fields = ("nom_du_fichier",
                      "nom_de_l_evenement",
                      "date_de_l_evenement")
 
@@ -240,11 +245,11 @@ class VideoAdmin(admin.ModelAdmin):
     """
 
     # Configuration de la liste d'articles
-    list_display = ("nom_de_la_video",
+    list_display = ("nom_du_fichier",
                     "nom_de_l_evenement",
                     "date_de_l_evenement")
 
-    list_filter = ("nom_de_la_video",
+    list_filter = ("nom_du_fichier",
                    "nom_de_l_evenement",
                    "date_de_l_evenement")
 
@@ -252,7 +257,7 @@ class VideoAdmin(admin.ModelAdmin):
 
     ordering = ("date_de_l_evenement", )
 
-    search_fields = ("nom_de_la_video",
+    search_fields = ("nom_du_fichier",
                      "nom_de_l_evenement",
                      "date_de_l_evenement")
 

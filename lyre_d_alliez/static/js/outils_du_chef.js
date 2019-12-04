@@ -26,12 +26,15 @@ $(function ()
     let sauvegardeFormulaireOutilDuChef = function()
     {
         let form = $(this);
+        let donnees = new FormData(form[0]);
 
         $.ajax(
         {
             url: form.attr("action"),
-            data: form.serialize(),
             type: form.attr("method"),
+            data: donnees,
+            processData: false,
+            contentType: false,
             dataType: 'json',
             success: function (data)
             {

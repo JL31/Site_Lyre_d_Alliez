@@ -76,8 +76,12 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'lyre_d_alliez',
-    # 'bootstrap_modal_forms',
     'widget_tweaks',
+    'actualites',
+    'association',
+    'photos',
+    'videos',
+    'les_outils_du_chef',
 ]
 
 MIDDLEWARE = [

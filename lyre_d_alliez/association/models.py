@@ -1,7 +1,10 @@
+from django.db import models
+
+# Create your models here.
 # coding: utf-8
 
 """
-    Module de gestion des modèles
+    Module de gestion des modèles pour l'application "association"
 """
 
 # =================================================================================================
@@ -11,7 +14,7 @@
 __author__ = 'Julien LEPAIN'
 __version__ = '1.0'
 __maintainer__ = 'Julien LEPAIN'
-__date__ = '10/2019'
+__date__ = '12/2019'
 __status__ = 'dev'
 
 
@@ -20,7 +23,6 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.db import models
-from django.contrib.auth.models import User
 
 from PIL import Image
 
@@ -34,50 +36,68 @@ from PIL import Image
 # ==================================================================================================
 
 
-# =================
-class Membre(User):
+# ==================================
+class ArticleDePresse(models.Model):
     """
-        Classe qui décrit le modèle des membres
+        Classe qui décrit le modèle des articles de presse
     """
-    
-    # liaison avec le modèle User
-    user = models.OneToOneField(User, parent_link=True, unique=True, on_delete=models.CASCADE)
-    
-    avatar = models.ImageField(null=False, blank=False, upload_to="avatars/")
-    description = models.TextField(null=True, blank=True, max_length=500)
-    instruments = models.CharField(null=False, blank=False, max_length=255)
 
-    chant = models.BooleanField(null=False, blank=True, default=False)
-    est_membre = models.BooleanField(null=False, blank=True, default=False)
-    est_membre_du_bureau = models.BooleanField(null=False, blank=True, default=False)
-    est_le_chef = models.BooleanField(null=False, blank=True, default=False)
+    titre = models.CharField(null=False, blank=False, max_length=250)
+    description = models.TextField(null=False, blank=False, max_length=1000)
+    lien_vers_l_article = models.URLField(null=False, blank=False, max_length=750)
 
     # =========
     class Meta:
         """
             Configuration/définition des options de metadonnées du modèle
         """
-        
-        verbose_name = "membre"
-        ordering = ["avatar",
-                    "username",
-                    "first_name",
-                    "email",
+
+        db_table = "article_de_presse"
+        verbose_name = "article_de_presse"
+        ordering = ["titre",
                     "description",
-                    "instruments",
-                    "chant",
-                    "est_membre",
-                    "est_membre_du_bureau",
-                    "est_le_chef"
-                   ]
+                    "lien_vers_l_article"
+                    ]
 
     # ================
     def __str__(self):
         """
             Permet de faciliter la reconnaissance des objets lors de l'administration
         """
-        
-        return self.username
+
+        return self.titre
+
+
+# ==========================
+class Soutien(models.Model):
+    """
+        Classe qui décrit le modèle des soutiens
+    """
+
+    nom = models.CharField(null=False, blank=False, max_length=250)
+    fichier = models.ImageField(null=False, blank=False, upload_to="logos/")
+    site_internet = models.URLField(null=True, blank=True, max_length=750)
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du modèle
+        """
+
+        db_table = "soutien"
+        verbose_name = "soutien"
+        ordering = ["nom",
+                    "fichier",
+                    "site_internet"
+                    ]
+
+    # ================
+    def __str__(self):
+        """
+            Permet de faciliter la reconnaissance des objets lors de l'administration
+        """
+
+        return self.nom
 
     # =============
     def save(self):
@@ -86,15 +106,15 @@ class Membre(User):
             Nécessite au préalable d'importer la classe Image depuis PIL (from PIL import Image)
         """
 
-        if not self.avatar:
+        if not self.fichier:
 
             return
 
-        super(Membre, self).save()
-        image = Image.open(self.avatar)
-        size = (40, 40)
+        super(Soutien, self).save()
+        image = Image.open(self.fichier)
+        size = (150, 150)
         image = image.resize(size, Image.ANTIALIAS)
-        image.save(self.avatar.path)
+        image.save(self.fichier.path)
 
 
 # ==================================================================================================

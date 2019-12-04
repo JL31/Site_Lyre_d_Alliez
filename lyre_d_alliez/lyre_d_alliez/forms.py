@@ -23,12 +23,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from django.forms import Form, CharField, FileField, ClearableFileInput, PasswordInput
+from django.forms import Form, CharField, PasswordInput
 
-from .models import Membre, Evenement, Abonnement, Article, Commentaire, ArticleDePresse, Soutien, Photo, Video
+from lyre_d_alliez.models import Membre
+from actualites.models import Abonnement, Commentaire
+
 from django.forms import MultipleChoiceField, ModelForm, EmailField, DateField, TextInput, DateInput, Textarea
-
-from .settings import DATE_INPUTS_FORMATS
 
 
 # ==================================================================================================
@@ -106,25 +106,6 @@ class MembreForm(UserCreationForm):
         return self.cleaned_data
 
 
-# =============================
-class EvenementForm(ModelForm):
-    """
-        Classe qui permet la création
-        d'un formulaire pour renseigner les champs d'un nouvel évènement
-    """
-
-    date = DateField(required=True, input_formats=DATE_INPUTS_FORMATS)
-
-    # =========
-    class Meta:
-        """
-            Configuration/définition des options de metadonnées du formulaire
-        """
-
-        model = Evenement
-        fields = ("nom", "lieu", "date", "programme")
-
-
 # =======================================
 class AbonnementEvenementForm(ModelForm):
     """
@@ -173,21 +154,6 @@ class AbonnementEvenementForm(ModelForm):
     #     return self.cleaned_data
 
 
-# ===========================
-class ArticleForm(ModelForm):
-    """
-        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouvel article
-    """
-
-    # =========
-    class Meta:
-        """
-            Configuration/définition des options de metadonnées du formulaire
-        """
-
-        model = Article
-        fields = ("image", "titre", "description")
-
 
 # ===============================
 class CommentaireForm(ModelForm):
@@ -214,58 +180,6 @@ class CommentaireForm(ModelForm):
         model = Commentaire
         fields = ("texte", )
         widgets = {"texte": Textarea(attrs={"placeholder": "Rédigez votre commentaire ici"}),}
-
-
-# ===================================
-class ArticleDepresseForm(ModelForm):
-    """
-        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouvel article de presse
-    """
-
-    # ==================================
-    def __init__(self, *args, **kwargs):
-        """
-            Constructeur de la classe
-        """
-
-        # Les deux lignes suivantes permettent de modifier le label du champ "lien_vers_l_article" dans la page
-        super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields["lien_vers_l_article"].label = "Lien vers l'article"
-
-    # =========
-    class Meta:
-        """
-            Configuration/définition des options de metadonnées du formulaire
-        """
-
-        model = ArticleDePresse
-        fields = ("titre", "description", "lien_vers_l_article")
-
-
-# ===========================
-class SoutienForm(ModelForm):
-    """
-        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouvel article de presse
-    """
-
-    # ==================================
-    def __init__(self, *args, **kwargs):
-        """
-            Constructeur de la classe
-        """
-
-        # Les deux lignes suivantes permettent de modifier le label du champ "site_internet" dans la page
-        super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields["site_internet"].label = "Site internet"
-
-    # =========
-    class Meta:
-        """
-            Configuration/définition des options de metadonnées du formulaire
-        """
-
-        model = Soutien
-        fields = ("nom", "logo", "site_internet")
 
 
 # ====================================
@@ -305,66 +219,6 @@ class DemandeDevenirSoutienForm(Form):
 
         return self.cleaned_data
 
-
-# =========================
-class PhotoForm(ModelForm):
-    """
-        Classe qui permet la création d'un formulaire pour uploader une(des) photo(s)
-    """
-
-    photo = FileField(widget=ClearableFileInput(attrs={"multiple": True}))
-    date_de_l_evenement = DateField(required=True, input_formats=DATE_INPUTS_FORMATS)   # utiliser plutôt l'attribut label comme pour AbonnementEvenementForm
-
-    # ==================================
-    def __init__(self, *args, **kwargs):
-        """
-            Constructeur de la classe
-        """
-
-        # Les lignes suivantes permettent de modifier les labels de certains champs dans la page
-        super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields["nom_de_l_evenement"].label = "Nom de l'évènement"
-        self.fields["date_de_l_evenement"].label = "Date de l'évènement"    # utiliser plutôt l'attribut label comme pour AbonnementEvenementForm
-
-    # =========
-    class Meta:
-        """
-            Configuration/définition des options de metadonnées du formulaire
-        """
-
-        model = Photo
-        fields = ("photo", "nom_de_l_evenement", "date_de_l_evenement")
-
-
-# =========================
-class VideoForm(ModelForm):
-    """
-        Classe qui permet la création d'un formulaire pour uploader une(des) vidéo(s)
-    """
-
-    video = FileField(widget=ClearableFileInput(attrs={"multiple": True}))
-    date_de_l_evenement = DateField(required=True, input_formats=DATE_INPUTS_FORMATS)   # utiliser plutôt l'attribut label comme pour AbonnementEvenementForm
-
-    # ==================================
-    def __init__(self, *args, **kwargs):
-        """
-            Constructeur de la classe
-        """
-
-        # Les lignes suivantes permettent de modifier les labels de certains champs dans la page
-        super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields["nom_de_l_evenement"].label = "Nom de l'évènement"
-        self.fields["date_de_l_evenement"].label = "Date de l'évènement"    # utiliser plutôt l'attribut label comme pour AbonnementEvenementForm
-        self.fields["poster_de_la_video"].label = "Poster de la vidéo"  # utiliser plutôt l'attribut label comme pour AbonnementEvenementForm
-
-    # =========
-    class Meta:
-        """
-            Configuration/définition des options de metadonnées du formulaire
-        """
-
-        model = Video
-        fields = ("video", "poster_de_la_video", "nom_de_l_evenement", "date_de_l_evenement")
 
 
 # ===============================

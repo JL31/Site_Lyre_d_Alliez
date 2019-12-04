@@ -1,6 +1,6 @@
 {% load widget_tweaks %}
 
-<form id="formulaire-outils-du-chef" method="post" action="{% url url_pour_action %}" class="{{ classe_pour_envoi_formulaire }}">
+<form id="formulaire-outils-du-chef" method="POST" enctype="multipart/form-data" action="{% url url_pour_action %}" class="{{ classe_pour_envoi_formulaire }}">
     {% csrf_token %}
 
     <!-- header du formulaire -->

@@ -27,7 +27,7 @@
     <div class="contenu_des_soutiens">
     {% for soutien in liste_des_soutiens %}
         <div class="contenu_soutien">
-            <img src="{{ soutien.logo.url }}" class="logo_soutien"/>
+            <img src="{{ soutien.fichier.url }}" class="logo_soutien"/>
             <p class="nom_soutien">{{ soutien.nom }}</p>
             {% if soutien.site_internet %}
                 <a href="{{ soutien.site_internet }}" target="_blank" class="site_internet_soutien">Site internet...</a>

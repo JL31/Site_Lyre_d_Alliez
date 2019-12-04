@@ -439,7 +439,8 @@ strong
 .conteneur_dossiers_photos
 {
     display: flex;
-    flex-direction: row
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
 }
 
@@ -447,6 +448,7 @@ strong
 {
     margin-left: 15px;
     margin-right: 15px;
+    margin-top: 10px;
 }
 
 .image_dossier_photo_annee
@@ -476,7 +478,7 @@ strong
 .conteneur_des_photos_pour_evenements_annee
 {
     display: flex;
-    flex-direction: row
+    flex-direction: row;
     align-items: center;
 }
 
@@ -513,7 +515,8 @@ strong
 .conteneur_dossiers_videos
 {
     display: flex;
-    flex-direction: row
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
 }
 

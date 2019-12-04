@@ -130,6 +130,9 @@ https://stackoverflow.com/questions/29682704/how-to-use-the-user-passes-test-dec
 https://stackoverflow.com/questions/4802482/how-to-send-success-message-if-we-use-django-generic-views
 https://www.w3schools.com/html/tryit.asp?filename=tryhtml_images_style
 
+https://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
+https://stackoverflow.com/questions/5392344/sending-multipart-formdata-with-jquery-ajax
+
 
 # =====================================================================================================================
 # Détail "Vidéos"
@@ -218,11 +221,6 @@ batterie et percussions
 # Membres de test
 # =====================================================================================================================
 
-username : Tutu
-prénom : Toto
-email : a.b@c.fr
-mdp: Pomme2rainette
-
 username : Chef
 prénom : Did
 email : c.d@e.fr
@@ -232,6 +230,11 @@ username : Bob
 prénom : b
 email : b.t@f.fr
 mdp : Bob123456
+
+username : Tutu
+prénom : Toto
+email : a.b@c.fr
+mdp: Pomme2rainette
 
 
 # =====================================================================================================================

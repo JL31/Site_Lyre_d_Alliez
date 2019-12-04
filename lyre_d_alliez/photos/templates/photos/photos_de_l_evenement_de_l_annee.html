@@ -28,8 +28,8 @@
     <!-- Images -->
     <div id="links" class="links">
     {% for photo in liste_des_photos_de_l_evenement_pour_l_annee %}
-        <a href="{{ photo.photo.url }}">
-            <img src="{{ photo.photo.url }}" style="width:150px;height:150px;" class="image_dossier_photo_evenement_annee"/>
+        <a href="{{ photo.fichier.url }}">
+            <img src="{{ photo.fichier.url }}" style="width:150px;height:150px;" class="image_dossier_photo_evenement_annee"/>
         </a>
     {% endfor %}
     </div>
