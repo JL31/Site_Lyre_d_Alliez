@@ -58,7 +58,6 @@ def videos(request):
         :rtype: django.http.response.HttpResponse
     """
 
-    # return render(request, "lire_videos.html")
     liste_des_annees_tmp = Video.objects.order_by("-date_de_l_evenement")
     liste_des_annees = OrderedDict()
 

@@ -64,7 +64,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 LOGIN_REDIRECT_URL = "/accueil/"
-LOGIN_URL = "/acces_interdit/"
+LOGIN_URL = "/acces/acces_interdit/"
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -75,13 +75,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'lyre_d_alliez',
     'widget_tweaks',
+    'lyre_d_alliez',
     'actualites',
     'association',
     'photos',
     'videos',
     'les_outils_du_chef',
+    'acces',
 ]
 
 MIDDLEWARE = [
@@ -181,7 +182,6 @@ MEDIA_URL = "/images.lyredalliez.fr/"
 ADMINS = secret_data.ADMINS
 EMAIL_SUBJECT_PREFIX = "[Site de la Lyre d'Alliez] "
 SERVER_EMAIL = "noreply@lyredalliez.fr"
-# SERVER_EMAIL = secret_data.ADMINS[0][1]
 
 EMAIL_BACKEND = "django_mailjet.backends.MailjetBackend"
 MAILJET_API_KEY = secret_data.MAILJET_API_KEY

@@ -23,7 +23,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from django.forms import Form, CharField, PasswordInput
+from django.forms import Form, CharField
 
 from lyre_d_alliez.models import Membre
 from actualites.models import Abonnement, Commentaire
@@ -154,7 +154,6 @@ class AbonnementEvenementForm(ModelForm):
     #     return self.cleaned_data
 
 
-
 # ===============================
 class CommentaireForm(ModelForm):
     """
@@ -218,25 +217,6 @@ class DemandeDevenirSoutienForm(Form):
             raise ValidationError(message_d_erreur)
 
         return self.cleaned_data
-
-
-
-# ===============================
-class AuthentificationForm(Form):
-    """
-        Classe qui permet la création d'un formulaire pour l'authentification
-    """
-
-    login = CharField(required=True, max_length=250, label="Nom d'utilisateur")
-    mot_de_passe = CharField(required=True, widget=PasswordInput())
-
-    # =========
-    class Meta:
-        """
-            Configuration/définition des options de metadonnées du formulaire
-        """
-
-        fields = ("login", "mot_de_passe")
 
 
 # ==================================================================================================
