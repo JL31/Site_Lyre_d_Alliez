@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    Module de gestion des formulaires de l'application "actualites"
+    Module de gestion des formulaires de l'application "association"
 """
 
 # =================================================================================================
@@ -19,12 +19,9 @@ __status__ = 'dev'
 # IMPORTS
 # ==================================================================================================
 
-from actualites.models import Commentaire
-from django.forms import ModelForm, Textarea, DateField
+from django.forms import ModelForm
 
-from lyre_d_alliez.settings import DATE_INPUTS_FORMATS
-
-from actualites.models import Evenement, Article
+from association.models import ArticleDePresse, Soutien
 
 
 # ==================================================================================================
@@ -35,13 +32,22 @@ from actualites.models import Evenement, Article
 # CLASSES
 # ==================================================================================================
 
-# =============================
-class EvenementForm(ModelForm):
+
+# ===================================
+class ArticleDepresseForm(ModelForm):
     """
-        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouvel évènement
+        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouvel article de presse
     """
 
-    date = DateField(required=True, input_formats=DATE_INPUTS_FORMATS)
+    # ==================================
+    def __init__(self, *args, **kwargs):
+        """
+            Constructeur de la classe
+        """
+
+        # Les deux lignes suivantes permettent de modifier le label du champ "lien_vers_l_article" dans la page
+        super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields["lien_vers_l_article"].label = "Lien vers l'article"
 
     # =========
     class Meta:
@@ -49,14 +55,14 @@ class EvenementForm(ModelForm):
             Configuration/définition des options de metadonnées du formulaire
         """
 
-        model = Evenement
-        fields = ("nom", "lieu", "date", "programme")
+        model = ArticleDePresse
+        fields = ("titre", "description", "lien_vers_l_article")
 
 
 # ===========================
-class ArticleForm(ModelForm):
+class SoutienForm(ModelForm):
     """
-        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouvel article
+        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouvel article de presse
     """
 
     # ==================================
@@ -66,34 +72,9 @@ class ArticleForm(ModelForm):
         """
 
         # Les lignes suivantes permettent de modifier les label d'un champ dans la page
-        super(ArticleForm, self).__init__(*args, **kwargs)
-        self.fields["fichier"].label = "Image"
-
-    # =========
-    class Meta:
-        """
-            Configuration/définition des options de metadonnées du formulaire
-        """
-
-        model = Article
-        fields = ("fichier", "titre", "description")
-
-
-# ===============================
-class CommentaireForm(ModelForm):
-    """
-        Classe qui permet la création d'un formulaire pour renseigner les champs d'un nouveau commentaire
-    """
-
-    # ==================================
-    def __init__(self, *args, **kwargs):
-        """
-            Constructeur de la classe
-        """
-
-        # Les deux lignes suivantes permettent de ne pas afficher le label du champ "texte" dans la page (en réalité le label est vide)
         super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields["texte"].label = ""
+        self.fields["site_internet"].label = "Site internet"
+        self.fields["fichier"].label = "Logo"
 
     # =========
     class Meta:
@@ -101,9 +82,8 @@ class CommentaireForm(ModelForm):
             Configuration/définition des options de metadonnées du formulaire
         """
 
-        model = Commentaire
-        fields = ("texte", )
-        widgets = {"texte": Textarea(attrs={"placeholder": "Rédigez votre commentaire ici"}),}
+        model = Soutien
+        fields = ("nom", "fichier", "site_internet")
 
 
 # ==================================================================================================

@@ -314,6 +314,7 @@ strong
 .conteneur_lien_vers_article_de_presse
 {
     display: flex;
+    margin-top: 10px;
 }
 
 .bordure_gauche_lien_vers_article_de_presse

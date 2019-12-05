@@ -18,11 +18,16 @@ __status__ = 'dev'
 # IMPORTS
 # ==================================================================================================
 
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required, user_passes_test
 
-from lyre_d_alliez.views import personne_autorisee
+from lyre_d_alliez.views import personne_autorisee, acces_restreints_au_chef
+
 from videos.models import Video
+
+from videos.forms import VideoForm
 
 from collections import OrderedDict
 
@@ -124,4 +129,105 @@ def voir_videos_evenement(request, evenement, annee):
     return render(request, "videos/videos_de_l_evenement_de_l_annee.html", {"liste_des_videos_de_l_evenement_pour_l_annee": liste_des_videos_de_l_evenement_pour_l_annee,
                                                                             "evenement": evenement,
                                                                             "annee": annee})
+
+
+# =========================================
+@login_required
+@user_passes_test(acces_restreints_au_chef)
+def creation_formulaire(request, donnees):
+    """
+        Vue qui permet d'afficher le formulaire demandé avec les données passées en argument
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param donnees: données issues de la vue appelant la vue
+        :type donnees: dict
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    data = dict()
+
+    if request.method == "POST":
+
+        if request.FILES:
+
+            for fichier in request.FILES.getlist("fichier"):
+
+                form = donnees["formulaire"](request.POST, request.FILES)
+
+                if form.is_valid():
+
+                    element = form.save(commit=False)
+                    element.nom_du_fichier = fichier.name
+                    element.fichier = fichier
+                    element.save()
+
+                    data["form_is_valid"] = True
+
+                else:
+
+                    data["form_is_valid"] = False
+
+        else:
+
+            form = donnees["formulaire"](request.POST, request.FILES)
+            form.save()
+
+            if form.is_valid():
+
+                data["form_is_valid"] = True
+
+            else:
+
+                data["form_is_valid"] = False
+
+    else:
+
+        form = donnees["formulaire"]()
+
+    context = {"form": form}
+    context.update(donnees)
+    del context["formulaire"]
+
+    data["html_form"] = render_to_string("videos/formulaire_videos.html", context, request=request)
+
+    return JsonResponse(data)
+
+
+# ===================================
+@login_required
+@user_passes_test(personne_autorisee)
+def ajouter_videos(request):
+    """
+        Vue du formulaire permettant l'ajout de vidéos
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    # Définition des valeurs des paramètres du contexte
+    url_pour_action = ajouter_videos.__name__
+    titre_du_formulaire = "Ajout de vidéos"
+    classe_pour_envoi_formulaire = "js-ajouter-videos-creation-formulaire"
+    titre_du_bouton_pour_validation = "Ajouter la(les) vidéo(s)"
+    id_champ_date = "#id_date_de_l_evenement"
+    formulaire = VideoForm
+
+    # Création du contexte
+    donnees = {
+        "url_pour_action": url_pour_action,
+        "titre_du_formulaire": titre_du_formulaire,
+        "classe_pour_envoi_formulaire": classe_pour_envoi_formulaire,
+        "titre_du_bouton_pour_validation": titre_du_bouton_pour_validation,
+        "id_champ_date": id_champ_date,
+        "formulaire": formulaire
+    }
+
+    return creation_formulaire(request, donnees)
 

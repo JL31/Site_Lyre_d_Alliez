@@ -77,12 +77,12 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'widget_tweaks',
     'lyre_d_alliez',
+    'acces',
     'actualites',
     'association',
     'photos',
     'videos',
     'les_outils_du_chef',
-    'acces',
 ]
 
 MIDDLEWARE = [

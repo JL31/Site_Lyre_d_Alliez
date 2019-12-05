@@ -37,7 +37,12 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.urls import path
+
 from les_outils_du_chef.views import *
+from actualites.views import creation_evenement, creation_article
+from association.views import creation_article_de_presse, creation_soutien
+from photos.views import ajouter_photos
+from videos.views import ajouter_videos
 
 
 # ==================================================================================================
