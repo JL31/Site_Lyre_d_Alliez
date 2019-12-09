@@ -61,4 +61,6 @@ urlpatterns = [
     path('calendrier/', calendrier, name='calendrier'),
     path('articles/', liste_des_articles, name='liste_des_articles'),
     re_path(r'^article/(?P<reference_de_l_article>\d+)/$', lire_article, name='lire_article'),
+    re_path(r'^requete_soumission_commentaires/(?P<reference_de_l_article>\d+)/$', requete_soumission_commentaires, name='requete_soumission_commentaires'),
+    re_path(r'^requete_recuperation_commentaires/(?P<reference_de_l_article>\d+)/$', requete_recuperation_commentaires, name='requete_recuperation_commentaires'),
 ]

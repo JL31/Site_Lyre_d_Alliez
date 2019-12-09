@@ -96,6 +96,112 @@ def liste_des_articles(request):
     return render(request, "actualites/liste_des_articles.html", {"liste_des_articles": liste_des_articles})
 
 
+# ====================================================
+def recuperation_commentaires(reference_de_l_article):
+    """
+        Fonction pour la récupération des commentaires de l'article
+
+        :param reference_de_l_article: référence de l'article (sous forme d'id)
+        :type reference_de_l_article: int
+
+        :return: un dictionnaire contenant :
+                 - la liste des commentaires de l'article [django.db.models.query.QuerySet]
+                 - l'article [actualites.models.Article]
+        :rtype: dict
+    """
+
+    # Récupération du contenu de l'article sélectionné
+    # ------------------------------------------------
+
+    article = Article.objects.filter(id=reference_de_l_article)
+
+    # Récupération de la liste des commentaires de l'article sélectionné
+    # ------------------------------------------------------------------
+
+    donnees = dict()
+
+    liste_des_commentaires = None
+    article_obj = None
+
+    if len(article) > 1:
+
+        # à améliorer
+        msg = "Erreur --- vue lire_article --- filtre id : plus d'un article"
+        raise ValueError(msg)
+
+    else:
+
+        for obj in article:
+
+            article_obj = obj
+            liste_des_commentaires = Commentaire.objects.filter(articles=obj).order_by("-date")
+
+    donnees = {"liste_des_commentaires": liste_des_commentaires,
+               "article_obj": article_obj
+              }
+
+    return donnees
+
+
+# =====================================================================
+def requete_recuperation_commentaires(request, reference_de_l_article):
+    """
+        Requête pour la récupération des commentaires de l'article
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param reference_de_l_article: référence de l'article (sous forme d'id)
+        :type reference_de_l_article: int
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    data = dict()
+
+    donnees_commentaires = recuperation_commentaires(reference_de_l_article)
+
+    context = {"liste_des_commentaires": donnees_commentaires["liste_des_commentaires"]}
+    data["html_form"] = render_to_string("actualites/liste_des_commentaires.html", context, request=request)
+
+    return JsonResponse(data)
+
+
+# ===================================================================
+def requete_soumission_commentaires(request, reference_de_l_article):
+    """
+        Requête pour la soumission d'un commentaire pour l'article
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param reference_de_l_article: référence de l'article (sous forme d'id)
+        :type reference_de_l_article: int
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    data = dict()
+
+    donnees_commentaires = recuperation_commentaires(reference_de_l_article)
+
+    if request.method == "POST":
+
+        form = CommentaireForm(request.POST)
+
+        if form.is_valid():
+
+            commentaire = form.save(commit=False)
+            commentaire.date = timezone.now()
+            commentaire.articles = donnees_commentaires["article_obj"]
+            commentaire.redacteur = request.user.membre
+            commentaire.save()
+
+    return JsonResponse(data)
+
+
 # ================================================
 def lire_article(request, reference_de_l_article):
     """
@@ -111,50 +217,28 @@ def lire_article(request, reference_de_l_article):
         :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
     """
 
-    # Récupération du contenu de l'article sélectionné
-    # ------------------------------------------------
-
-    article = Article.objects.filter(id=reference_de_l_article)
-
     # Récupération des commentaires associés à l'article sélectionné
     # --------------------------------------------------------------
 
-    liste_des_commentaires = None
-
-    if len(article) > 1:
-
-        # à améliorer
-        msg = "Erreur --- vue lire_article --- filtre id : plus d'un article"
-        raise ValueError(msg)
-
-    else:
-
-        for obj in article:
-            article = obj
-            liste_des_commentaires = Commentaire.objects.filter(articles=obj).order_by("-date")
+    donnees_commentaires = recuperation_commentaires(reference_de_l_article)
 
     # Gestion du formulaire permettant l'ajout d'un commentaire à l'article sélectionné
     # ---------------------------------------------------------------------------------
 
-    if request.method == "POST":
+    form_commentaires = CommentaireForm()
 
-        form = CommentaireForm(request.POST)
+    contexte = {"article": donnees_commentaires["article_obj"],
+                "liste_des_commentaires": donnees_commentaires["liste_des_commentaires"],
+                "form": form_commentaires,
+                "url_pour_action": requete_soumission_commentaires.__name__,
+                "nom_classe_formulaire": "formulaire-ajout-commentaire",
+                "titre_bouton_envoi": "Envoyer le commentaire",
+                "nom_classe_bouton_envoi": "js-ajout-commentaire",
+                "url_pour_data_url": requete_recuperation_commentaires.__name__,
+                "template_affichage_commentaires": "actualites/liste_des_commentaires.html"
+               }
 
-        if form.is_valid():
-
-            commentaire = form.save(commit=False)
-            commentaire.date = timezone.now()
-            commentaire.articles = article
-            commentaire.redacteur = request.user.membre
-            commentaire.save()
-
-            return HttpResponseRedirect(reverse("lire_article", kwargs={"reference_de_l_article": reference_de_l_article}))
-
-    else:
-
-        form = CommentaireForm()
-
-    return render(request, "actualites/lecture_article.html", {"article": article, "liste_des_commentaires": liste_des_commentaires, "form": form})
+    return render(request, "actualites/lecture_article.html", contexte)
 
 
 # =========================================

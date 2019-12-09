@@ -1,0 +1,12 @@
+{% for commentaire in liste_des_commentaires %}
+    <div class="commentaire">
+        <div class="infos_redacteur">
+            <img src="{{ commentaire.redacteur.avatar.url }}" class="image_commentaire"/>
+            <p class="username_redacteur">{{ commentaire.redacteur.username }}</p>
+        </div>
+        <div class="contenu_commentaire">
+            <p class="texte_commentaire">{{ commentaire.texte }}</p>
+            <p class="date_commentaire">{{ commentaire.date }}</p>
+        </div>
+    </div>
+{% endfor %}

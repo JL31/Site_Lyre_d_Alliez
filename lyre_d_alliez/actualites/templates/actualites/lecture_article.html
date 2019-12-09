@@ -1,9 +1,9 @@
 {% extends "base_etendue.html" %}
 
+{% load static %}
+
 {% block contenu %}
-
     <div class="conteneur_global_de_l_article">
-
         <div class="lecture_article">
 
             <!-- Affichage de l'article sélectionné -->
@@ -17,35 +17,26 @@
             <br />
 
             <!-- Affichage des commentaires associé à l'article sélectionné -->
-            {% for commentaire in liste_des_commentaires %}
-                <div class="commentaire">
-
-                    <div class="infos_redacteur">
-                        <img src="{{ commentaire.redacteur.avatar.url }}" class="image_commentaire"/>
-                        <p class="username_redacteur">{{ commentaire.redacteur.username }}</p>
-                    </div>
-
-                    <div class="contenu_commentaire">
-                        <p class="texte_commentaire">{{ commentaire.texte }}</p>
-                        <p class="date_commentaire">{{ commentaire.date }}</p>
-                    </div>
-
-                </div>
-            {% endfor %}
+            <div id="conteneur_commentaires_article">
+                {% include template_affichage_commentaires %}
+            </div>
 
             <!-- Affichage du formulaire permettant de rajouter des commentaires à l'article sélectionné -->
             {% if user.is_authenticated %}
                 {% if request.user.membre.est_membre or request.user.membre.est_membre_du_bureau or request.user.membre.est_le_chef %}
-                    <form action="{% url 'lire_article' article.id %}" method="POST" class="formulaire_ajout_commentaire">
+                    <form id="formulaire-actualites" class="{{ nom_classe_formulaire }}" method="POST" action="{% url url_pour_action article.id %}">
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <input type="submit" value="Envoyer le commentaire" />
+                        <input type="button" value="{{ titre_bouton_envoi }}" class="{{ nom_classe_bouton_envoi }}" data-url="{% url url_pour_data_url article.id %}"/>
                     </form>
                 {% endif %}
             {% endif %}
 
         </div>
-
     </div>
+{% endblock %}
 
+{% block javascripts %}
+    <!-- Requête AJAX pour l'ajout d'un commentaire -->
+    <script src="{% static 'actualites/js/ajout_d_un_commentaire.js' %}"></script>
 {% endblock %}
