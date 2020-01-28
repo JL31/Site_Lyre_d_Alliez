@@ -3,7 +3,8 @@
 {% load static %}
 
 {% block javascripts %}
-    <script src="{% static 'js/outils_du_chef.js' %}"></script>
+    <!-- Script qui permet d'interagir avec les boutons constituants les outils du chef -->
+    <script src="{% static 'les_outils_du_chef/js/outils_du_chef.js' %}"></script>
 {% endblock %}
 
 {% block contenu %}
@@ -16,7 +17,7 @@
     <div id="conteneur_boutons_outils_du_chef">
     {% for outil in liste_des_outils %}
         <button type="button" class="{{ outil.classe }}" data-url="{% url outil.url %}">
-                {{ outil.nom }}
+            {{ outil.nom }}
         </button>
     {% endfor %}
     </div>
