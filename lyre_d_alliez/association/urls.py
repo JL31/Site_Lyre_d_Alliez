@@ -64,6 +64,6 @@ urlpatterns = [
     path('articles_de_presse/', articles_de_presse, name='articles_de_presse'),
     path('historique_des_concerts/', historique_des_concerts, name='historique_des_concerts'),
     re_path('liste_des_evenements_de_l_annee/(?P<annee>\d{4})/$', liste_des_evenements_de_l_annee, name='liste_des_evenements_de_l_annee'),
-    re_path('voir_programme/(?P<id_evenement>\d*)/(?P<annee>\d{4})/$', voir_programme, name='voir_programme'),
     path('soutiens/', soutiens, name='soutiens'),
+    re_path('affichage_programme/(?P<id_evenement>\d*)', affichage_programme, name='affichage_programme'),
 ]

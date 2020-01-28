@@ -174,8 +174,8 @@ def liste_des_evenements_de_l_annee(request, annee):
     return render(request, "association/evenements_de_l_annee.html", {"annee": annee_int, "liste_des_evenements_de_l_annee": liste_des_evenements_de_l_annee})
 
 
-# ===============================================
-def voir_programme(request, id_evenement, annee):
+# =============================================
+def affichage_programme(request, id_evenement):
     """
         Vue qui permet d'afficher le programme de l'évènement choisi
 
@@ -185,28 +185,52 @@ def voir_programme(request, id_evenement, annee):
         :param id_evenement: identifiant de l'évènement choisi
         :type id_evenement: str
 
-        :param annee: année choisie par le visiteur
-        :type annee: str (converti automatiquement par django lors de l'utilisation d'expression régulières dans les URLs)
-
-        :return: instance
-        :rtype: django.http.response.HttpResponse
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
     """
 
-    evenement_choisi = Evenement.objects.filter(pk=id_evenement)
+    # Définition des valeurs des paramètres du contexte
+    url_pour_action = affichage_programme.__name__
 
-    if len(evenement_choisi) > 1:
+    nom_de_l_evenement = Evenement.objects.get(id=id_evenement)
+    titre = "Programme du {}".format(nom_de_l_evenement)
 
-        # à améliorer
-        msg = "Erreur --- vue abonnement_evenement --- filtre nom : plus d'une personne"
-        raise ValueError(msg)
+    programme = Evenement.objects.get(id=id_evenement).programme
 
-    else:
+    # Création du contexte
+    donnees = {
+               "url_pour_action": url_pour_action,
+               "titre": titre,
+               "programme": programme,
+               "id_evenement ": id_evenement,
+              }
 
-        for obj in evenement_choisi:
+    return recuperation_contenu_du_programme(request, donnees)
 
-            evenement_choisi = obj
 
-    return render(request, "association/voir_programme.html", {"evenement_choisi": evenement_choisi, "annee": annee})
+# ======================================================
+def recuperation_contenu_du_programme(request, donnees):
+    """
+        Vue qui permet de récupérer le contenu du programme à afficher dans la fenêtre Bootstrap
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param donnees: données issues de la vue appelant cette vue
+        :type donnees: dict
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    data = dict()
+
+    context = {}
+    context.update(donnees)
+
+    data["html_form"] = render_to_string("association/formulaire_affichage_programme_evenement.html", context, request=request)
+
+    return JsonResponse(data)
 
 
 # ====================

@@ -408,6 +408,12 @@ strong
 /* Mise en forme des évènements d'une année spécifiée */
 /* -------------------------------------------------- */
 
+.bouton_affichage_programme_evenement
+{
+    padding: 0px;
+    margin-right: 10px;
+}
+
 .conteneur_des_evenements_annee
 {
     display: flex;
@@ -417,6 +423,7 @@ strong
 .conteneur_evenements_annee
 {
     display: flex;
+    flex-direction: row;
     margin-bottom: 0px;
 }
 
@@ -432,6 +439,9 @@ strong
     padding: 5px;
     background-color: RGB(200,200,200);
     width: 65vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .lien_vers_programme_evenement_de_l_annee

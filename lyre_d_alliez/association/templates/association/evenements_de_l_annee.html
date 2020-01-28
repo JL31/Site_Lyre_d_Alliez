@@ -1,6 +1,11 @@
 {% extends "base_etendue.html" %}
 {% load static %}
 
+{% block javascripts %}
+    <!-- Script pour l'affichage du programme de l'évènement sélectionné -->
+    <script src="{% static 'association/affichage_programme_evenement.js' %}"></script>
+{% endblock %}
+
 {% block contenu %}
 <h1>Evènements de l'année {{ annee }}</h1>
 <div>
@@ -14,18 +19,26 @@
 
     <div class="conteneur_des_evenements_annee">
     {% for evenement in liste_des_evenements_de_l_annee %}
-        <a href="{% url 'voir_programme' evenement.pk annee %}" class="lien_vers_programme_evenement_de_l_annee">
+        <button type="button" class="bouton_affichage_programme_evenement js-affichage-programme-evenement" data-url="{% url 'affichage_programme' evenement.pk %}">
             <div class="conteneur_evenements_annee">
-                <p class="bordure_gauche_annee"></p>
-                <p class="description_evenement_annee">
-                    <strong>{{ evenement.nom }}</strong><br />
-                    Lieu : {{ evenement.lieu }}<br />
-                    Date : {{ evenement.date }}
-                </p>
+                <div class="bordure_gauche_annee"></div>
+                <div class="description_evenement_annee">
+                    <div><strong>{{ evenement.nom }}</strong></div>
+                    <div>Lieu : {{ evenement.lieu }}</div>
+                    <div>Date : {{ evenement.date }}</div>
+                </div>
             </div>
-        </a>
+        </button>
     {% endfor %}
     </div>
 
+</div>
+
+<!-- Bootstrap modal -->
+<div class="modal fade" id="modal-afficher-programme-evenement" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -1,0 +1,24 @@
+{% load widget_tweaks %}
+
+<form id="formulaire-affichage-programme-evenement" action="{% url url_pour_action id_evenement %}">
+    {% csrf_token %}
+
+    <!-- header du formulaire -->
+    <div class="modal-header">
+        <h4 class="modal-title">{{ titre }}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <!-- corps du formulaire -->
+    <div class="modal-body">
+        {{ programme | safe }}
+    </div>
+
+    <!-- footer du formulaire -->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+    </div>
+
+</form>
