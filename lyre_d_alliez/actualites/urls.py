@@ -63,4 +63,6 @@ urlpatterns = [
     re_path(r'^article/(?P<reference_de_l_article>\d+)/$', lire_article, name='lire_article'),
     re_path(r'^requete_soumission_commentaires/(?P<reference_de_l_article>\d+)/$', requete_soumission_commentaires, name='requete_soumission_commentaires'),
     re_path(r'^requete_recuperation_commentaires/(?P<reference_de_l_article>\d+)/$', requete_recuperation_commentaires, name='requete_recuperation_commentaires'),
+    re_path(r'^abonnement_evenement/(?P<id_evenement>\d+)/$', abonnement_evenement, name='abonnement_evenement'),
+    path('envoi_alerte_abonne/', envoi_alerte_abonne, name='envoi_alerte_abonne'),
 ]

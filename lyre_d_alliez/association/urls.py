@@ -66,4 +66,5 @@ urlpatterns = [
     re_path('liste_des_evenements_de_l_annee/(?P<annee>\d{4})/$', liste_des_evenements_de_l_annee, name='liste_des_evenements_de_l_annee'),
     path('soutiens/', soutiens, name='soutiens'),
     re_path('affichage_programme/(?P<id_evenement>\d*)', affichage_programme, name='affichage_programme'),
+    path('demande_pour_devenir_soutien/', demande_pour_devenir_soutien, name='demande_pour_devenir_soutien'),
 ]

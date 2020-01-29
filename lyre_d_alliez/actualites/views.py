@@ -18,17 +18,22 @@ __status__ = 'dev'
 # IMPORTS
 # ==================================================================================================
 
-from django.http import HttpResponseRedirect, JsonResponse
-from django.urls import reverse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.utils import timezone
 from django.shortcuts import render
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.template.loader import render_to_string
+from django.urls import reverse
 
-from lyre_d_alliez.views import acces_restreints_au_chef
+from lyre_d_alliez.views import acces_restreints_au_chef, envoi_mail
 
-from actualites.forms import EvenementForm, ArticleForm, CommentaireForm
-from actualites.models import Evenement, Article, Commentaire
+from actualites.forms import EvenementForm, ArticleForm, CommentaireForm, AbonnementEvenementForm
+
+from actualites.models import Evenement, Article, Commentaire, Abonnement
+
+from locale import setlocale, LC_TIME
+from datetime import datetime
 
 
 # ==================================================================================================
@@ -62,6 +67,106 @@ def agenda(request):
     liste_des_evenements = Evenement.objects.all()
 
     return render(request, "actualites/agenda.html", {"liste_des_evenements": liste_des_evenements})
+
+
+# ==============================================
+def abonnement_evenement(request, id_evenement):
+    """
+        Vue pour la gestion d'un abonnement à un évènement
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param id_evenement: id de l'évènement
+        :type id_evenement: str (int onverti automatiquement par django lors de l'utilisation d'expression régulières dans les URLs)
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    data = dict()
+
+    id_evenement_int = int(id_evenement)
+
+    if request.method == "POST":
+
+        form = AbonnementEvenementForm(request.POST)
+
+        if form.is_valid():
+
+            evenement = Evenement.objects.filter(id=id_evenement_int)
+
+            if len(evenement) > 1:
+
+                # à améliorer
+                msg = "Erreur --- vue abonnement_evenement --- filtre nom : plus d'une personne"
+                raise ValueError(msg)
+
+            else:
+
+                # mettre en place un système pour éviter les doublons
+                # quid si un même visiteur souhaite programmer deux alertes à la même date ?
+
+                adresse_mail_abonne = form.cleaned_data.get("adresse_email")
+                date_de_l_alerte = form.cleaned_data.get("date_envoi_alerte")
+
+                setlocale(LC_TIME, "fr-FR")  # permet d'obtenir la date au format local (ici Fr)
+
+                abonnement = Abonnement(adresse_mail_abonne=adresse_mail_abonne, date_de_l_alerte=date_de_l_alerte)
+                abonnement.save()
+
+                for obj in evenement:
+
+                    abonnement.evenement = obj
+                    abonnement.save()
+                    msg = "Votre demande d'abonnement a bien été prise en compte. Vous recevrez un email pour vous alerter le {} à l'adresse suivante : {}".format(date_de_l_alerte.strftime("%A %d %B %Y"), adresse_mail_abonne)
+                    messages.info(request, msg)
+
+            data["form_is_valid"] = True
+
+        else:
+
+            data["form_is_valid"] = False
+
+    else:
+
+            form = AbonnementEvenementForm()
+
+    context = {"form": form, "id_evenement": id_evenement}
+    data["html_form"] = render_to_string("actualites/formulaire_abonnement_evenement.html", context, request=request)
+
+    return JsonResponse(data)
+
+
+# ===============================
+def envoi_alerte_abonne(request):
+    """
+        Vue pour la gestion de l'envoi d'une alerte à un abonné concernant un évènement
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    liste_des_evenements = Evenement.objects.all()
+
+    for evenement in liste_des_evenements:
+
+        liste_des_abonnes = evenement.abonnements.all()
+
+        for abonne in liste_des_abonnes:
+
+            if abonne.date_de_l_alerte.strftime("%Y-%m-%d") == datetime.now().strftime("%Y-%m-%d"):
+                sujet = " Rappel "
+                message = ("La Lyre d'Alliez vous rappelle que le {{ evenement.nom }} aura lieu à {{ evenement.lieu }} le {{ evenement.date }}<br />"
+                           "Ceci est un message automatique envoyé à {{ abonne.adresse_mail_abonne }}")
+                msg_erreur = "Problème lors de l'envoi d'une alerte mail à un abonné"
+
+                envoi_mail(sujet=sujet, message=message, msg_erreur=msg_erreur)
+
+    return HttpResponseRedirect(reverse("accueil"))
 
 
 # ======================

@@ -21,12 +21,13 @@ __status__ = 'dev'
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 
-from lyre_d_alliez.views import acces_restreints_au_chef
+from lyre_d_alliez.views import acces_restreints_au_chef, envoi_mail_bis
 
 from lyre_d_alliez.forms import LISTE_DES_INSTRUMENTS
-from association.forms import ArticleDepresseForm, SoutienForm
+from association.forms import ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm
 
 from lyre_d_alliez.models import Membre
 from actualites.models import Evenement
@@ -248,6 +249,138 @@ def soutiens(request):
     liste_des_soutiens = Soutien.objects.all()
 
     return render(request, "association/soutiens.html", {"liste_des_soutiens": liste_des_soutiens})
+
+
+# ========================================
+def demande_pour_devenir_soutien(request):
+    """
+        Vue du formulaire permettant la demande pour devenir un soutien de l'asso
+
+        :param request: instance de HttpRequest ou de HttpResponseRedirect
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    # Définition des valeurs des paramètres du contexte
+    url_pour_action = demande_pour_devenir_soutien.__name__
+    titre_du_formulaire = "Demande pour devenir soutien de la Lyre d'Alliez"
+    classe_pour_envoi_formulaire = "js-demande-pour-devenir-soutien-creation-formulaire"
+    titre_du_bouton_pour_validation = "Envoyer la demande"
+    id_champ_date = ""
+    formulaire = DemandeDevenirSoutienForm
+
+    # Création du contexte
+    donnees = {
+               "url_pour_action": url_pour_action,
+               "titre_du_formulaire": titre_du_formulaire,
+               "classe_pour_envoi_formulaire": classe_pour_envoi_formulaire,
+               "titre_du_bouton_pour_validation": titre_du_bouton_pour_validation,
+               "id_champ_date": id_champ_date,
+               "formulaire": formulaire
+              }
+
+    return creation_formulaire_demande_pour_devenir_soutien(request, donnees)
+
+
+# =====================================================================
+def creation_formulaire_demande_pour_devenir_soutien(request, donnees):
+    """
+        Vue qui permet d'afficher le formulaire demandé avec les données passées en argument
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param donnees: données issues de la vue appelant la vue
+        :type donnees: dict
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    data = dict()
+
+    if request.method == "POST":
+
+        form = donnees["formulaire"](request.POST)
+
+        if form.is_valid():
+
+            # récupération des données du formulaire
+            nom = form.cleaned_data["nom"]
+            prenom = form.cleaned_data["prenom"]
+            societe = form.cleaned_data["societe"]
+            adresse_email = form.cleaned_data["adresse_email"]
+            numero_de_telephone = form.cleaned_data["numero_de_telephone"]
+            message = form.cleaned_data["message"]
+
+            # définition du sujet du mail
+            sujet = "Demande pour devenir soutien de l'asso"
+
+            # définition des coordonnées de la personne qui envoie la demande de soutien
+            # améliorable avec la version 3.6 et le formatted string literal
+            coordonnees = ""
+
+            if adresse_email != "" and numero_de_telephone == "":
+
+                coordonnees = "adresse email : {}".format(adresse_email)
+
+            elif adresse_email == "" and numero_de_telephone != "":
+
+                coordonnees = "numéro de téléphone : {}".format(numero_de_telephone)
+
+            elif adresse_email != "" and numero_de_telephone != "":
+
+                coordonnees = "adresse email : {}\nnuméro de téléphone : {}".format(adresse_email, numero_de_telephone)
+
+            # définition du début du message (selon si un nom de société a été renseigné ou non)
+            if societe != "":
+
+                debut_message = ("La société {} souhaite devenir soutien de l'association.\n"
+                                 "La personne a contacter est {} {},").format(societe, prenom, nom)
+
+            else:
+
+                debut_message = "{} {} souhaite devenir soutien de l'association,".format(prenom, nom)
+
+            # définition du message à envoyer
+            message_a_envoyer = ("{} ses coordonnées sont :\n\n"
+                                 "{}\n\n"
+                                 "Voici son message :\n\n"
+                                 "{}").format(debut_message, coordonnees, message)
+
+            message_d_erreur = "Problème lors de l'envoi d'un mail de demande pour devenir soutien de l'asso"
+
+            # envoi d'un mail contenant les données définies précédemment
+            dico_des_donnees = {
+                                "sujet": sujet,
+                                "message": message_a_envoyer,
+                                "message_d_erreur": message_d_erreur
+                               }
+
+            envoi_mail_bis(dico_des_donnees)
+
+            data["form_is_valid"] = True
+
+            msg = "La demande a été envoyée"
+            messages.info(request, msg)
+
+        else:
+
+            data["form_is_valid"] = False
+
+    else:
+
+        form = donnees["formulaire"]()
+
+    context = {"form": form}
+    context.update(donnees)
+    del context["formulaire"]
+
+    data["html_form"] = render_to_string("association/formulaire_demande_devenir_soutien.html", context, request=request)
+
+    return JsonResponse(data)
 
 
 # =========================================

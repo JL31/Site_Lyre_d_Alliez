@@ -39,7 +39,7 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.contrib import admin
-from django.urls import path, re_path, include
+from django.urls import path, include
 from .views import *
 
 # Pour la gestion des images (en dév)
@@ -88,10 +88,6 @@ urlpatterns = [
 
     # Autres
     path('creation_profil_membre/', creation_profil_membre, name='creation_profil_membre'),
-    re_path(r'^abonnement_evenement/(?P<id_evenement>\d+)/$', abonnement_evenement, name='abonnement_evenement'),
-    path('envoi_alerte_abonne/', envoi_alerte_abonne, name='envoi_alerte_abonne'),
-
-    path('demande_pour_devenir_soutien/', demande_pour_devenir_soutien, name='demande_pour_devenir_soutien'),
 
     # Connexion / déconnexion
     path('acces/', include('acces.urls')),

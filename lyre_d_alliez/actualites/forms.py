@@ -20,11 +20,12 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from actualites.models import Commentaire
-from django.forms import ModelForm, Textarea, DateField
 
 from lyre_d_alliez.settings import DATE_INPUTS_FORMATS
 
-from actualites.models import Evenement, Article
+from actualites.models import Evenement, Article, Abonnement
+
+from django.forms import ModelForm, EmailField, DateField, TextInput, DateInput, Textarea
 
 
 # ==================================================================================================
@@ -51,6 +52,54 @@ class EvenementForm(ModelForm):
 
         model = Evenement
         fields = ("nom", "lieu", "date", "programme")
+
+
+# =======================================
+class AbonnementEvenementForm(ModelForm):
+    """
+        Classe qui permet la création d'un formulaire pour l'abonnement à un évènement
+    """
+
+    adresse_email = EmailField(label="Indiquez votre adresse email", required=True)
+    confirmation_adresse_email = EmailField(label="Confirmez votre adresse email", required=True)
+    date_envoi_alerte = DateField(label="Date d'envoi de l'alerte")
+
+    # =========
+    class Meta:
+        """
+            Configuration/définition des options de metadonnées du formulaire
+        """
+
+        model = Abonnement
+
+        fields = ("adresse_email",
+                  "confirmation_adresse_email",
+                  "date_envoi_alerte")
+
+        widgets = {'adresse_email': TextInput(attrs={'type': 'email', 'placeholder': 'exemple: jean.dupont@test.fr'}),
+                   'confirmation_adresse_email': TextInput(attrs={'type': 'email', 'placeholder': 'exemple: jean.dupont@test.fr'}),
+                   'date_envoi_alerte': DateInput(format='%d-%m-%Y',
+                                                  attrs={'class': 'myDateClass', 'placeholder': 'Choisissez une date', 'required': True})
+                  }
+
+        # # ==============
+        # def clean(self):
+        #     """
+        #         Surcharge de la méthode clean
+        #
+        #         :return: les données nettoyées
+        #         :rtype: dict
+        #     """
+        #
+        #     adresse_email = self.cleaned_data.get("adresse_email")
+        #     confirmation_adresse_email = self.cleaned_data.get("confirmation_adresse_email")
+        #
+        #     if adresse_email != confirmation_adresse_email:
+        #
+        #         message_d_erreur = "Les deux adresses mail ne sont pas identiques, merci de corriger votre saisie"
+        #         raise ValidationError(message_d_erreur)
+        #
+        #     return self.cleaned_data
 
 
 # ===========================
