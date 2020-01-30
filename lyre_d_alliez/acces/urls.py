@@ -61,4 +61,5 @@ urlpatterns = [
     path('verification_login/', verification_login, name="verification_login"),
     path('deconnexion/', deconnexion, name='deconnexion'),
     path('acces_interdit/', acces_interdit, name='acces_interdit'),
+    path('changement_du_mot_de_passe/', changement_du_mot_de_passe, name='changement_du_mot_de_passe'),
 ]

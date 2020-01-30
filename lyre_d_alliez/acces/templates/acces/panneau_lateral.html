@@ -9,7 +9,7 @@
 
             <div class="modal-body panneau-lateral">
                 <button type="button" class="btn" data-toggle="modal" id="bouton_information_personnelles" data-url="">Mes informations personnelles</button>
-                <button type="button" class="btn" data-toggle="modal" id="bouton_changement_mot_de_passe" data-url="">Changer mon mot de passe</button>
+                <a href="{% url 'changement_du_mot_de_passe' %}"><button type="button" class="btn" data-toggle="modal" id="bouton_changement_mot_de_passe">Changer mon mot de passe</button> </a>
                 <hr />
                 <button type="button" class="btn" data-toggle="modal" id="bouton_deconnexion" data-url="{% url 'deconnexion' %}">Se déconnecter</button>
             </div>

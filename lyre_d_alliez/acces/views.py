@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-        Module de gestion des vues pour l'application "acces"
+    Module de gestion des vues pour l'application "acces"
 """
 
 # =================================================================================================
@@ -18,12 +18,16 @@ __status__ = 'dev'
 # IMPORTS
 # ==================================================================================================
 
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse
 from django.urls import reverse
 from django.template.loader import render_to_string
+from django.shortcuts import render, redirect
+
+from lyre_d_alliez.views import personne_autorisee
 
 from lyre_d_alliez.models import Membre
 
@@ -197,4 +201,43 @@ def acces_interdit(request):
     """
 
     return render(request, "acces/acces_interdit.html")
+
+
+# ======================================
+@login_required
+@user_passes_test(personne_autorisee)
+def changement_du_mot_de_passe(request):
+    """
+        Vue permettant la modification du mot de passe d'un membre
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    url_pour_redirection = 'accueil'
+    option_modification = 'deconnexion'
+
+    if request.method == 'POST':
+
+        form = PasswordChangeForm(request.user, request.POST)
+
+        if form.is_valid():
+
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Votre mot de passe a bien été mis-à-jour')
+
+            return redirect(url_pour_redirection)
+
+    else:
+
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'acces/modification_donnees_membre.html', {'form': form,
+                                                                      'url_pour_redirection': url_pour_redirection,
+                                                                      'option_modification': option_modification
+                                                                     })
 

@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr" id="html_modification_donnees_membre">
+    <head>
+       <meta charset="utf-8" />
+       <title>Modification des données d'un membre du site</title>
+
+        <!-- Feuilles de style -->
+        <!-- ----------------- -->
+
+        <!-- feuille de style Bootstrap -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+        <!-- feuille de style globale -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/overall_style.css' %}" />
+    </head>
+
+    <body id="body_modification_donnees_membre">
+        <div id="conteneur_global_modification_donnees_membre">
+            <div id="titre_modification_donnees_membre">
+                <h1 id="titre_principal_modification_donnees_membre">Site de la Lyre d'Alliez</h1>
+                <h3 id="sous_titre_modification_donnees_membre">Modification des données d'un membre du site</h3>
+            </div>
+            <div id="conteneur_modification_donnees_membre">
+                <div id="contenu_partie_remplie">
+                    {% if option_modification == 'deconnexion' %}
+                        {% include "acces/changement_du_mot_de_passe.html" %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Scripts Javascript -->
+        <!-- ------------------ -->
+
+        <!-- jQuery -->
+        <script src="{% static 'js/jquery.js' %}"></script>
+
+        <!-- Bootstrap -->
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+        <!-- Script pour gérer la déconnexion -->
+        <script src="{% static 'acces/js/modification_donnees_membres.js' %}"></script>
+
+    </body>
+</html>

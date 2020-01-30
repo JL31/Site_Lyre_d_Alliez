@@ -646,20 +646,20 @@ hr
 /* Mise en forme de la page de l'accès interdit */
 /* -------------------------------------------- */
 
-#body_acces_interdit
+#body_acces_interdit, #body_modification_donnees_membre
 {
     min-height: 100vh;
     margin: 0px;
     padding: 0px;
 }
 
-#titre_acces_interdit
+#titre_acces_interdit, #titre_modification_donnees_membre
 {
     background-color: RGB(216,125,52);
     padding: 10px;
 }
 
-#conteneur_acces_interdit
+#conteneur_acces_interdit, #conteneur_modification_donnees_membre
 {
     min-height: 100vh;
     display: flex;
@@ -673,6 +673,33 @@ hr
     width: 66%;
     background-color: white;
     padding-left: 10px;
+}
+
+#titre_principal_modification_donnees_membre
+{
+    margin-bottom: 0px;
+}
+
+#sous_titre_modification_donnees_membre
+{
+    margin-top: 0px;
+    font-weight: normal;
+}
+
+#titre_modification_mot_de_passe
+{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+label
+{
+    width: 19em;
+}
+
+#boutons_actions
+{
+    margin-top: 10px;
 }
 
 /* Mise en forme du calendrier */
