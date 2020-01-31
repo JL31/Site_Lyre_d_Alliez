@@ -183,6 +183,8 @@ ADMINS = secret_data.ADMINS
 EMAIL_SUBJECT_PREFIX = "[Site de la Lyre d'Alliez] "
 SERVER_EMAIL = "noreply@lyredalliez.fr"
 
-EMAIL_BACKEND = "django_mailjet.backends.MailjetBackend"
-MAILJET_API_KEY = secret_data.MAILJET_API_KEY
-MAILJET_API_SECRET = secret_data.MAILJET_API_SECRET
+# EMAIL_BACKEND = "django_mailjet.backends.MailjetBackend"
+# MAILJET_API_KEY = secret_data.MAILJET_API_KEY
+# MAILJET_API_SECRET = secret_data.MAILJET_API_SECRET
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"    # pour tester la réinitialisation du mot de passe
