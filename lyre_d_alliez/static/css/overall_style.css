@@ -27,7 +27,7 @@ header
     text-decoration: none;
 }
 
-#avatar_membre
+#avatar_membre, #avatar_admin
 {
     border-radius: 20px;
 }
@@ -637,7 +637,7 @@ hr
     border: none;
 }
 
-#bouton_information_personnelles:hover, #bouton_changement_mot_de_passe:hover, #bouton_deconnexion:hover
+#bouton_information_personnelles:hover, #bouton_changement_mot_de_passe:hover, #bouton_suppression_du_compte:hover,#bouton_deconnexion:hover
 {
     border: 1px solid black;
 }

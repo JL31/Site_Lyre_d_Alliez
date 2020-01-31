@@ -241,3 +241,38 @@ def changement_du_mot_de_passe(request):
                                                                       'option_modification': option_modification
                                                                      })
 
+
+# ===================================
+@login_required
+@user_passes_test(personne_autorisee)
+def supprimer_le_compte(request):
+    """
+        Vue permettant la suppression du profil d'un membre
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    url_pour_redirection = 'accueil'
+
+    try:
+
+        membre = Membre.objects.get(pk=request.user.pk)
+        membre.delete()
+        messages.success(request, "Votre profil a bien été supprimé")
+
+    except Membre.DoesNotExist:
+
+        messages.error(request, "Ce membre n'existe pas")
+        return redirect(url_pour_redirection)
+
+    except Exception as e:
+
+        messages.error(request, "Une erreur inattendue s'est produite : {}".format(e.message))
+        return redirect(url_pour_redirection)
+
+    return redirect(url_pour_redirection)
+

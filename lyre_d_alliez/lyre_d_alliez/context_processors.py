@@ -1,24 +1,7 @@
 # coding: utf-8
 
 """
-    acces URL Configuration
-
-    The `urlpatterns` list routes URLs to views. For more information please see:
-        https://docs.djangoproject.com/en/2.1/topics/http/urls/
-
-    Examples:
-
-    Function views
-        1. Add an import:  from my_app import views
-        2. Add a URL to urlpatterns:  path('', views.home, name='home')
-
-    Class-based views
-        1. Add an import:  from other_app.views import Home
-        2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-
-    Including another URLconf
-        1. Import the include() function: from django.urls import include, path
-        2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+    Module qui contient des données que l'on pourra afficher dans tous les templates
 """
 
 # =================================================================================================
@@ -28,7 +11,7 @@
 __author__ = 'Julien LEPAIN'
 __version__ = '1.0'
 __maintainer__ = 'Julien LEPAIN'
-__date__ = '12/2019'
+__date__ = '01/2020'
 __status__ = 'dev'
 
 
@@ -36,9 +19,7 @@ __status__ = 'dev'
 # IMPORTS
 # ==================================================================================================
 
-from django.urls import path
-from acces.views import *
-
+from lyre_d_alliez import secret_data
 
 # ==================================================================================================
 # INITIALISATIONS
@@ -49,18 +30,25 @@ from acces.views import *
 # ==================================================================================================
 
 # ==================================================================================================
-# FUNCTIONS
+# FONCTIONS
 # ==================================================================================================
+
+
+# ==========================
+def admin_username(request):
+    """
+        Fonction permettant d'accéder, dans tous les templates, à la variable "ADMIN_USERNAME" du fichier "secret_data.py"
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: a dictionary containing the "ADMIN_USERNAME" value
+        :rtype: dict
+    """
+
+    return {"ADMIN_USERNAME": secret_data.ADMIN_USERNAME}
+
 
 # ==================================================================================================
 # UTILISATION
 # ==================================================================================================
-
-urlpatterns = [
-    path('authentification/', authentification, name='authentification'),
-    path('verification_login/', verification_login, name="verification_login"),
-    path('deconnexion/', deconnexion, name='deconnexion'),
-    path('acces_interdit/', acces_interdit, name='acces_interdit'),
-    path('changement_du_mot_de_passe/', changement_du_mot_de_passe, name='changement_du_mot_de_passe'),
-    path('supprimer_le_compte/', supprimer_le_compte, name='supprimer_le_compte'),
-]

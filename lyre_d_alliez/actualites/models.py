@@ -142,7 +142,7 @@ class Commentaire(models.Model):
     texte = models.TextField(null=True, blank=False, max_length=5000)
     date = models.DateTimeField(default=timezone.now)
     articles = models.ForeignKey(Article, on_delete=models.SET_NULL, null=True, related_name="commentaire_articles")
-    redacteur = models.ForeignKey(Membre, on_delete=models.SET_NULL, null=True, related_name="commentaire_redacteur")
+    redacteur = models.ForeignKey(Membre, on_delete=models.CASCADE, null=True, related_name="commentaire_redacteur")
 
     # =========
     class Meta:

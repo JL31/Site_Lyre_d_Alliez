@@ -1,11 +1,20 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block authentification %}
 
     {% if user.is_authenticated %}
         <div>
             <button type="button" class="btn" data-toggle="modal" data-target="#id_panneau_lateral">
-                <img src="{{ request.user.membre.avatar.url }}" id="avatar_membre"/>
+                <!-- Partie à supprimer en prod ? (début) -->
+                {% if user.username == ADMIN_USERNAME %}
+                    <img src="{% static 'img/ADMIN.jpg' %}" id="avatar_admin"/>
+                {% else %}
+                    <img src="{{ request.user.membre.avatar.url }}" id="avatar_membre"/>
+                {% endif %}
+                <!-- Partie à supprimer en prod ? (fin) -->
+                <!-- {# <img src="{{ request.user.membre.avatar.url }}" id="avatar_membre"/> #} -->
             </button>
         </div>
         
