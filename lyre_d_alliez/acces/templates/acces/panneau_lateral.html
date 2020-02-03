@@ -8,7 +8,7 @@
             </div>
 
             <div class="modal-body panneau-lateral">
-                <button type="button" class="btn" data-toggle="modal" id="bouton_information_personnelles" data-url="">Mes informations personnelles</button>
+                <a href="{% url 'donnees_personnelles' %}"><button type="button" class="btn" data-toggle="modal" id="bouton_information_personnelles" data-url="">Mes informations personnelles</button></a>
                 <a href="{% url 'changement_du_mot_de_passe' %}"><button type="button" class="btn" data-toggle="modal" id="bouton_changement_mot_de_passe">Changer mon mot de passe</button> </a>
                 <a href="{% url 'supprimer_le_compte' %}"><button type="button" class="btn" data-toggle="modal" id="bouton_suppression_du_compte">Supprimer mon compte</button> </a>
                 <hr />

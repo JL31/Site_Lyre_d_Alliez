@@ -96,6 +96,32 @@ class Membre(User):
         image = image.resize(size, Image.ANTIALIAS)
         image.save(self.avatar.path)
 
+    # ================================
+    def get_instruments_as_list(self):
+        """
+            Permet de retourner la liste des instrument
+
+            :return: la liste des instruments
+            :rtype: list[str]
+        """
+
+        liste_temporaire = self.instruments.replace('[', '').replace(']', '')
+        liste_temporaire = liste_temporaire.split(',')
+        liste_temporaire = [ element.strip() for element in liste_temporaire ]
+        return liste_temporaire
+
+    # =================================
+    def get_nombre_d_instruments(self):
+        """
+            Permet de retourner le nombre d'instruments
+
+            :return: le nombre d'instruments
+            :rtype: int
+        """
+
+        liste_temporaire = self.get_instruments_as_list()
+        return len(liste_temporaire)
+
 
 # ==================================================================================================
 # FUNCTIONS

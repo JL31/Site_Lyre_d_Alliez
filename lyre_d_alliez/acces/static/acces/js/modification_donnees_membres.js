@@ -3,7 +3,7 @@ $(function ()
     /* Fonctions */
     /* --------- */
 
-    let annulerModificationMotDePasse = function()
+    let retourAccueil = function()
     {
         let btn = $(this);
         let url_pour_redirection = btn.attr("url_pour_redirection");
@@ -14,5 +14,6 @@ $(function ()
     /* Liens */
     /* ----- */
 
-    $("#bouton_annuler_changement_mot_de_passe").click(annulerModificationMotDePasse);
+    $("#bouton_annuler_changement_mot_de_passe").click(retourAccueil);
+    $("#bouton_retour_accueil").click(retourAccueil);
 });

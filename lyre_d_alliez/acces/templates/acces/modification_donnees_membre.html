@@ -26,8 +26,8 @@
                 <div id="contenu_partie_remplie">
                     {% if option_modification == 'deconnexion' %}
                         {% include "acces/changement_du_mot_de_passe.html" %}
-                    {% else %}
-                        {% block contenu %}{% endblock %}
+                    {% elif option_modification == 'consultation_et_modification' %}
+                        {% include "acces/consultation_et_modification.html" %}
                     {% endif %}
                 </div>
             </div>

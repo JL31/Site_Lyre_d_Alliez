@@ -236,6 +236,11 @@ prénom : Toto
 email : a.b@c.fr
 mdp: Pomme2rainette
 
+username : Cor
+prénom : Nichon
+email : cor.nichon@c.fr
+mdp: Cor123456
+
 
 # =====================================================================================================================
 # Notes ré-inint database

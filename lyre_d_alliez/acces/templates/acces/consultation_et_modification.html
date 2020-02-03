@@ -1,0 +1,91 @@
+{% load static %}
+
+<h2 id="titre_consultation_modification_donnees_personnelles">Consultation/modification de vos données personnelles</h2>
+
+<br/>
+<div id="conteneur_consultation_modification_donnees_personnelles">
+
+    <div class="conteneur_element_consultation_modification_donnees_personnelles">
+        <div class="label_element_consultation_modification_donnees_personnelles">Avatar</div>
+        <div>
+            <img src="{{ request.user.membre.avatar.url }}" id="avatar_membre_consultation_modification_donnees_personnelles"/>
+        </div>
+    </div>
+
+    <div class="conteneur_element_consultation_modification_donnees_personnelles">
+        <div class="label_element_consultation_modification_donnees_personnelles">
+            Nom d'utilisateur
+        </div>
+        <div class="valeur_element_consultation_modification_donnees_personnelles">
+            {{ request.user.membre.username }}
+        </div>
+    </div>
+
+    <div class="conteneur_element_consultation_modification_donnees_personnelles">
+        <div class="label_element_consultation_modification_donnees_personnelles">
+            Prénom
+        </div>
+        <div class="valeur_element_consultation_modification_donnees_personnelles">
+            {{ request.user.membre.first_name }}
+        </div>
+    </div>
+
+    <div class="conteneur_element_consultation_modification_donnees_personnelles">
+        <div class="label_element_consultation_modification_donnees_personnelles">
+            Adresse électronique
+        </div>
+        <div class="valeur_element_consultation_modification_donnees_personnelles">
+            {{ request.user.membre.email }}
+        </div>
+    </div>
+
+    <div class="conteneur_element_consultation_modification_donnees_personnelles">
+        <div class="label_element_consultation_modification_donnees_personnelles">
+            Description
+        </div>
+        <div class="valeur_element_consultation_modification_donnees_personnelles">
+            {% if request.user.membre.description %}
+                <br/>{{ request.user.membre.description }}
+            {% else %}
+                pas de description
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="conteneur_element_consultation_modification_donnees_personnelles">
+        <div class="label_element_consultation_modification_donnees_personnelles">
+            Instruments
+        </div>
+        <div class="valeur_element_consultation_modification_donnees_personnelles">
+            {% if request.user.membre.get_nombre_d_instruments > 1 %}
+            <ul class="tirets">
+                {% for instrument in request.user.membre.get_instruments_as_list %}
+                    <li>{{ instrument|slice:"1:-1" }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                {% for instrument in request.user.membre.get_instruments_as_list %}
+                    {{ instrument|slice:"1:-1" }}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="conteneur_element_consultation_modification_donnees_personnelles">
+        <div class="label_element_consultation_modification_donnees_personnelles">
+            Chanteur(euse)
+        </div>
+        <div class="valeur_element_consultation_modification_donnees_personnelles">
+            {% if request.user.membre.chant %}
+                oui
+            {% else %}
+                non
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="conteneur_element_consultation_modification_donnees_personnelles">
+        <button id="bouton_retour_accueil" type="button" class="btn btn-info" url_pour_redirection="{% url url_pour_redirection %}">Retour à l'accueil du site</button>
+    </div>
+
+</div>

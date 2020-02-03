@@ -48,6 +48,92 @@ header
     text-decoration: none;
 }
 
+/* Mise en forme de la partie concernant la consultation/modification des données personnelles */
+/* ------------------------------------------------------------------------------------------- */
+
+#titre_consultation_modification_donnees_personnelles
+{
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+#avatar_membre_consultation_modification_donnees_personnelles
+{
+    border-radius: 20px;
+    border: 1px solid black;
+}
+
+#conteneur_consultation_modification_donnees_personnelles
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.conteneur_element_consultation_modification_donnees_personnelles
+{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.label_element_consultation_modification_donnees_personnelles
+{
+    width: 10em;
+
+    border-radius: 5px;
+
+    margin-right: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+
+    display: flex;
+    align-items: center;
+}
+
+.valeur_element_consultation_modification_donnees_personnelles
+{
+    width: 20em;
+
+    border: 1px solid RGB(204,204,204);
+    border-radius: 5px;
+
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 3px;
+
+    display: flex;
+    align-items: center;
+}
+
+.valeur_element_consultation_modification_donnees_personnelles ul
+{
+    padding-left: 15px;
+    margin: 0px;
+}
+
+ul.tirets
+{
+    list-style-type: none;
+}
+
+ul.tirets > li
+{
+    text-indent: -15px;
+}
+
+ul.tirets > li:before
+{
+    content: "- ";
+}
+
+#bouton_retour_accueil
+{
+    margin-top: 10px;
+    color: black;
+}
 
 /* Mise en forme du body */
 /* --------------------- */

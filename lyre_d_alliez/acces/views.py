@@ -276,3 +276,26 @@ def supprimer_le_compte(request):
 
     return redirect(url_pour_redirection)
 
+
+# ===================================
+@login_required
+@user_passes_test(personne_autorisee)
+def donnees_personnelles(request):
+    """
+        Vue permettant la visualisation ainsi que l'édition des données personnelles d'un membre
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse
+        :rtype: django.http.response.HttpResponse
+    """
+
+    url_pour_redirection = 'accueil'
+    option_modification = 'consultation_et_modification'
+
+    membre = Membre.objects.get(pk=request.user.pk)
+
+    return render(request, 'acces/modification_donnees_membre.html', {'url_pour_redirection': url_pour_redirection,
+                                                                      'option_modification': option_modification})
+
