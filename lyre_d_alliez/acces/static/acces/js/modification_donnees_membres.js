@@ -14,6 +14,7 @@ $(function ()
     /* Liens */
     /* ----- */
 
+    $("#bouton_retour_consultation_modification_donnees_personnelles").click(retourAccueil);
     $("#bouton_annuler_changement_mot_de_passe").click(retourAccueil);
-    $("#bouton_retour_accueil").click(retourAccueil);
+    $("#bouton_annuler_suppression_du_compte").click(retourAccueil);
 });

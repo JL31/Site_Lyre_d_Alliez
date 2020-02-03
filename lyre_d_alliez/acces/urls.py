@@ -62,6 +62,7 @@ urlpatterns = [
     path('deconnexion/', deconnexion, name='deconnexion'),
     path('acces_interdit/', acces_interdit, name='acces_interdit'),
     path('changement_du_mot_de_passe/', changement_du_mot_de_passe, name='changement_du_mot_de_passe'),
+    path('confirmation_suppression_compte/', ConfirmPasswordView.as_view(), name='confirmation_suppression_compte'),
     path('supprimer_le_compte/', supprimer_le_compte, name='supprimer_le_compte'),
     path('donnees_personnelles/', donnees_personnelles, name='donnees_personnelles'),
 ]

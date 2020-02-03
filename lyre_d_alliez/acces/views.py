@@ -33,6 +33,12 @@ from lyre_d_alliez.models import Membre
 
 from acces.forms import AuthentificationForm
 
+# ---
+from .forms import ConfirmPasswordForm
+from django.views.generic.edit import UpdateView
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+# ---
 
 # ==================================================================================================
 # FUNCTIONS
@@ -41,6 +47,8 @@ from acces.forms import AuthentificationForm
 # ==================================================================================================
 # INITIALISATIONS
 # ==================================================================================================
+
+decorators = [login_required, user_passes_test(personne_autorisee)]
 
 # ==================================================================================================
 # CLASSES
@@ -240,6 +248,47 @@ def changement_du_mot_de_passe(request):
                                                                       'url_pour_redirection': url_pour_redirection,
                                                                       'option_modification': option_modification
                                                                      })
+
+
+# ====================================
+@method_decorator(decorators, name='dispatch')
+class ConfirmPasswordView(UpdateView):
+    """
+        Vue basée sur une classe permettant de demander la confirmation pour la suppression du profil d'un membre
+    """
+
+    # configuration de la classe
+    form_class = ConfirmPasswordForm
+    template_name = 'acces/modification_donnees_membre.html'
+    success_url = reverse_lazy('supprimer_le_compte')
+
+    # variables à ajouter dans le contexte du template
+    url_pour_redirection = 'accueil'
+    option_modification = 'confirmation_suppression_compte'
+
+    # ===================
+    def get_object(self):
+        """
+            Méthode qui récupère l'objet
+
+            finir de compléter
+        """
+
+        return self.request.user
+
+    # ===================================
+    def get_context_data(self, **kwargs):
+        """
+            Méthode qui permet de surcharger le contexte
+
+            finir de compléter
+        """
+
+        context = super(ConfirmPasswordView, self).get_context_data(**kwargs)
+        context['url_pour_redirection'] = self.url_pour_redirection
+        context['option_modification'] = self.option_modification
+
+        return context
 
 
 # ===================================

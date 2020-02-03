@@ -1,0 +1,18 @@
+<h2 id="titre_confirmation_suppression_compte_membre">Confirmation de suppression de compte</h2>
+
+<div id="conteneur_confirmation_suppression_compte_membre">
+    <div class="texte_confirmation_suppression_compte_membre">
+        <p>Si vous souhaitez supprimer votre compte merci de bien vouloir rentrer votre mot de passe</p>
+    </div>
+
+    <div>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div id="boutons_actions">
+                <button id="bouton_valider_changement_mot_de_passe" type="submit" class="btn btn-danger">Supprimer le compte</button>
+                <button id="bouton_annuler_suppression_du_compte" type="button" class="btn btn-info" url_pour_redirection="{% url url_pour_redirection %}">Annuler</button>
+            </div>
+        </form>
+    </div>
+</div>
