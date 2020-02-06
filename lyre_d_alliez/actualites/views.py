@@ -159,12 +159,15 @@ def envoi_alerte_abonne(request):
         for abonne in liste_des_abonnes:
 
             if abonne.date_de_l_alerte.strftime("%Y-%m-%d") == datetime.now().strftime("%Y-%m-%d"):
+
                 sujet = " Rappel "
                 message = ("La Lyre d'Alliez vous rappelle que le {{ evenement.nom }} aura lieu à {{ evenement.lieu }} le {{ evenement.date }}<br />"
                            "Ceci est un message automatique envoyé à {{ abonne.adresse_mail_abonne }}")
-                msg_erreur = "Problème lors de l'envoi d'une alerte mail à un abonné"
+                message_d_erreur = "Problème lors de l'envoi d'une alerte mail à un abonné"
 
-                envoi_mail(sujet=sujet, message=message, msg_erreur=msg_erreur)
+                donnees = { "sujet": sujet, "message": message, "message_d_erreur": message_d_erreur }
+
+                envoi_mail(donnees)
 
     return HttpResponseRedirect(reverse("accueil"))
 

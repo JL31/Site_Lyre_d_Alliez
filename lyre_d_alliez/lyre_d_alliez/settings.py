@@ -172,14 +172,19 @@ MEDIA_ROOT = os.path.join(STATICFILES_DIRS[0], "img")
 
 MEDIA_URL = "/images.lyredalliez.fr/"
 
-# Email sending configuration (require to install django-mailjet through pip and to create a Mailjet account)
 
-ADMINS = secret_data.ADMINS
-EMAIL_SUBJECT_PREFIX = "[Site de la Lyre d'Alliez] "
-SERVER_EMAIL = "noreply@lyredalliez.fr"
+# Email sending configuration
+# ---------------------------
 
-# EMAIL_BACKEND = "django_mailjet.backends.MailjetBackend"
-# MAILJET_API_KEY = secret_data.MAILJET_API_KEY
-# MAILJET_API_SECRET = secret_data.MAILJET_API_SECRET
+# ADMINS = secret_data.ADMINS
+# SERVER_EMAIL = "noreply@lyredalliez.fr"
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"    # pour tester la réinitialisation du mot de passe
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"    # pour tester la réinitialisation du mot de passe
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+
+EMAIL_HOST_USER = secret_data.ADMINS["default"]["login"]
+EMAIL_HOST_PASSWORD = secret_data.ADMINS["default"]["password"]

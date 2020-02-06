@@ -22,7 +22,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver
-from django.core.mail import mail_admins, send_mail
+from django.core.mail import send_mail
 from django.contrib import messages
 from django.urls import reverse
 
@@ -30,8 +30,7 @@ from lyre_d_alliez.forms import MembreForm
 from lyre_d_alliez.models import Membre
 from association.models import Soutien
 
-from lyre_d_alliez.secret_data import ADMINS, MOT_DE_PASSE
-
+from lyre_d_alliez.secret_data import ADMINS
 from smtplib import SMTPException
 
 
@@ -70,65 +69,42 @@ def personne_autorisee(request):
         return False
 
 
-# ============================================
-def envoi_mail_admin_nouveau_membre(**kwargs):
+# =======================================================================
+@receiver(post_save, sender=Membre)
+def envoi_mail_admin_nouveau_membre(sender, instance, created, **kwargs):
     """
         Fonction qui permet d'envoyer un mail à l'admin pour l'informer qu'un nouveau membre a été créé
-    """
 
-    sujet = " Inscription d'un nouveau membre"
-    message = ("Une personne vient de remplir le formulaire d'inscription à la zone des membres.\n\n"
-               "Merci de vérifier les informations renseignées et de lui attribuer les accès en tant que : \n\n"
-               "- membre ;\n"
-               "- membre du bureau ;\n"
-               "- chef.")
-    expediteur = ADMINS[0][1]
-    destinataire = [ADMINS[0][1]]
+        :param sender: le modèle qui émet le signal (la classe de modèle)
+        :type sender: django.db.models.base.ModelBase
 
-    utilisateur = ADMINS[0][1]
-    mot_de_passe = MOT_DE_PASSE
+        :param instance: l'instance en cours d'enregistrement
+        :type instance: lyre_d_alliez.models.Membre
 
-    # mail_admins(sujet, message)
-    try:
-
-        send_mail(sujet, message, expediteur, destinataire, fail_silently=False, auth_user=utilisateur, auth_password=mot_de_passe)
-
-    except SMTPException:
-
-        msg = "Problème lors de l'envoi de mail après la création d'un compte membre"
-        raise SMTPException(msg)
-
-
-# ==================================================
-@receiver(post_save, sender=Membre)
-def envoi_mail(sender, instance, created, **kwargs):
-    """
-        Fonction qui permet d'envoyer un mail
-
-        :param sender: l'instance du modèle Soutien qui est en cours de suppression
-        :type sender: lyre_d_alliez.models.Soutien
+        :param created: booléen qui permet de savoir si un nouvel enrgistrement est créé
+        :type created: bool
     """
 
     if created:
 
         sujet = " Inscription d'un nouveau membre"
-        message = ("Une personne vient de remplir le formulaire d'inscription à la zone des membres.\n\n"
+        message = ("{} vient de remplir le formulaire d'inscription à la zone des membres.\n\n"
                    "Merci de vérifier les informations renseignées et de lui attribuer les accès en tant que : \n\n"
                    "- membre ;\n"
                    "- membre du bureau ;\n"
-                   "- chef.")
-        expediteur = ADMINS[0][1]
-        destinataire = [ADMINS[0][1]]
-        utilisateur = ADMINS[0][1]
-        mot_de_passe = MOT_DE_PASSE
+                   "- chef.".format(instance.username))
+
+        expediteur = ADMINS["default"]["login"]
+        destinataire = (ADMINS["default"]["login"],)
 
         try:
 
-            send_mail(sujet, message, expediteur, destinataire, fail_silently=False, auth_user=utilisateur, auth_password=mot_de_passe)
+            send_mail(sujet, message, expediteur, destinataire, fail_silently=False)
 
-        except SMTPException:
+        except SMTPException as e:
 
-            msg = "Problème lors de l'envoi de mail après la création d'un compte membre"
+            msg = ("Problème lors de l'envoi de mail après la création d'un compte membre"
+                   "\n{}".format(e))
             raise SMTPException(msg)
 
 
@@ -148,8 +124,8 @@ def supprimer_logo_d_un_soutien(sender, instance, **kwargs):
     instance.fichier.delete(False)
 
 
-# ===================================
-def envoi_mail_bis(dico_des_donnees):
+# ===============================
+def envoi_mail(dico_des_donnees):
     """
         Fonction qui permet d'envoyer un mail
 
@@ -157,14 +133,12 @@ def envoi_mail_bis(dico_des_donnees):
         ::type dico_des_donnees: dict
     """
 
-    expediteur = ADMINS[0][1]
-    destinataire = [ADMINS[0][1]]
-    utilisateur = ADMINS[0][1]
-    mot_de_passe = MOT_DE_PASSE
+    expediteur = ADMINS["default"]["login"]
+    destinataire = (ADMINS["default"]["login"],)
 
     try:
 
-        send_mail(dico_des_donnees["sujet"], dico_des_donnees["message"], expediteur, destinataire, fail_silently=False, auth_user=utilisateur, auth_password=mot_de_passe)
+        send_mail(dico_des_donnees["sujet"], dico_des_donnees["message"], expediteur, destinataire, fail_silently=False)
 
     except SMTPException:
 

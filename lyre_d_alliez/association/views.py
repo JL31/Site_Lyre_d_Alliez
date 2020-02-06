@@ -24,7 +24,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 
-from lyre_d_alliez.views import acces_restreints_au_chef, envoi_mail_bis
+from lyre_d_alliez.views import acces_restreints_au_chef, envoi_mail
 
 from lyre_d_alliez.forms import LISTE_DES_INSTRUMENTS
 from association.forms import ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm
@@ -359,7 +359,7 @@ def creation_formulaire_demande_pour_devenir_soutien(request, donnees):
                                 "message_d_erreur": message_d_erreur
                                }
 
-            envoi_mail_bis(dico_des_donnees)
+            envoi_mail(dico_des_donnees)
 
             data["form_is_valid"] = True
 
