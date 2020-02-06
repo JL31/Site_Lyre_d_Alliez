@@ -19,23 +19,19 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver
 from django.core.mail import mail_admins, send_mail
 from django.contrib import messages
 from django.urls import reverse
-from django.template.loader import render_to_string
 
-# from lyre_d_alliez.forms import MembreForm, DemandeDevenirSoutienForm
 from lyre_d_alliez.forms import MembreForm
 from lyre_d_alliez.models import Membre
-from actualites.models import Evenement
 from association.models import Soutien
 
 from lyre_d_alliez.secret_data import ADMINS, MOT_DE_PASSE
 
-from datetime import datetime
 from smtplib import SMTPException
 
 
@@ -103,9 +99,9 @@ def envoi_mail_admin_nouveau_membre(**kwargs):
         raise SMTPException(msg)
 
 
-# =================================
+# ==================================================
 @receiver(post_save, sender=Membre)
-def envoi_mail(sender, **kwargs):
+def envoi_mail(sender, instance, created, **kwargs):
     """
         Fonction qui permet d'envoyer un mail
 
@@ -113,25 +109,27 @@ def envoi_mail(sender, **kwargs):
         :type sender: lyre_d_alliez.models.Soutien
     """
 
-    sujet = " Inscription d'un nouveau membre"
-    message = ("Une personne vient de remplir le formulaire d'inscription à la zone des membres.\n\n"
-               "Merci de vérifier les informations renseignées et de lui attribuer les accès en tant que : \n\n"
-               "- membre ;\n"
-               "- membre du bureau ;\n"
-               "- chef.")
-    expediteur = ADMINS[0][1]
-    destinataire = [ADMINS[0][1]]
-    utilisateur = ADMINS[0][1]
-    mot_de_passe = MOT_DE_PASSE
+    if created:
 
-    try:
+        sujet = " Inscription d'un nouveau membre"
+        message = ("Une personne vient de remplir le formulaire d'inscription à la zone des membres.\n\n"
+                   "Merci de vérifier les informations renseignées et de lui attribuer les accès en tant que : \n\n"
+                   "- membre ;\n"
+                   "- membre du bureau ;\n"
+                   "- chef.")
+        expediteur = ADMINS[0][1]
+        destinataire = [ADMINS[0][1]]
+        utilisateur = ADMINS[0][1]
+        mot_de_passe = MOT_DE_PASSE
 
-        send_mail(sujet, message, expediteur, destinataire, fail_silently=False, auth_user=utilisateur, auth_password=mot_de_passe)
+        try:
 
-    except SMTPException:
+            send_mail(sujet, message, expediteur, destinataire, fail_silently=False, auth_user=utilisateur, auth_password=mot_de_passe)
 
-        msg = "Problème lors de l'envoi de mail après la création d'un compte membre"
-        raise SMTPException(msg)
+        except SMTPException:
+
+            msg = "Problème lors de l'envoi de mail après la création d'un compte membre"
+            raise SMTPException(msg)
 
 
 # ==========================================================

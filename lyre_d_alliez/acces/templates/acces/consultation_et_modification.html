@@ -84,8 +84,17 @@
         </div>
     </div>
 
-    <div class="conteneur_element_consultation_modification_donnees_personnelles">
+    <div class="conteneur_boutons_consultation_modification_donnees_personnelles">
         <button id="bouton_retour_consultation_modification_donnees_personnelles" type="button" class="btn btn-info" url_pour_redirection="{% url url_pour_redirection %}">Retour à l'accueil du site</button>
+        <button id="bouton_modification_donnees_personnelles" type="button" class="btn btn-warning js-modification-donnees-personnelles" data-url="{% url 'modification_des_donnees_personnelles' request.user.membre.id %}">Modifier mes données</button>
+    </div>
+
+    <!-- Bootstrap modal pour la modification des données-->
+    <div class="modal fade" id="modal-modification">
+        <div class="modal-dialog modification">
+              <div class="modal-content modification">
+              </div>
+        </div>
     </div>
 
 </div>

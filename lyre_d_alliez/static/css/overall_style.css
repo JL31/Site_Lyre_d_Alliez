@@ -135,6 +135,30 @@ ul.tirets > li:before
     color: black;
 }
 
+.conteneur_boutons_consultation_modification_donnees_personnelles
+{
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+}
+
+#bouton_retour_consultation_modification_donnees_personnelles
+{
+    margin-right: 105px;
+}
+
+#id_chant
+{
+    margin-left: -40px;
+    width: 100px;
+}
+
+.form-group
+{
+    display: flex;
+    flex-direction: column;
+}
+
 /* Mise en forme du body */
 /* --------------------- */
 

@@ -36,7 +36,7 @@ __status__ = 'dev'
 # IMPORTS
 # ==================================================================================================
 
-from django.urls import path
+from django.urls import path, re_path
 from acces.views import *
 
 
@@ -65,4 +65,5 @@ urlpatterns = [
     path('confirmation_suppression_compte/', ConfirmPasswordView.as_view(), name='confirmation_suppression_compte'),
     path('supprimer_le_compte/', supprimer_le_compte, name='supprimer_le_compte'),
     path('donnees_personnelles/', donnees_personnelles, name='donnees_personnelles'),
+    re_path('^modification_des_donnees_personnelles/(?P<id>\d+)/$', modification_des_donnees_personnelles, name='modification_des_donnees_personnelles'),
 ]

@@ -23,22 +23,20 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.template.loader import render_to_string
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic.edit import UpdateView
+from django.utils.decorators import method_decorator
 
 from lyre_d_alliez.views import personne_autorisee
 
 from lyre_d_alliez.models import Membre
 
 from acces.forms import AuthentificationForm
-
-# ---
 from .forms import ConfirmPasswordForm
-from django.views.generic.edit import UpdateView
-from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-# ---
+from lyre_d_alliez.forms import MembreForm, UpdateMembreForm
+
 
 # ==================================================================================================
 # FUNCTIONS
@@ -244,7 +242,7 @@ def changement_du_mot_de_passe(request):
 
         form = PasswordChangeForm(request.user)
 
-    return render(request, 'acces/modification_donnees_membre.html', {'form': form,
+    return render(request, 'acces/gestion_des_donnees_membre.html', {'form': form,
                                                                       'url_pour_redirection': url_pour_redirection,
                                                                       'option_modification': option_modification
                                                                      })
@@ -259,7 +257,7 @@ class ConfirmPasswordView(UpdateView):
 
     # configuration de la classe
     form_class = ConfirmPasswordForm
-    template_name = 'acces/modification_donnees_membre.html'
+    template_name = 'acces/gestion_des_donnees_membre.html'
     success_url = reverse_lazy('supprimer_le_compte')
 
     # variables à ajouter dans le contexte du template
@@ -271,7 +269,7 @@ class ConfirmPasswordView(UpdateView):
         """
             Méthode qui récupère l'objet
 
-            finir de compléter
+            ... ... ... finir de compléter ... ... ...
         """
 
         return self.request.user
@@ -281,7 +279,7 @@ class ConfirmPasswordView(UpdateView):
         """
             Méthode qui permet de surcharger le contexte
 
-            finir de compléter
+            ... ... ... finir de compléter ... ... ...
         """
 
         context = super(ConfirmPasswordView, self).get_context_data(**kwargs)
@@ -331,7 +329,7 @@ def supprimer_le_compte(request):
 @user_passes_test(personne_autorisee)
 def donnees_personnelles(request):
     """
-        Vue permettant la visualisation ainsi que l'édition des données personnelles d'un membre
+        Vue permettant la visualisation des données personnelles d'un membre
 
         :param request: instance de HttpRequest
         :type request: django.core.handlers.wsgi.WSGIRequest
@@ -341,10 +339,82 @@ def donnees_personnelles(request):
     """
 
     url_pour_redirection = 'accueil'
-    option_modification = 'consultation_et_modification'
+    option_modification = 'consultation'
 
-    membre = Membre.objects.get(pk=request.user.pk)
-
-    return render(request, 'acces/modification_donnees_membre.html', {'url_pour_redirection': url_pour_redirection,
+    return render(request, 'acces/gestion_des_donnees_membre.html', {'url_pour_redirection': url_pour_redirection,
                                                                       'option_modification': option_modification})
+
+
+# =====================================================
+@login_required
+@user_passes_test(personne_autorisee)
+def modification_des_donnees_personnelles(request, id):
+    """
+        Vue permettant la modification des données personnelles d'un membre
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param id: clé primaire permettant d'identifier le membre
+        :type id: integer
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    membre = get_object_or_404(Membre, id=id)
+
+    nom_du_template = "acces/modification_des_donnees_personnelles.html"
+
+    if request.method == "POST":
+
+        form = UpdateMembreForm(request.POST, instance=membre)
+
+    else:
+
+        form = UpdateMembreForm(instance=membre)
+
+        instruments_choisis = tuple([ instrument.replace("'", "") for instrument in membre.get_instruments_as_list() ])
+        form.initial["instruments"] = instruments_choisis
+
+    return enregistrer_les_modifications(request, form, nom_du_template)
+
+
+# ================================================================
+@login_required
+@user_passes_test(personne_autorisee)
+def enregistrer_les_modifications(request, form, nom_du_template):
+    """
+        Vue qui permet d'enregistrer les modifications dans les données personnelles du membre
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :param form: formulaire qui gère les données personnelles des membres
+        :type form: lyre_d_alliez.forms.UpdateMembreForm
+
+        :param nom_du_template: le nom du template qui va contenir le formulaire de modification des données personnelles
+        :type nom_du_template: string
+
+        :return: instance de JsonResponse
+        :rtype: django.http.response.JsonResponse
+    """
+
+    donnees = {}
+
+    if request.method == "POST":
+
+        if form.is_valid():
+
+            form.save()
+            donnees["formulaire_valide"] = True
+
+        else:
+
+            donnees["formulaire_valide"] = False
+
+    contexte = {"form": form}
+    donnees["html_form"] = render_to_string(nom_du_template, contexte, request=request)
+
+    return JsonResponse(donnees)
 

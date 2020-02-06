@@ -504,3 +504,10 @@ https://simpleisbetterthancomplex.com/tutorial/2016/09/19/how-to-create-password
 
 https://simpleisbetterthancomplex.com/tutorial/2016/08/15/how-to-create-a-password-confirmation-view.html
 
+
+# =====================================================================================================================
+# Gestion du signal post_save pour gérer à la fois la création et la mise-à-jour du profil membre
+# =====================================================================================================================
+
+https://simpleisbetterthancomplex.com/tutorial/2016/07/28/how-to-create-django-signals.html
+

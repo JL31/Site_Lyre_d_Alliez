@@ -4,7 +4,7 @@
 <html lang="fr" id="html_modification_donnees_membre">
     <head>
        <meta charset="utf-8" />
-       <title>Modification des données d'un membre du site</title>
+       <title>Gestion des données d'un membre du site</title>
 
         <!-- Feuilles de style -->
         <!-- ----------------- -->
@@ -20,17 +20,18 @@
         <div id="conteneur_global_modification_donnees_membre">
             <div id="titre_modification_donnees_membre">
                 <h1 id="titre_principal_modification_donnees_membre">Site de la Lyre d'Alliez</h1>
-                <h3 id="sous_titre_modification_donnees_membre">Modification des données d'un membre du site</h3>
+                <h3 id="sous_titre_modification_donnees_membre">Gestion des données d'un membre du site</h3>
             </div>
             <div id="conteneur_modification_donnees_membre">
                 <div id="contenu_partie_remplie">
                     {% if option_modification == 'deconnexion' %}
                         {% include "acces/changement_du_mot_de_passe.html" %}
-                    {% elif option_modification == 'consultation_et_modification' %}
+                    {% elif option_modification == 'consultation' %}
                         {% include "acces/consultation_et_modification.html" %}
                     {% elif option_modification == 'confirmation_suppression_compte' %}
                         {% include "acces/confirmation_suppression_compte.html" %}
                     {% endif %}
+                    {% block contenu %}{% endblock %}
                 </div>
             </div>
         </div>
@@ -45,7 +46,7 @@
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
         <!-- Script pour gérer la déconnexion -->
-        <script src="{% static 'acces/js/modification_donnees_membres.js' %}"></script>
+        <script src="{% static 'acces/js/gestion_des_donnees_membres.js' %}"></script>
 
     </body>
 </html>
