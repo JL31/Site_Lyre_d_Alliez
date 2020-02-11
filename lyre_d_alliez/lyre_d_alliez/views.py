@@ -19,14 +19,10 @@ __status__ = 'dev'
 # ==================================================================================================
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
 from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver
 from django.core.mail import send_mail
-from django.contrib import messages
-from django.urls import reverse
 
-from lyre_d_alliez.forms import MembreForm
 from lyre_d_alliez.models import Membre
 from association.models import Soutien
 
@@ -147,7 +143,7 @@ def envoi_mail(dico_des_donnees):
 
 
 # ====================================
-def acces_restreints_au_chef(request):
+def acces_restreint_au_chef(request):
     """
         Fonction pour vérifier si le visiteur est le chef
 
@@ -163,6 +159,30 @@ def acces_restreints_au_chef(request):
     try:
 
         return request.membre.est_le_chef
+
+    except AttributeError:
+        "La gestion de cette erreur est nécessaire car les instances d'objet 'AnonymousUser' ne possèdent pas l'attribut 'membre'"
+
+        return False
+
+
+# =======================================
+def acces_restreint_aux_admins(request):
+    """
+        Fonction pour vérifier si le visiteur est un administrateur
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: un booléen indiquant :
+                 - True si le visiteur est un administrateur
+                 - False sinon
+        :rtype: bool
+    """
+
+    try:
+
+        return request.is_superuser
 
     except AttributeError:
         "La gestion de cette erreur est nécessaire car les instances d'objet 'AnonymousUser' ne possèdent pas l'attribut 'membre'"
@@ -196,33 +216,4 @@ def accueil(request):
     """
 
     return render(request, "base_etendue.html")
-
-
-# ==================================
-def creation_profil_membre(request):
-    """
-        Vue pour la création du profil d'un membre
-
-        :param request: instance de HttpRequest
-        :type request: django.core.handlers.wsgi.WSGIRequest
-
-        :return: instance de HttpResponse ou de HttpResponseRedirect
-        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
-    """
-
-    if request.method == "POST":
-
-        form = MembreForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            form.save()
-            msg = "Le profil a été crée avec succès, merci d'attendre l'email d'activation de votre compte"
-            messages.info(request, msg)
-            return HttpResponseRedirect(reverse("accueil"))
-
-    else:
-
-        form = MembreForm()
-
-    return render(request, "MembreForm.html", {"form": form})
 

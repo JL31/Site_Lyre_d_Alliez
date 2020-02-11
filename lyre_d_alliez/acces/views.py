@@ -18,29 +18,49 @@ __status__ = 'dev'
 # IMPORTS
 # ==================================================================================================
 
+from random import choice
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.forms import PasswordChangeForm
+from django.http import HttpResponseRedirect
 from django.http import JsonResponse
-from django.urls import reverse, reverse_lazy
-from django.template.loader import render_to_string
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic.edit import UpdateView
+from django.template.loader import render_to_string
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-
-from lyre_d_alliez.views import personne_autorisee
-
-from lyre_d_alliez.models import Membre
+from django.views.generic.edit import UpdateView
 
 from acces.forms import AuthentificationForm
-from .forms import ConfirmPasswordForm
-from lyre_d_alliez.forms import MembreForm, UpdateMembreForm
+from acces.token import default_token_generator
+from lyre_d_alliez.forms import UpdateMembreForm, MembreForm
+from lyre_d_alliez.models import Membre
+from lyre_d_alliez.secret_data import ADMIN_USERNAME
+from lyre_d_alliez.views import personne_autorisee, envoi_mail, acces_restreint_aux_admins
+from .forms import ConfirmPasswordForm, EnvoiLienCreationProfilMembreForm
 
 
 # ==================================================================================================
 # FUNCTIONS
 # ==================================================================================================
+
+
+# =======================
+def generate_random_id():
+    """
+        Fonction qui permet la géénration aléatoire d'un identifiant.
+        L'identifiant est constitué de 20 caractères pris dans les caractères affichables (depuis string.printable)
+
+        :return: l'identifiant
+        :rtype: str
+    """
+
+    nombre_de_caracteres = 20
+    liste_des_carcateres = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&()*+,-.:;<=>?@^_`{|}~[]'
+
+    return "".join([ choice(liste_des_carcateres) for _ in range(nombre_de_caracteres) ])
+
 
 # ==================================================================================================
 # INITIALISATIONS
@@ -163,7 +183,14 @@ def verification_login(request):
     """
 
     login = request.GET.get("login", None)
-    data = {"login_existe": Membre.objects.filter(username__iexact=login).exists()}
+
+    if login == ADMIN_USERNAME:
+
+        data = {"login_existe": True}
+
+    else:
+
+        data = {"login_existe": Membre.objects.filter(username__iexact=login).exists()}
 
     return JsonResponse(data)
 
@@ -417,4 +444,119 @@ def enregistrer_les_modifications(request, form, nom_du_template):
     donnees["html_form"] = render_to_string(nom_du_template, contexte, request=request)
 
     return JsonResponse(donnees)
+
+
+# ===================================================
+def creation_profil_membre(request, *args, **kwargs):
+    """
+        Vue pour la création du profil d'un membre
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    assert "random_id_1" in kwargs and "random_id_2" in kwargs and "jeton" in kwargs
+
+    random_id_1 = kwargs["random_id_1"]
+    random_id_2 = kwargs["random_id_2"]
+    jeton = kwargs["jeton"]
+
+    if default_token_generator.check_token(random_id_1, random_id_2, jeton):
+
+        if request.method == "POST":
+
+            form = MembreForm(request.POST, request.FILES)
+
+            if form.is_valid():
+
+                form.save()
+                msg = "Le profil a été crée avec succès, merci d'attendre l'email d'activation de votre compte"
+                messages.info(request, msg)
+
+                return HttpResponseRedirect(reverse("accueil"))
+
+        else:
+
+            form = MembreForm()
+            return render(request, "acces/MembreForm.html", {"form": form,
+                                                             "random_id_1": random_id_1,
+                                                             "random_id_2": random_id_2,
+                                                             "jeton": jeton})
+
+    else:
+
+        return render(request, "acces/ErreurAccesFormulaireCreationProfilMembre.html")
+
+
+# =============================================================
+@login_required
+@user_passes_test(acces_restreint_aux_admins)
+def formulaire_pour_envoi_mail_creation_profil_membre(request):
+    """
+        Vue pour l'affichage du formulaire qui va permettre d'envoyer un mail à un futur membre
+        afin qu'il puisse compléter son profil en vue de sa création
+
+        :param request: instance de HttpRequest
+        :type request: django.core.handlers.wsgi.WSGIRequest
+
+        :return: instance de HttpResponse ou de HttpResponseRedirect
+        :rtype: django.http.response.HttpResponse | django.http.response.HttpResponseRedirect
+    """
+
+    if request.method == "POST":
+
+        form = EnvoiLienCreationProfilMembreForm(request.POST)
+
+        if form.is_valid():
+
+            random_id_1 = generate_random_id()
+            random_id_2 = generate_random_id()
+            jeton = default_token_generator.make_token(random_id_1, random_id_2)
+
+            sujet = "[ Site de la Lyre d'Alliez ]"
+
+            # en_tete_lien = "http://{}".format(Site.objects.get_current().domain)
+            en_tete_lien = "localhost:8000"
+            lien = reverse("creation_profil_membre", args=(random_id_1, random_id_2, jeton))
+            lien_complet = "{}{}".format(en_tete_lien, lien)
+
+            message_fr = ("Hello,\n\n"
+                          "Si tu veux créer un compte sur le site de la Lyre merci de cliquer sur le lien suivant :\n\n"
+                          "{}\n\n"
+                          "Attention, ce lien n'est utilisable qu'une seule fois et il sera actif pendant xxx.\n\n"
+                          "Passé ce délai il faudra nous demander de t'en générer un nouveau ;-)\n\n"
+                          "A bientôt et bonne inscription ^^\n\n"
+                          "L'équipe d'administration du site de la Lyre d'Alliez").format(lien_complet)
+
+            message_en = ("Hello,\n\n"
+                          "If you want to subscribe to the Lyre website please click on the link bellow :\n\n"
+                          "{}\n\n"
+                          "Be aware that this link will only be available once and it will be active for xxx .\n\n"
+                          "After that period you will have to ask us to generate you a new one ;-)\n\n"
+                          "See you soon and good subscription ^^\n\n"
+                          "The Lyre d'Alliez website administration team").format(lien_complet)
+
+            message = ("{}\n\n"
+                       "___________________________________________________________________________________________\n\n"
+                       "{}\n\n").format(message_fr, message_en)
+
+            dico_des_donnees = {"sujet": sujet,
+                                "message": message,
+                                }
+
+            envoi_mail(dico_des_donnees)
+
+            msg = "Un email contenant un lien à usage unique a été envoyé au futur membre"
+            messages.info(request, msg)
+
+            return HttpResponseRedirect(reverse("accueil"))
+
+    else:
+
+        form = EnvoiLienCreationProfilMembreForm()
+
+    return render(request, "acces/EnvoiMailCreationProfilMembreForm.html", {"form": form})
 

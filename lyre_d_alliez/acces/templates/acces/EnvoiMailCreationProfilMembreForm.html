@@ -1,0 +1,13 @@
+{% extends "acces/gestion_des_donnees_membre.html" %}
+
+{% block contenu %}
+<div id="conteneur_formulaire_envoi_mail_creation_profil">
+    <h4>Formulaire pour l'envoi d'un email contenant le lien vers le formulaire de création d'un nouveau profil membre</h4>
+
+    <form action="{% url 'formulaire_pour_envoi_mail_creation_profil_membre' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Envoyer l'email pour la création du profil" />
+    </form>
+</div>
+{% endblock %}

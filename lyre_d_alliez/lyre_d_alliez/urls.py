@@ -87,9 +87,6 @@ urlpatterns = [
     # Menu Les outils du chef
     path('les_outils_du_chef/', include('les_outils_du_chef.urls')),
 
-    # Autres
-    path('creation_profil_membre/', creation_profil_membre, name='creation_profil_membre'),
-
     # Connexion / déconnexion
     path('acces/', include('acces.urls')),
 

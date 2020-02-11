@@ -8,7 +8,7 @@
         <div>
             <button type="button" class="btn" data-toggle="modal" data-target="#id_panneau_lateral">
                 <!-- Partie à supprimer en prod ? (début) -->
-                {% if user.username == ADMIN_USERNAME %}
+                {% if user.is_superuser %}
                     <img src="{% static 'img/ADMIN.jpg' %}" id="avatar_admin"/>
                 {% else %}
                     <img src="{{ request.user.membre.avatar.url }}" id="avatar_membre"/>

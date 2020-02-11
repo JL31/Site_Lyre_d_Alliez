@@ -26,7 +26,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.template.loader import render_to_string
 from django.urls import reverse
 
-from lyre_d_alliez.views import acces_restreints_au_chef, envoi_mail
+from lyre_d_alliez.views import acces_restreint_au_chef, envoi_mail
 
 from actualites.forms import EvenementForm, ArticleForm, CommentaireForm, AbonnementEvenementForm
 
@@ -351,7 +351,7 @@ def lire_article(request, reference_de_l_article):
 
 # =========================================
 @login_required
-@user_passes_test(acces_restreints_au_chef)
+@user_passes_test(acces_restreint_au_chef)
 def creation_formulaire(request, donnees):
     """
         Vue qui permet d'afficher le formulaire demandé avec les données passées en argument
@@ -417,7 +417,7 @@ def creation_formulaire(request, donnees):
 
 # =========================================
 @login_required
-@user_passes_test(acces_restreints_au_chef)
+@user_passes_test(acces_restreint_au_chef)
 def creation_evenement(request):
     """
         Vue pour la création d'un évènement
@@ -452,7 +452,7 @@ def creation_evenement(request):
 
 # =========================================
 @login_required
-@user_passes_test(acces_restreints_au_chef)
+@user_passes_test(acces_restreint_au_chef)
 def creation_article(request):
     """
         Vue du formulaire permettant la création d'un nouvel article

@@ -1,0 +1,13 @@
+{% extends "acces/gestion_des_donnees_membre.html" %}
+
+{% block contenu %}
+<div>
+    <h4>Formulaire de création d'un profil membre</h4>
+
+    <form action="{% url 'creation_profil_membre' random_id_1 random_id_2 jeton %}" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Créer le profil" />
+    </form>
+</div>
+{% endblock %}

@@ -66,4 +66,8 @@ urlpatterns = [
     path('supprimer_le_compte/', supprimer_le_compte, name='supprimer_le_compte'),
     path('donnees_personnelles/', donnees_personnelles, name='donnees_personnelles'),
     re_path('^modification_des_donnees_personnelles/(?P<id>\d+)/$', modification_des_donnees_personnelles, name='modification_des_donnees_personnelles'),
+
+    # Gestion de la création d'un profil membre
+    path('formulaire_pour_envoi_mail_creation_profil_membre/', formulaire_pour_envoi_mail_creation_profil_membre, name='formulaire_pour_envoi_mail_creation_profil_membre'),
+    path('creation_profil_membre/<random_id_1>/<random_id_2>/<jeton>/', creation_profil_membre, name='creation_profil_membre'),
 ]

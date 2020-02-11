@@ -511,3 +511,10 @@ https://simpleisbetterthancomplex.com/tutorial/2016/08/15/how-to-create-a-passwo
 
 https://simpleisbetterthancomplex.com/tutorial/2016/07/28/how-to-create-django-signals.html
 
+
+# =====================================================================================================================
+# Divers
+# =====================================================================================================================
+
+https://getbootstrap.com/docs/3.3/components/
+

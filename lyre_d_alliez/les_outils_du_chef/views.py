@@ -21,7 +21,7 @@ __status__ = 'dev'
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
 
-from lyre_d_alliez.views import acces_restreints_au_chef
+from lyre_d_alliez.views import acces_restreint_au_chef
 
 
 # ==================================================================================================
@@ -42,7 +42,7 @@ from lyre_d_alliez.views import acces_restreints_au_chef
 
 # =========================================
 @login_required
-@user_passes_test(acces_restreints_au_chef)
+@user_passes_test(acces_restreint_au_chef)
 def les_outils_du_chef(request):
     """
         Vue qui permet d'afficher les outils du chef

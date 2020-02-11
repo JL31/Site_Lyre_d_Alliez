@@ -24,7 +24,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 
-from lyre_d_alliez.views import acces_restreints_au_chef, envoi_mail
+from lyre_d_alliez.views import acces_restreint_au_chef, envoi_mail
 
 from lyre_d_alliez.forms import LISTE_DES_INSTRUMENTS
 from association.forms import ArticleDepresseForm, SoutienForm, DemandeDevenirSoutienForm
@@ -385,7 +385,7 @@ def creation_formulaire_demande_pour_devenir_soutien(request, donnees):
 
 # =========================================
 @login_required
-@user_passes_test(acces_restreints_au_chef)
+@user_passes_test(acces_restreint_au_chef)
 def creation_formulaire(request, donnees):
     """
         Vue qui permet d'afficher le formulaire demandé avec les données passées en argument
@@ -451,7 +451,7 @@ def creation_formulaire(request, donnees):
 
 # =========================================
 @login_required
-@user_passes_test(acces_restreints_au_chef)
+@user_passes_test(acces_restreint_au_chef)
 def creation_article_de_presse(request):
     """
         Vue du formulaire permettant la création d'un nouvel article
@@ -486,7 +486,7 @@ def creation_article_de_presse(request):
 
 # =========================================
 @login_required
-@user_passes_test(acces_restreints_au_chef)
+@user_passes_test(acces_restreint_au_chef)
 def creation_soutien(request):
     """
         Vue du formulaire permettant la création d'un nouveau soutien

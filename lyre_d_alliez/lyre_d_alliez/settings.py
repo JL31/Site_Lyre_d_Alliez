@@ -105,8 +105,7 @@ TEMPLATES = [
         'OPTIONS': {'context_processors': ['django.template.context_processors.debug',
                                            'django.template.context_processors.request',
                                            'django.contrib.auth.context_processors.auth',
-                                           'django.contrib.messages.context_processors.messages',
-                                           'lyre_d_alliez.context_processors.admin_username'],},
+                                           'django.contrib.messages.context_processors.messages'],},
     },
 ]
 

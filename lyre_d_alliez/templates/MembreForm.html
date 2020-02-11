@@ -1,9 +1,0 @@
-{% extends "base_etendue.html" %}
-
-{% block contenu %}
-<form action="{% url 'creation_profil_membre' %}" enctype="multipart/form-data" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Créer le profil" />
-</form>
-{% endblock %}

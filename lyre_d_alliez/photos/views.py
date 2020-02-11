@@ -23,7 +23,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required, user_passes_test
 
-from lyre_d_alliez.views import personne_autorisee, acces_restreints_au_chef
+from lyre_d_alliez.views import personne_autorisee, acces_restreint_au_chef
 
 from photos.models import Photo
 
@@ -133,7 +133,7 @@ def voir_photos_evenement(request, evenement, annee):
 
 # =========================================
 @login_required
-@user_passes_test(acces_restreints_au_chef)
+@user_passes_test(acces_restreint_au_chef)
 def creation_formulaire(request, donnees):
     """
         Vue qui permet d'afficher le formulaire demandé avec les données passées en argument

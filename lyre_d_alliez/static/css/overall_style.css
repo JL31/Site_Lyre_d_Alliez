@@ -159,6 +159,17 @@ ul.tirets > li:before
     flex-direction: column;
 }
 
+
+/* Mise en forme de la page contenant le formulaire permettant l'envoi d'un email pour la création d'un nouveau profil membre */
+/* -------------------------------------------------------------------------------------------------------------------------- */
+
+#conteneur_formulaire_envoi_mail_creation_profil h4
+{
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+
 /* Mise en forme du body */
 /* --------------------- */
 

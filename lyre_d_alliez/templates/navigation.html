@@ -50,6 +50,12 @@
                     <a href="{% url 'les_outils_du_chef' %}">Les outils du chef</a>
                 </li>
                 {% endif %}
+
+                {% if user.is_authenticated and user.is_superuser %}
+                <li>
+                    <a href="{% url 'formulaire_pour_envoi_mail_creation_profil_membre' %}">Création d'un profil membre</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>

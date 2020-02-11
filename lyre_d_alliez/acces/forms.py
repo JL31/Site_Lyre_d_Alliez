@@ -19,7 +19,7 @@ __status__ = 'dev'
 # IMPORTS
 # ==================================================================================================
 
-from django.forms import Form, CharField, PasswordInput, ModelForm
+from django.forms import Form, CharField, PasswordInput, ModelForm, EmailField
 
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
@@ -82,6 +82,16 @@ class ConfirmPasswordForm(ModelForm):
         if not check_password(confirmer_le_mot_de_passe, self.instance.password):
 
             self.add_error("confirmer_le_mot_de_passe", "Erreur dans le mot de passe")
+
+
+# ============================================
+class EnvoiLienCreationProfilMembreForm(Form):
+    """
+        Classe qui permet la création d'un formulaire pour l'envoi, à un futur membre,
+        d'un lien qui lui permettra d'accéder au formulaire de création d'un profil
+    """
+
+    destinataire = EmailField(label="Indique l'adresse email du futur membre", required=True)
 
 
 # ==================================================================================================

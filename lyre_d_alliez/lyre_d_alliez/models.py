@@ -19,7 +19,7 @@ __status__ = 'dev'
 # IMPORTS
 # ==================================================================================================
 
-from django.db import models
+from django.db.models import OneToOneField, ImageField, TextField, CharField, BooleanField, CASCADE
 from django.contrib.auth.models import User
 
 from PIL import Image
@@ -41,16 +41,16 @@ class Membre(User):
     """
     
     # liaison avec le modèle User
-    user = models.OneToOneField(User, parent_link=True, unique=True, on_delete=models.CASCADE)
+    user = OneToOneField(User, parent_link=True, unique=True, on_delete=CASCADE)
     
-    avatar = models.ImageField(null=False, blank=False, upload_to="avatars/")
-    description = models.TextField(null=True, blank=True, max_length=500)
-    instruments = models.CharField(null=False, blank=False, max_length=255)
+    avatar = ImageField(null=False, blank=False, upload_to="avatars/")
+    description = TextField(null=True, blank=True, max_length=500)
+    instruments = CharField(null=False, blank=False, max_length=255)
 
-    chant = models.BooleanField(null=False, blank=True, default=False)
-    est_membre = models.BooleanField(null=False, blank=True, default=False)
-    est_membre_du_bureau = models.BooleanField(null=False, blank=True, default=False)
-    est_le_chef = models.BooleanField(null=False, blank=True, default=False)
+    chant = BooleanField(null=False, blank=True, default=False)
+    est_membre = BooleanField(null=False, blank=True, default=False)
+    est_membre_du_bureau = BooleanField(null=False, blank=True, default=False)
+    est_le_chef = BooleanField(null=False, blank=True, default=False)
 
     # =========
     class Meta:
